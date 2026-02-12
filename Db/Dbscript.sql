@@ -1,0 +1,298 @@
+USE [master]
+GO
+/****** Object:  Database [EduTrackdb]    Script Date: 12-02-2026 07:10:57 ******/
+CREATE DATABASE [EduTrackdb]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'EduTrackdb', FILENAME = N'C:\Users\Sannidhi\EduTrackdb.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'EduTrackdb_log', FILENAME = N'C:\Users\Sannidhi\EduTrackdb_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [EduTrackdb] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [EduTrackdb].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [EduTrackdb] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [EduTrackdb] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [EduTrackdb] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [EduTrackdb] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [EduTrackdb] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [EduTrackdb] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [EduTrackdb] SET  MULTI_USER 
+GO
+ALTER DATABASE [EduTrackdb] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [EduTrackdb] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [EduTrackdb] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [EduTrackdb] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [EduTrackdb] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [EduTrackdb] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [EduTrackdb] SET QUERY_STORE = OFF
+GO
+USE [EduTrackdb]
+GO
+/****** Object:  Table [dbo].[Classes]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Classes](
+	[Class_Id] [int] IDENTITY(1,1) NOT NULL,
+	[ClassName] [varchar](50) NULL,
+	[Section] [varchar](10) NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Class_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Roles]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Roles](
+	[Role_Id] [int] IDENTITY(1,1) NOT NULL,
+	[Role_Name] [varchar](50) NOT NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Role_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Role_Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Students]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Students](
+	[Student_Id] [int] IDENTITY(1,1) NOT NULL,
+	[User_Id] [int] NULL,
+	[FullName] [varchar](100) NULL,
+	[DOB] [date] NULL,
+	[Gender] [varchar](10) NULL,
+	[Phone_No] [varchar](15) NULL,
+	[Address] [varchar](255) NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Student_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Subjects]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Subjects](
+	[Subject_Id] [int] IDENTITY(1,1) NOT NULL,
+	[SubjectName] [varchar](50) NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Subject_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Teachers]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Teachers](
+	[Teacher_Id] [int] IDENTITY(1,1) NOT NULL,
+	[User_Id] [int] NULL,
+	[FullName] [varchar](100) NULL,
+	[Phone_No] [varchar](15) NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Teacher_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 12-02-2026 07:10:58 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[User_Id] [int] IDENTITY(1,1) NOT NULL,
+	[User_Name] [varchar](50) NOT NULL,
+	[PasswordHash] [varchar](225) NOT NULL,
+	[Email] [varchar](50) NOT NULL,
+	[Role_Id] [int] NULL,
+	[Created_By] [varchar](50) NOT NULL,
+	[Created_Date] [datetime] NULL,
+	[Modified_By] [varchar](50) NOT NULL,
+	[Modified_Date] [datetime] NULL,
+	[isActive] [bit] NULL,
+	[isDeleted] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[User_Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[User_Name] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Classes] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Classes] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Classes] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Classes] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Roles] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Roles] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Roles] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Roles] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Students] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Students] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Students] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Students] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Subjects] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Subjects] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Subjects] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Subjects] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Teachers] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Teachers] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Teachers] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Teachers] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT ((0)) FOR [Role_Id]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (getdate()) FOR [Created_Date]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (getdate()) FOR [Modified_Date]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT ((0)) FOR [isActive]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT ((0)) FOR [isDeleted]
+GO
+ALTER TABLE [dbo].[Students]  WITH CHECK ADD FOREIGN KEY([User_Id])
+REFERENCES [dbo].[Users] ([User_Id])
+GO
+ALTER TABLE [dbo].[Teachers]  WITH CHECK ADD FOREIGN KEY([User_Id])
+REFERENCES [dbo].[Users] ([User_Id])
+GO
+ALTER TABLE [dbo].[Users]  WITH CHECK ADD  CONSTRAINT [FK_Users_Role] FOREIGN KEY([Role_Id])
+REFERENCES [dbo].[Roles] ([Role_Id])
+GO
+ALTER TABLE [dbo].[Users] CHECK CONSTRAINT [FK_Users_Role]
+GO
+USE [master]
+GO
+ALTER DATABASE [EduTrackdb] SET  READ_WRITE 
+GO
