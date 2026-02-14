@@ -9,7 +9,7 @@ namespace EduTrack.Controllers
         public IActionResult Index()
         {
             return View();
-            //sharanya
+            //diya
         }
 
         public IActionResult Privacy()
