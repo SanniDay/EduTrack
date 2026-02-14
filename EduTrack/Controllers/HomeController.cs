@@ -11,7 +11,7 @@ namespace EduTrack.Controllers
             return View();
             //diya
         }
-
+        //chandu
         public IActionResult Privacy()
         {
             return View();
