@@ -34,7 +34,7 @@ namespace EduTrack.Services
 
         public int Insert(Student s)
         {
-            return _db.ExecuteNonQuery("sp_Student_Insert", Params(s));
+            return _db.ExecuteProcedureNonQuery("sp_Student_Insert", Params(s));
         }
 
         public int Update(Student s)
@@ -42,13 +42,13 @@ namespace EduTrack.Services
             var list = Params(s).ToList();
             list.Add(new SqlParameter("@Student_Id", s.Student_Id));
 
-            return _db.ExecuteNonQuery("sp_Student_Update", list.ToArray());
+            return _db.ExecuteProcedureNonQuery("sp_Student_Update", list.ToArray());
         }
 
         public int Delete(int id)
         {
             var param = new[] { new SqlParameter("@Student_Id", id) };
-            return _db.ExecuteNonQuery("sp_Student_Delete", param);
+            return _db.ExecuteProcedureNonQuery("sp_Student_Delete", param);
         }
 
         private List<Student> ToList(DataTable dt)
@@ -64,20 +64,21 @@ namespace EduTrack.Services
         {
             return new Student(
                 Convert.ToInt32(row["Student_Id"]),
-                row["User_Id"] as int?,
+                row["User_Id"] == DBNull.Value ? 0 : (int)row["User_Id"],
                 row["FullName"]?.ToString(),
-                row["DOB"] as DateTime?,
+                row["DOB"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["DOB"],
                 Enum.TryParse<Gender>(row["Gender"]?.ToString(), out var g) ? g : default,
                 row["Phone_No"]?.ToString(),
                 row["Address"]?.ToString(),
                 row["Created_By"]?.ToString() ?? "",
-                row["Created_Date"] as DateTime?,
+                row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
-                row["Modified_Date"] as DateTime?,
-                row["IsActive"] as bool?,
-                row["IsDeleted"] as bool?
+                row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
+                row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
+                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
             );
         }
+
         private SqlParameter[] Params(Student s)
         {
             return new[]

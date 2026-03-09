@@ -1,0 +1,14 @@
+﻿<h2>Error @ViewBag.StatusCode</h2>
+
+@if (ViewBag.StatusCode == 404)
+{
+    <p>Page not found.</p>
+}
+else if (ViewBag.StatusCode == 403)
+{
+    <p>Access denied.</p>
+}
+else
+{
+    <p>An error occurred.</p>
+}

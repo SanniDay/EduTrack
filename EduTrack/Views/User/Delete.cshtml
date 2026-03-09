@@ -1,0 +1,32 @@
+﻿@model EduTrack.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Delete User";
+    var roleName = ViewBag.RoleName as string ?? "None";
+}
+
+<h2>Delete User</h2>
+
+<div>
+    <h4>Are you sure you want to delete this user?</h4>
+
+    <dl class="row">
+        <dt class="col-sm-2 d-none">Id</dt>
+        <dd class="col-sm-10 d-none">@Model.User_Id</dd>
+
+        <dt class="col-sm-2">User Name</dt>
+        <dd class="col-sm-10">@Model.User_Name</dd>
+
+        <dt class="col-sm-2">Email</dt>
+        <dd class="col-sm-10">@Model.Email</dd>
+
+        <dt class="col-sm-2">Role</dt>
+        <dd class="col-sm-10">@roleName</dd>
+    </dl>
+
+    <form asp-action="DeleteConfirmed" method="post">
+        <input type="hidden" asp-for="User_Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>

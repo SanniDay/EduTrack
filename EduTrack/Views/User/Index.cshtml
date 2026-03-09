@@ -1,0 +1,69 @@
+﻿@model IEnumerable<EduTrack.ViewModels.UserViewModel>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">User Management</h4>
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Role Name</th>
+                        <th>Active</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int counter = 0;    
+                        foreach (var user in Model)
+                        {
+                            counter++;
+                            <tr>
+                                <td class="d-none">@user.User_Id</td>
+                                <td>@counter</td>
+                                <td>@user.User_Name</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role_Name</td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                </td>
+                                <td>@user.Created_Date.ToString("dd-MM-yyyy")</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@user.User_Id" class="btn btn-sm btn-warning">Edit</a>
+                                    <a asp-action="Delete" asp-route-id="@user.User_Id" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">
+                                No users found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
