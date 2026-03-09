@@ -1,0 +1,38 @@
+﻿@model List<EduTrack.Models.Role>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h2>Roles</h2>
+
+<p>
+    <a asp-controller="Role" asp-action="Create" class="btn btn-primary">Create New Role</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Role Name</th>
+            <th>Created Date</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var r in Model)
+    {
+        <tr>
+            <td>@r.Role_Id</td>
+            <td>@r.Role_Name</td>
+            <td>@(r.Created_Date == DateTime.MinValue ? "" : r.Created_Date.ToString("yyyy-MM-dd HH:mm"))</td>
+            <td>@(r.IsActive ? "Yes" : "No")</td>
+            <td>
+                <a asp-controller="Role" asp-action="Edit" asp-route-id="@r.Role_Id" class="btn btn-sm btn-secondary">Edit</a>
+                <a asp-controller="Role" asp-action="Delete" asp-route-id="@r.Role_Id" class="btn btn-sm btn-danger ms-1">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -19,7 +19,8 @@ namespace EduTrack.ViewModels
 
         public int? Role_Id { get; set; }
 
-    
+        public string Role_Name { get; set; } = string.Empty;
+
         public string Created_By { get; set; } = string.Empty;
 
         public DateTime Created_Date { get; set; }
@@ -41,6 +42,7 @@ namespace EduTrack.ViewModels
             string passwordHash,
             string email,
             int? role_Id,
+            string role_name,
             string created_By,
             DateTime created_Date,
             string modified_By,
@@ -53,6 +55,7 @@ namespace EduTrack.ViewModels
             PasswordHash = passwordHash;
             Email = email;
             Role_Id = role_Id;
+            Role_Name = role_name;
             Created_By = created_By;
             Created_Date = created_Date;
             Modified_By = modified_By;

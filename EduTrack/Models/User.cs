@@ -10,7 +10,11 @@
 
         public string Email { get; set; } = string.Empty;
 
+        public string PhoneNumber { get; set; } = string.Empty;
+
         public int? Role_Id { get; set; }
+
+        public string Role_Name { get; set; }= string.Empty;
 
         public string Created_By { get; set; } = string.Empty;
 
@@ -32,6 +36,7 @@
             string passwordHash,
             string email,
             int? role_Id,
+            string role_name,
             string created_By,
             DateTime created_Date,
             string modified_By,
@@ -44,6 +49,7 @@
             PasswordHash = passwordHash;
             Email = email;
             Role_Id = role_Id;
+            Role_Name = role_name;
             Created_By = created_By;
             Created_Date = created_Date;
             Modified_By = modified_By;

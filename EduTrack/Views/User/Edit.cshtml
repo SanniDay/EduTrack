@@ -1,0 +1,48 @@
+﻿@model EduTrack.ViewModels.UserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<h2>Edit User</h2>
+
+<form asp-action="Edit" method="post" class="form-horizontal">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <input asp-for="User_Id" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="User_Name" class="form-label"></label>
+        <input asp-for="User_Name" class="form-control" />
+        <span asp-validation-for="User_Name" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">New Password (leave blank to keep existing)</label>
+        <input asp-for="PasswordHash" type="password" class="form-control" autocomplete="new-password" />
+        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Role</label>
+        <select asp-for="Role_Id" class="form-select" asp-items="ViewBag.Roles">
+            <option value="">-- No role --</option>
+        </select>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <div class="mt-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>

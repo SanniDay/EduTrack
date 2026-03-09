@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using EduTrack.Models;
+using System.Linq;
 
 namespace EduTrack.Controllers
 {
@@ -12,11 +13,13 @@ namespace EduTrack.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly IUserService _userService;
+        private readonly IRoleService _roleService;
 
-        public AccountController(IAccountService accountService, IUserService userService)
+        public AccountController(IAccountService accountService, IUserService userService, IRoleService roleService)
         {
             _accountService = accountService;
             _userService = userService;
+            _roleService = roleService;
         }
 
         // =========================
@@ -69,11 +72,30 @@ namespace EduTrack.Controllers
                 ModelState.AddModelError("", "Invalid email or password.");
                 return View(model);
             }
-            
+
+            // Build claims including role if available
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, model.Email)
             };
+
+            // Try to locate the user and attach role claim (if any)
+            var user = _userService.GetAll().FirstOrDefault(u => string.Equals(u.Email, model.Email, StringComparison.OrdinalIgnoreCase));
+
+            if (user != null)
+            {
+                // Add identifier
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.User_Id.ToString()));
+
+                if (user.Role_Id.HasValue)
+                {
+                    var role = _roleService.GetById(user.Role_Id.Value);
+                    if (role != null && !string.IsNullOrWhiteSpace(role.Role_Name))
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role.Role_Name));
+                    }
+                }
+            }
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 

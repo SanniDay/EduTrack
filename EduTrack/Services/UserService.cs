@@ -69,6 +69,8 @@ namespace EduTrack.Services
                 new SqlParameter("@User_Id", u.User_Id),
                 new SqlParameter("@User_Name", u.User_Name),
                 new SqlParameter("@Email", u.Email),
+                new SqlParameter("@Password", u.PasswordHash),
+                new SqlParameter("@Phone_Number", u.PhoneNumber),
                 new SqlParameter("@Role_Id", (object?)u.Role_Id ?? DBNull.Value),
                 new SqlParameter("@Modified_By", u.Modified_By),
                 new SqlParameter("@isActive", u.IsActive)
@@ -115,6 +117,7 @@ namespace EduTrack.Services
                 row["PasswordHash"]?.ToString() ?? "",
                 row["Email"]?.ToString() ?? "",
                 row["Role_Id"] == DBNull.Value ? null : (int?)row["Role_Id"],
+                row["Role_Name"]?.ToString() ?? "",
                 row["Created_By"]?.ToString() ?? "",
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
