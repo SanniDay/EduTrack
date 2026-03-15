@@ -1,0 +1,90 @@
+﻿@model IEnumerable<EduTrack.ViewModels.TeacherViewModel>
+
+@{
+    ViewData["Title"] = "Teacher List";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Teacher Management</h4>
+                <a asp-action="Create" class="btn btn-success">Add Teacher</a>
+            </div>
+
+        </div>
+
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Teacher Name</th>
+                        <th>Phone Number</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int counter = 0;
+
+                        foreach (var teacher in Model)
+                        {
+                            counter++;
+
+                            <tr>
+                                <td>@counter</td>
+
+                                <td>@teacher.FullName</td>
+
+                                <td>@teacher.Phone_No</td>
+
+                                <td>
+                                    @if (teacher.IsActive)
+                                    {
+                                        <span class="badge bg-success">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Inactive</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @teacher.Created_Date.ToString("dd-MM-yyyy")
+                                </td>
+
+                                <td>
+                                    <a asp-action="Edit"
+                                       asp-route-id="@teacher.Teacher_Id"
+                                       class="btn btn-sm btn-warning">
+                                        Edit
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                       asp-route-id="@teacher.Teacher_Id"
+                                       class="btn btn-sm btn-danger">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">
+                                No Teachers found.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
