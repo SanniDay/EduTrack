@@ -1,4 +1,4 @@
-﻿@using System.Security.Claims
+@using System.Security.Claims
 @using System.Linq
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EduTrack.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/bootstrap-icon/bootstrap-icons.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -177,6 +179,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            <partial name="_NotificationPartial" />
             @RenderBody()
         </main>
     </div>
@@ -188,6 +191,8 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

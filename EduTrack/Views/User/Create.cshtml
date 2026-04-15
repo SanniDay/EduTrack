@@ -1,59 +1,89 @@
-﻿@model EduTrack.ViewModels.UserViewModel
-
+@model EduTrack.ViewModels.UserViewModel
 @{
-    ViewData["Title"] = "Create User";
+    ViewData["Title"] = "Create User Portfolio";
 }
 
-<h2>Create User</h2>
-
-<form asp-action="Create" method="post">
-
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <!-- User Name -->
-    <div class="mb-3">
-        <label asp-for="User_Name" class="form-label"></label>
-        <input asp-for="User_Name" class="form-control" />
-        <span asp-validation-for="User_Name" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="mb-0 text-primary fw-bold">Create New User</h2>
+            <p class="text-muted">Register a new user account into the system.</p>
+        </div>
+        <div class="col-auto">
+             <a asp-action="Index" class="btn btn-outline-secondary">
+                 <i class="bi bi-arrow-left"></i> Back to List
+             </a>
+        </div>
     </div>
 
-    <!-- Password -->
-    <div class="mb-3">
-        <label asp-for="PasswordHash" class="form-label"></label>
-        <input asp-for="PasswordHash" type="password" class="form-control" />
-        <span asp-validation-for="PasswordHash" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post" class="needs-validation">
+        <div asp-validation-summary="All" class="alert alert-danger" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
 
-    <!-- Email -->
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom pb-0 pt-4">
+                <h5 class="fw-bold"><i class="bi bi-person-plus-fill text-primary me-2"></i> Account Information</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label asp-for="User_Name" class="form-label text-muted fw-bold small text-uppercase">Username</label>
+                        <input asp-for="User_Name" class="form-control form-control-lg bg-light border-0" placeholder="e.g. John Doe" />
+                        <span asp-validation-for="User_Name" class="text-danger small"></span>
+                    </div>
 
-    <!-- Role -->
-    <div class="mb-3">
-        <label asp-for="Role_Id" class="form-label"></label>
-        <input asp-for="Role_Id" class="form-control" />
-        <span asp-validation-for="Role_Id" class="text-danger"></span>
-    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label text-muted fw-bold small text-uppercase">Email Address</label>
+                        <input asp-for="Email" class="form-control form-control-lg bg-light border-0" placeholder="user@domain.com" />
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <!-- Active -->
-    <div class="form-check mb-3">
-        <input asp-for="IsActive" class="form-check-input" />
-        <label asp-for="IsActive" class="form-check-label"></label>
-    </div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom pb-0 pt-4">
+                 <h5 class="fw-bold"><i class="bi bi-shield-lock-fill text-danger me-2"></i> Security & Access</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted fw-bold small text-uppercase">Role Assignment</label>
+                        <!-- Updated to use ViewBag.Roles instead of manual input -->
+                        <select asp-for="Role_Id" class="form-select form-select-lg bg-light border-0" asp-items="ViewBag.Roles">
+                            <option value="">-- Assign a role --</option>
+                        </select>
+                        <span asp-validation-for="Role_Id" class="text-danger small"></span>
+                    </div>
 
-    <!-- Deleted -->
-    <div class="form-check mb-3">
-        <input asp-for="IsDeleted" class="form-check-input" />
-        <label asp-for="IsDeleted" class="form-check-label"></label>
-    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted fw-bold small text-uppercase">Initial Password</label>
+                        <input asp-for="PasswordHash" type="password" class="form-control form-control-lg bg-light border-0" placeholder="Enter secure password" />
+                        <span asp-validation-for="PasswordHash" class="text-danger small"></span>
+                    </div>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <div class="d-flex justify-content-between align-items-center p-3 bg-light rounded-3 border mt-4">
+                    <div>
+                        <h6 class="fw-bold mb-1">Account Activation Status</h6>
+                        <p class="text-muted small mb-0">Disabling this will prevent the user from logging in immediately.</p>
+                    </div>
+                    <div>
+                        <select asp-for="IsActive" class="form-select form-select-lg fw-bold p-2 px-4 shadow-sm @(Model?.IsActive == false ? "border-danger text-danger bg-danger bg-opacity-10" : "border-success text-success bg-success bg-opacity-10")" style="appearance: none; cursor: pointer;">
+                            <option value="true">🟢 Active Status</option>
+                            <option value="false">🔴 Inactive Status</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-</form>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                <i class="bi bi-check-circle"></i> Create User Account
+            </button>
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     @{

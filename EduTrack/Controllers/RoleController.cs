@@ -1,9 +1,12 @@
 using EduTrack.Interfaces;
 using EduTrack.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using EduTrack.Constants;
 
 namespace EduTrack.Controllers
 {
+    [Authorize(Roles = AppRoles.Admin)]
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
@@ -40,7 +43,7 @@ namespace EduTrack.Controllers
             model.IsDeleted = false;
 
             _roleService.Create(model);
-
+            TempData["Success"] = "Role created successfully.";
             return RedirectToAction("Index");
         }
 
@@ -63,7 +66,7 @@ namespace EduTrack.Controllers
             model.Modified_Date = DateTime.UtcNow;
 
             _roleService.Update(model);
-
+            TempData["Success"] = "Role updated successfully.";
             return RedirectToAction("Index");
         }
 
@@ -80,6 +83,7 @@ namespace EduTrack.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             _roleService.Delete(id);
+            TempData["Success"] = "Role deleted successfully.";
             return RedirectToAction("Index");
         }
     }

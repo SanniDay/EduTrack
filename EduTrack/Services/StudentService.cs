@@ -1,4 +1,4 @@
-﻿using EduTrack.Helpers;
+using EduTrack.Helpers;
 using EduTrack.Interfaces;
 using EduTrack.Models;
 using System.Data;
@@ -87,8 +87,6 @@ namespace EduTrack.Services
                 new SqlParameter("@FullName", (object?)s.FullName ?? DBNull.Value),
                 new SqlParameter("@DOB", (object?)s.DOB ?? DBNull.Value),
                 new SqlParameter("@Gender", (object?)s.Gender.ToString() ?? DBNull.Value),
-                new SqlParameter("@Phone_No", (object?)s.Phone_No ?? DBNull.Value),
-                new SqlParameter("@Address", (object?)s.Address ?? DBNull.Value),
                 new SqlParameter("@Created_By", s.Created_By),
                 new SqlParameter("@Modified_By", s.Modified_By),
                 new SqlParameter("@isActive", (object?)s.IsActive ?? DBNull.Value),

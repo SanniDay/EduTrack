@@ -1,4 +1,4 @@
-﻿namespace EduTrack.Models
+namespace EduTrack.Models
 {
     public class User
     {
@@ -28,6 +28,8 @@
 
         public bool IsDeleted { get; set; }
 
+        public string Address { get; set; } = string.Empty;
+
         public User() { }
 
         public User(
@@ -35,6 +37,8 @@
             string user_Name,
             string passwordHash,
             string email,
+            string phoneNumber,
+            string address,
             int? role_Id,
             string role_name,
             string created_By,
@@ -48,6 +52,8 @@
             User_Name = user_Name;
             PasswordHash = passwordHash;
             Email = email;
+            PhoneNumber = phoneNumber;
+            Address = address;
             Role_Id = role_Id;
             Role_Name = role_name;
             Created_By = created_By;

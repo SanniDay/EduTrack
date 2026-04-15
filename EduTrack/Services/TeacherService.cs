@@ -1,4 +1,4 @@
-﻿using EduTrack.Interfaces;
+using EduTrack.Interfaces;
 using EduTrack.Models;
 using EduTrack.Helpers;
 using System.Data;
@@ -39,10 +39,18 @@ namespace EduTrack.Services
 
         public int Update(Teacher t)
         {
-            var list = Params(t).ToList();
-            list.Add(new SqlParameter("@Teacher_Id", t.Teacher_Id));
+            var parameters = new List<SqlParameter>
+            {
+                new SqlParameter("@Teacher_Id", t.Teacher_Id),
+                new SqlParameter("@User_Id", t.User_Id),
+                new SqlParameter("@FullName", t.FullName),
+                new SqlParameter("@Created_By", t.Created_By),
+                new SqlParameter("@Modified_By", t.Modified_By),    
+                new SqlParameter("@IsActive", t.IsActive),
+                new SqlParameter("@IsDeleted", t.IsDeleted)
+            };
 
-            return _db.ExecuteProcedureNonQuery("sp_Teacher_Update", list.ToArray());
+            return _db.ExecuteProcedureNonQuery("sp_Teacher_Update", parameters.ToArray());
         }
 
         public int Delete(int id)
@@ -83,7 +91,6 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@User_Id", (object?)t.User_Id ?? DBNull.Value),
                 new SqlParameter("@FullName", (object?)t.FullName ?? DBNull.Value),
-                new SqlParameter("@Phone_No", (object?)t.Phone_No ?? DBNull.Value),
                 new SqlParameter("@Created_By", t.Created_By),
                 new SqlParameter("@Modified_By", t.Modified_By),
                 new SqlParameter("@IsActive", (object?)t.IsActive ?? DBNull.Value),

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduTrack.ViewModels
 {
@@ -31,6 +31,19 @@ namespace EduTrack.ViewModels
 
         public bool IsDeleted { get; set; }
 
+        public TeacherViewModel()
+        {
+            Teacher_Id = 0;
+            User_Id = 0;
+            FullName = string.Empty;
+            Phone_No = string.Empty;
+            Created_By = string.Empty;
+            Created_Date = DateTime.MinValue;
+            Modified_By = string.Empty;
+            Modified_Date = DateTime.MinValue;
+            IsActive =false;
+            IsDeleted = false;
+        }
 
         public TeacherViewModel(
             int teacher_Id,
@@ -53,7 +66,7 @@ namespace EduTrack.ViewModels
             Modified_By = modified_By;
             Modified_Date = modified_Date;
             IsActive = isActive;
-            IsDeleted = IsDeleted;
+            IsDeleted = isDeleted;
         }
     }
 }

@@ -1,3 +1,7 @@
 <Solution>
+  <Project Path="../EduTrack.DB/EduTrack.DB.sqlproj" Id="cb6ec0be-217b-4e2b-8f6d-9c033ae75428">
+    <Build />
+    <Deploy />
+  </Project>
   <Project Path="EduTrack.csproj" />
 </Solution>

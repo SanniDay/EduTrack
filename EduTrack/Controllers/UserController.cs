@@ -1,4 +1,4 @@
-﻿using EduTrack.Helpers;
+using EduTrack.Helpers;
 using EduTrack.Interfaces;
 using EduTrack.Models;
 using EduTrack.ViewModels;
@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Linq;
 using System.Security.Claims;
+using EduTrack.Constants;
 
 namespace EduTrack.Controllers
 {
-    [Authorize(Roles = "Admin,Teacher")]
+    [Authorize(Roles = $"{AppRoles.Admin},{AppRoles.Teacher}")]
     public class UserController : Controller
     {
         private readonly IUserService _userService;
@@ -34,10 +35,10 @@ namespace EduTrack.Controllers
             // Get roles from database
             var roles = _roleService.GetAll();
 
-            var adminRoleId = roles.FirstOrDefault(r => r.Role_Name == "Admin")?.Role_Id;
-            var teacherRoleId = roles.FirstOrDefault(r => r.Role_Name == "Teacher")?.Role_Id;
+            var adminRoleId = roles.FirstOrDefault(r => r.Role_Name == AppRoles.Admin)?.Role_Id;
+            var teacherRoleId = roles.FirstOrDefault(r => r.Role_Name == AppRoles.Teacher)?.Role_Id;
 
-            if (Role == "Teacher")
+            if (Role == AppRoles.Teacher)
             {
                 lstusers = lstusers
                     .Where(u => u.Role_Id != adminRoleId
@@ -52,6 +53,8 @@ namespace EduTrack.Controllers
                     u.User_Name,
                     u.PasswordHash,
                     u.Email,
+                    u.PhoneNumber,
+                    u.Address,
                     u.Role_Id,
                     u.Role_Name,
                     u.Created_By,
@@ -66,24 +69,7 @@ namespace EduTrack.Controllers
             return View(userViewModels);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            UserViewModel user = new UserViewModel();
-            return View(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(UserViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            // Save to DB here
-            return RedirectToAction("Index");
-        }
-
+    
         // =========================
         // EDIT
         // =========================
@@ -94,9 +80,9 @@ namespace EduTrack.Controllers
             if (u == null) return NotFound();
             var roles = _roleService.GetAll();
 
-            var studentRoleId = roles.FirstOrDefault(r => r.Role_Name == "Student")?.Role_Id;
+            var studentRoleId = roles.FirstOrDefault(r => r.Role_Name == AppRoles.Student)?.Role_Id;
 
-            if (Role == "Teacher")
+            if (Role == AppRoles.Teacher)
             {
                 roles = [.. roles.Where(u => u.Role_Id == studentRoleId)];
             }
@@ -107,6 +93,8 @@ namespace EduTrack.Controllers
                 u.User_Name,
                 u.PasswordHash,
                 u.Email,
+                u.PhoneNumber,
+                u.Address,
                 u.Role_Id,
                 u.Role_Name,
                 u.Created_By,
@@ -150,6 +138,8 @@ namespace EduTrack.Controllers
                 model.User_Name,
                 string.IsNullOrWhiteSpace(model.PasswordHash) ? existing.PasswordHash : PasswordHelper.HashPassword(model.PasswordHash),
                 model.Email,
+                model.PhoneNumber,
+                model.Address,
                 model.Role_Id,
                 string.Empty,
                 existing.Created_By,
@@ -161,7 +151,7 @@ namespace EduTrack.Controllers
             );
 
             _userService.Update(updated);
-
+            TempData["Success"] = "User updated successfully.";
             return RedirectToAction("Index");
         }
 
@@ -179,6 +169,8 @@ namespace EduTrack.Controllers
                 u.User_Name,
                 u.PasswordHash,
                 u.Email,
+                u.PhoneNumber,
+                u.Address,
                 u.Role_Id,
                 u.Role_Name,
                 u.Created_By,
@@ -208,6 +200,7 @@ namespace EduTrack.Controllers
         public IActionResult DeleteConfirmed(int User_Id)
         {
             _userService.Delete(User_Id);
+            TempData["Success"] = "User deleted successfully.";
             return RedirectToAction("Index");
         }
     }

@@ -1,27 +1,76 @@
-using System.Diagnostics;
+using System.Security.Claims;
+using EduTrack.Constants;
+using EduTrack.Interfaces;
 using EduTrack.ViewModels;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EduTrack.Controllers
 {
-    [Authorize] //Require login for entire controller
+    [Authorize]
     public class HomeController : Controller
     {
-        // Only logged-in users can access
-        public IActionResult Index()
+        private readonly IUserService _userService;
+        private readonly ITeacherService _teacherService;
+        private readonly IRoleService _roleService;
+        private readonly IStudentService _studentService;
+        private readonly IClassService _classService;
+
+        public HomeController(
+            IUserService userService, 
+            ITeacherService teacherService, 
+            IRoleService roleService,
+            IStudentService studentService,
+            IClassService classService)
         {
-            return View();
+            _userService = userService;
+            _teacherService = teacherService;
+            _roleService = roleService;
+            _studentService = studentService;
+            _classService = classService;
         }
 
-        // If you want Privacy public, allow anonymous
+        public IActionResult Index()
+        {
+            var role = User.FindFirstValue(ClaimTypes.Role) ?? "No Role";
+            var name = User.Identity?.Name ?? "Unknown User";
+
+            var model = new DashboardViewModel
+            {
+                UserRole = role,
+                DisplayName = name
+            };
+
+            if (role == AppRoles.Admin)
+            {
+                // Load all admin metrics
+                model.TotalUsers = _userService.GetAll().Count;
+                model.TotalTeachers = _teacherService.GetAll().Count;
+                model.TotalStudents = _studentService.GetAll().Count;
+                model.TotalRoles = _roleService.GetAll().Count;
+                model.TotalClasses = _classService.GetAllClasses().Count;
+            }
+            else if (role == AppRoles.Teacher)
+            {
+                // In future, restrict to this specific teacher ID
+                model.TotalStudents = _studentService.GetAll().Count; 
+                model.ActiveClasses = _classService.GetAllClasses().Count;
+            }
+            else if (role == AppRoles.Student)
+            {
+                // For a student, just passing enrolled classes count
+                model.ActiveClasses = _classService.GetAllClasses().Count;
+            }
+
+            return View(model);
+        }
+
         [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        // Error page must be accessible without login
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -29,7 +78,6 @@ namespace EduTrack.Controllers
             return View();
         }
 
-        // Status code handler (404, 403 etc.)
         [AllowAnonymous]
         public IActionResult StatusCodeError(int code)
         {
