@@ -1,0 +1,131 @@
+@page
+@model EduTrack.Pages.StudentFees.IndexModel
+
+@{
+    ViewData["Title"] = "Student Fees Management";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-warning text-dark">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-receipt-cutoff me-2"></i>Student Fees Management
+                </h4>
+                <a asp-page="Create" class="btn btn-dark btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>Add Fee Record
+                </a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@Model.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card-body">
+            @if (Model.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table id="studentFeesTable" class="table table-bordered table-hover align-middle w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">
+                                    <i class="bi bi-hash"></i>
+                                </th>
+                                <th style="width: 20%">
+                                    <i class="bi bi-person-circle me-2"></i>Student Name
+                                </th>
+                                <th style="width: 18%">
+                                    <i class="bi bi-credit-card me-2"></i>Fee Description
+                                </th>
+                                <th style="width: 12%">Amount</th>
+                                <th style="width: 12%">Status</th>
+                                <th style="width: 15%">Due Date</th>
+                                <th style="width: 12%">Created Date</th>
+                                <th style="width: 15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@item.StudentFees_Id</td>
+                                    <td>
+                                        <i class="bi bi-person-circle text-primary me-2"></i>@(string.IsNullOrEmpty(item.StudentName) ? "N/A" : item.StudentName)
+                                    </td>
+                                    <td>
+                                        @(string.IsNullOrEmpty(item.FeeDescription) ? "N/A" : item.FeeDescription)
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success border border-success">
+                                            @item.Amount.ToString("C")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var statusClass = item.Status.ToString() switch
+                                            {
+                                                "Paid" => "bg-success",
+                                                "Pending" => "bg-warning",
+                                                "Overdue" => "bg-danger",
+                                                "Exempted" => "bg-info",
+                                                "PartiallyPaid" => "bg-secondary",
+                                                _ => "bg-secondary"
+                                            };
+                                        }
+                                        <span class="badge @statusClass">@item.Status.ToString()</span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@item.DueDate.ToString("dd MMM yyyy")</small>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">@item.Created_Date.ToString("dd/MM/yyyy")</small>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <a asp-page="Edit" asp-route-id="@item.StudentFees_Id" 
+                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@item.StudentFees_Id" 
+                                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                    <h5 class="text-muted mt-3">No Student Fee Records Found</h5>
+                    <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new fee record</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#studentFeesTable').DataTable({
+                "pageLength": 10,
+                "responsive": true,
+                "language": {
+                    "search": "Search records:",
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}

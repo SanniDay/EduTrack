@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Pages\StudentClass\" />
+    <Folder Include="Pages\TeacherClass\" />
   </ItemGroup>
 
   <ItemGroup>

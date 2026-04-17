@@ -1,21 +1,27 @@
-@if (TempData["Success"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+@* Unified toast notifications using local toast.js (Bootstrap-based) *@
+@{ 
+    var success = TempData["Success"] ?? TempData["Message"];
+    var error = TempData["Error"];
+}
 
+@if (success != null)
+{
     <script type="text/javascript">
-        toastr.success('@TempData["Success"]');
+        document.addEventListener('DOMContentLoaded', function(){
+            try {
+                Toast.show('success', '@Html.Raw(success.ToString().Replace("'","\'"))', 'Success');
+            } catch(e) { console.error(e); }
+        });
     </script>
 }
 
-@if (TempData["Error"] != null)
+@if (error != null)
 {
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-
     <script type="text/javascript">
-        toastr.error('@TempData["Error"]');
+        document.addEventListener('DOMContentLoaded', function(){
+            try {
+                Toast.show('error', '@Html.Raw(error.ToString().Replace("'","\'"))', 'Error');
+            } catch(e) { console.error(e); }
+        });
     </script>
 }

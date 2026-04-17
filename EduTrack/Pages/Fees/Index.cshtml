@@ -1,0 +1,142 @@
+@page
+@model EduTrack.Pages.Fees.IndexModel
+
+@{
+    ViewData["Title"] = "Fees Management";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-danger text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-cash-stack me-2"></i>Fees Management
+                </h4>
+                <a asp-page="Create" class="btn btn-light btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>Add Fee Type
+                </a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@Model.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card-body">
+            @if (Model.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table id="feesTable" class="table table-bordered table-hover align-middle w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">
+                                    <i class="bi bi-hash"></i>
+                                </th>
+                                <th style="width: 15%">
+                                    <i class="bi bi-tag me-2"></i>Fee Type
+                                </th>
+                                <th style="width: 12%">
+                                    <i class="bi bi-cash-stack me-2"></i>Amount
+                                </th>
+                                <th style="width: 10%">Currency</th>
+                                <th style="width: 22%">Description</th>
+                                <th style="width: 12%">Created By</th>
+                                <th style="width: 12%">Created Date</th>
+                                <th style="width: 8%">Status</th>
+                                <th style="width: 15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var fee in Model.Items)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@fee.Fees_Id</td>
+                                    <td>
+                                        <span class="badge bg-info">@fee.FeeType</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success-subtle text-success border border-success">
+                                            <strong>@fee.Amount.ToString("C")</strong>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small>@fee.Currency</small>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(fee.Description))
+                                        {
+                                            <small class="text-muted">@(fee.Description.Length > 40 ? fee.Description.Substring(0, 40) + "..." : fee.Description)</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-muted fst-italic">No description</small>
+                                        }
+                                    </td>
+                                    <td>@fee.Created_By</td>
+                                    <td>
+                                        <small class="text-muted">@fee.Created_Date.ToString("dd MMM yyyy")</small>
+                                    </td>
+                                    <td>
+                                        @if (fee.IsActive)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success">
+                                                <i class="bi bi-check-circle me-1"></i>Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning border border-warning">
+                                                <i class="bi bi-dash-circle me-1"></i>Inactive
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <a asp-page="Edit" asp-route-id="@fee.Fees_Id" 
+                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@fee.Fees_Id" 
+                                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                    <h5 class="text-muted mt-3">No Fees Found</h5>
+                    <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new fee type</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#feesTable').DataTable({
+                "pageLength": 10,
+                "responsive": true,
+                "language": {
+                    "search": "Search fees:",
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}
+
+}

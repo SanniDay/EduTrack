@@ -1,0 +1,82 @@
+@page
+@model EduTrack.Pages.Classes.CreateModel
+
+@{
+    ViewData["Title"] = "Add New Class";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-door-open me-2"></i>Add New Class
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert" role="alert"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Class.ClassName" class="form-label fw-bold">
+                                Class Name <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-door-open text-info"></i>
+                                </span>
+                                <input asp-for="Class.ClassName" class="form-control" 
+                                       placeholder="e.g., Grade 10 A" required />
+                            </div>
+                            <span asp-validation-for="Class.ClassName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Class.Section" class="form-label fw-bold">
+                                Section <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light">
+                                    <i class="bi bi-bookmark text-info"></i>
+                                </span>
+                                <input asp-for="Class.Section" class="form-control" 
+                                       placeholder="e.g., A, B, C" required />
+                            </div>
+                            <span asp-validation-for="Class.Section" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="form-check form-switch">
+                                <input type="checkbox" asp-for="Class.IsActive" 
+                                       class="form-check-input" id="isActiveCheck" checked />
+                                <label class="form-check-label" for="isActiveCheck">
+                                    <strong>Active</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-info btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Create Class
+                            </button>
+                            <a asp-page="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back to List
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Show validation summary if there are errors
+        if (document.querySelectorAll('.text-danger').length > 0) {
+            document.getElementById('validationAlert').classList.remove('d-none');
+        }
+    </script>
+}

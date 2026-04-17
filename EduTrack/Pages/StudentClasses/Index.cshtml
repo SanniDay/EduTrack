@@ -1,0 +1,129 @@
+@page
+@model EduTrack.Pages.StudentClasses.IndexModel
+
+@{
+    ViewData["Title"] = "Student Classes Management";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-people-fill me-2"></i>Student Classes Management
+                </h4>
+                <a asp-page="Create" class="btn btn-light btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>Add Assignment
+                </a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@Model.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card-body">
+            @if (Model.StudentClasses.Any())
+            {
+                <div class="table-responsive">
+                    <table id="studentClassTable" class="table table-bordered table-hover align-middle w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">
+                                    <i class="bi bi-hash"></i>
+                                </th>
+                                <th style="width: 20%">
+                                    <i class="bi bi-person me-2"></i>Student Name
+                                </th>
+                                <th style="width: 15%">
+                                    <i class="bi bi-door-open me-2"></i>Class
+                                </th>
+                                <th style="width: 10%">Section</th>
+                                <th style="width: 15%">Created By</th>
+                                <th style="width: 12%">Created Date</th>
+                                <th style="width: 8%">Status</th>
+                                <th style="width: 15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var sc in Model.StudentClasses)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@sc.Student_Class_Id</td>
+                                    <td>
+                                        <i class="bi bi-person-circle text-primary me-2"></i>@sc.StudentName
+                                    </td>
+                                    <td>@sc.ClassName</td>
+                                    <td><span class="badge bg-info text-dark">@sc.Section</span></td>
+                                    <td>@sc.Created_By</td>
+                                    <td>
+                                        <small class="text-muted">@sc.Created_Date.ToString("dd/MM/yyyy")</small>
+                                    </td>
+                                    <td>
+                                        @if (sc.IsActive && !sc.IsDeleted)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success">
+                                                <i class="bi bi-check-circle me-1"></i>Active
+                                            </span>
+                                        }
+                                        else if (sc.IsDeleted)
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger border border-danger">
+                                                <i class="bi bi-x-circle me-1"></i>Deleted
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning border border-warning">
+                                                <i class="bi bi-dash-circle me-1"></i>Inactive
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <a asp-page="Edit" asp-route-id="@sc.Student_Class_Id" 
+                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@sc.Student_Class_Id" 
+                                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                    <h5 class="text-muted mt-3">No Student Classes Found</h5>
+                    <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new assignment</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#studentClassTable').DataTable({
+                "pageLength": 10,
+                "responsive": true,
+                "language": {
+                    "search": "Search assignments:",
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}

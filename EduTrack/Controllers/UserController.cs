@@ -84,7 +84,8 @@ namespace EduTrack.Controllers
 
             if (Role == AppRoles.Teacher)
             {
-                roles = [.. roles.Where(u => u.Role_Id == studentRoleId)];
+                // Teachers should only be able to assign the Student role when editing users
+                roles = roles.Where(r => r.Role_Id == studentRoleId).ToList();
             }
 
 

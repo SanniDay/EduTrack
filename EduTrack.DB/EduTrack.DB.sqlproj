@@ -67,7 +67,6 @@
     <Build Include="dbo\Tables\Users.sql" />
     <Build Include="dbo\Tables\Roles.sql" />
     <Build Include="dbo\Tables\Students.sql" />
-    <Build Include="dbo\Tables\Class.sql" />
     <Build Include="dbo\Tables\Teachers.sql" />
     <Build Include="dbo\Tables\StudentClass.sql" />
     <Build Include="dbo\Tables\TeacherClass.sql" />
@@ -109,6 +108,30 @@
     <Build Include="dbo\Stored Procedures\sp_TeacherClass_Update.sql" />
     <Build Include="dbo\Stored Procedures\sp_TeacherClass_Delete.sql" />
     <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Tables\StudentFees.sql" />
+    <Build Include="dbo\Tables\Fees.sql" />
+    <Build Include="dbo\Tables\Classes.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetByStudentId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetByFeesId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_Create_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetByClassId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Create.sql" />
+    <Build Include="DEPLOYMENT_README.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EduTrack.DB.publish.xml" />

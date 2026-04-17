@@ -1,0 +1,44 @@
+@page "{id:int}"
+@model EduTrack.Pages.StudentClasses.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete Student Class";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Delete Student Class</h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <strong>Warning!</strong> Are you sure you want to delete this student class assignment?
+                    </div>
+
+                    <div class="info-box">
+                        <p><strong>Student:</strong> @Model.StudentClassViewModel.StudentName</p>
+                        <p><strong>Class:</strong> @Model.StudentClassViewModel.ClassName - @Model.StudentClassViewModel.Section</p>
+                        <p><strong>Created By:</strong> @Model.StudentClassViewModel.Created_By</p>
+                        <p><strong>Created Date:</strong> @Model.StudentClassViewModel.Created_Date.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <form method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@Model.StudentClassViewModel.Student_Class_Id">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </form>
+                    <a href="/StudentClasses/Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

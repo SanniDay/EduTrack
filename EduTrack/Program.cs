@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 // =============================
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 builder.Services.AddScoped<DbHelper>();
@@ -17,7 +18,15 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<IRoleService, RoleService>(); // Registered role service
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+// New Services for Classes, Subjects, and Fees Management
+builder.Services.AddScoped<IClassService, ClassService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<IStudentClassService, StudentClassService>();
+builder.Services.AddScoped<ITeacherClassService, TeacherClassService>();
+builder.Services.AddScoped<IFeesService, FeesService>();
+builder.Services.AddScoped<IStudentFeesService, StudentFeesService>();
 builder.Services.AddScoped<IStudentClassService, StudentClassService>();
 builder.Services.AddScoped<ITeacherClassService, TeacherClassService>();
 builder.Services.AddScoped<IClassService, ClassService>();
@@ -77,6 +86,8 @@ app.UseAuthorization();
 // =============================
 // Routing
 // =============================
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",

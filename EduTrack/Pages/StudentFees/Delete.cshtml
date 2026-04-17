@@ -1,0 +1,57 @@
+@page "{id:int}"
+@model EduTrack.Pages.StudentFees.DeleteModel
+@{
+    ViewData["Title"] = "Delete Student Fee";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">⚠️ Confirm Deletion</h4>
+                <p>Are you sure you want to delete this student fee record? This action cannot be undone.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Student:</strong></div>
+                        <div class="col-8">@(string.IsNullOrEmpty(Model.Item.StudentName) ? Model.Item.Student_Id.ToString() : Model.Item.StudentName)</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Fee:</strong></div>
+                        <div class="col-8">@(string.IsNullOrEmpty(Model.Item.FeeDescription) ? Model.Item.Fees_Id.ToString() : Model.Item.FeeDescription)</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Amount:</strong></div>
+                        <div class="col-8">@Model.Item.Amount.ToString("C")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Due Date:</strong></div>
+                        <div class="col-8">@Model.Item.DueDate.ToString("dd MMM yyyy")</div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" class="mt-4">
+                <input type="hidden" name="id" value="@Model.Item.StudentFees_Id" />
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <a asp-page="Index" class="btn btn-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
