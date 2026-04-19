@@ -74,3 +74,4 @@ Generated_Code/
 
 # dotenv environment variables
 .env
+*.dbmdl

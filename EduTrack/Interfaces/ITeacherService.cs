@@ -1,6 +1,6 @@
-﻿using EduTrack.Models;
+using EduTrack.Models;
 
-namespace EduTrack.Services
+namespace EduTrack.Interfaces
 {
 
     public interface ITeacherService

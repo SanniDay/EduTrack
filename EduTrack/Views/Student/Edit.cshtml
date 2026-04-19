@@ -1,0 +1,73 @@
+﻿@model EduTrack.ViewModels.StudentViewModel
+
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Student</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" class="needs-validation">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert"></div>
+                        <input type="hidden" asp-for="Student_Id" />
+
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
+                            <input asp-for="FullName" class="form-control" required />
+                            <span asp-validation-for="FullName" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DOB" class="form-label fw-bold">Date of Birth</label>
+                            <input asp-for="DOB" class="form-control" type="date" required />
+                            <span asp-validation-for="DOB" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Gender" class="form-label fw-bold">Gender</label>
+                            <select asp-for="Gender" class="form-select">
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                                <option value="3">Other</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Phone_No" class="form-label fw-bold">Phone</label>
+                            <input asp-for="Phone_No" class="form-control" />
+                            <span asp-validation-for="Phone_No" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Address" class="form-label fw-bold">Address</label>
+                            <textarea asp-for="Address" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3 text-muted small">
+                            <div><strong>Created:</strong> @Model.Created_Date.ToString("dd MMM yyyy HH:mm") by @Model.Created_By</div>
+                            <div><strong>Last Modified:</strong> @Model.Modified_Date.ToString("dd MMM yyyy HH:mm")</div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg"><i class="bi bi-check-circle me-2"></i>Update Student</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left me-2"></i>Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        if (document.querySelectorAll('.text-danger').length > 0) { var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none'); }
+    </script>
+}

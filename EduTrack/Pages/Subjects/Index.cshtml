@@ -1,0 +1,135 @@
+@page
+@model EduTrack.Pages.Subjects.IndexModel
+
+@{
+    ViewData["Title"] = "Subjects Management";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-book-fill me-2"></i>Subjects Management
+                </h4>
+                <a asp-page="Create" class="btn btn-light btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>Add Subject
+                </a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@Model.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card-body">
+            @if (Model.Subjects.Any())
+            {
+                <div class="table-responsive">
+                    <table id="subjectsTable" class="table table-bordered table-hover align-middle w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">
+                                    <i class="bi bi-hash"></i>
+                                </th>
+                                <th style="width: 12%">
+                                    <i class="bi bi-code-square me-2"></i>Subject Code
+                                </th>
+                                <th style="width: 20%">
+                                    <i class="bi bi-book me-2"></i>Subject Name
+                                </th>
+                                <th style="width: 25%">Description</th>
+                                <th style="width: 13%">Created By</th>
+                                <th style="width: 12%">Created Date</th>
+                                <th style="width: 8%">Status</th>
+                                <th style="width: 15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var subject in Model.Subjects)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@subject.Subject_Id</td>
+                                    <td>
+                                        <span class="badge bg-secondary">@subject.Subject_Code</span>
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-book-fill text-primary me-2"></i><strong>@subject.Subject_Name</strong>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(subject.Description))
+                                        {
+                                            <small class="text-muted">@(subject.Description.Length > 50 ? subject.Description.Substring(0, 50) + "..." : subject.Description)</small>
+                                        }
+                                        else
+                                        {
+                                            <small class="text-muted fst-italic">No description</small>
+                                        }
+                                    </td>
+                                    <td>@subject.Created_By</td>
+                                    <td>
+                                        <small class="text-muted">@subject.Created_Date.ToString("dd MMM yyyy")</small>
+                                    </td>
+                                    <td>
+                                        @if (subject.IsActive)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success">
+                                                <i class="bi bi-check-circle me-1"></i>Active
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning border border-warning">
+                                                <i class="bi bi-dash-circle me-1"></i>Inactive
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <a asp-page="Edit" asp-route-id="@subject.Subject_Id" 
+                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@subject.Subject_Id" 
+                                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                    <h5 class="text-muted mt-3">No Subjects Found</h5>
+                    <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new subject</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#subjectsTable').DataTable({
+                "pageLength": 10,
+                "responsive": true,
+                "language": {
+                    "search": "Search subjects:",
+                    "lengthMenu": "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}

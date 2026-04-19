@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace EduTrack.Models
@@ -28,7 +28,19 @@ namespace EduTrack.Models
 
         public bool IsDeleted { get; set; }
 
-       
+       public Teacher()
+        {
+            Teacher_Id = 0;
+            User_Id = 0;
+            FullName = string.Empty;
+            Phone_No = string.Empty;
+            Created_By = string.Empty;
+            Created_Date = DateTime.MinValue;
+            Modified_By = string.Empty;
+            Modified_Date = DateTime.MinValue;
+            IsActive = false;
+            IsDeleted = false;
+        }
         public Teacher(
             int teacher_Id,
             int user_Id,
@@ -50,7 +62,7 @@ namespace EduTrack.Models
             Modified_By = modified_By;
             Modified_Date = modified_Date;
             IsActive = isActive;
-            IsDeleted = IsDeleted;
+            IsDeleted = isDeleted;
         }
     }
 }

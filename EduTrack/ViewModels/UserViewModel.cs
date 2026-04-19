@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduTrack.ViewModels
 {
@@ -16,6 +16,10 @@ namespace EduTrack.ViewModels
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
         public string Email { get; set; } = string.Empty;
+
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        public string Address { get; set; } = string.Empty;
 
         public int? Role_Id { get; set; }
 
@@ -41,6 +45,8 @@ namespace EduTrack.ViewModels
             string user_Name,
             string passwordHash,
             string email,
+            string phoneNumber,
+            string address,
             int? role_Id,
             string role_name,
             string created_By,
@@ -54,6 +60,8 @@ namespace EduTrack.ViewModels
             User_Name = user_Name;
             PasswordHash = passwordHash;
             Email = email;
+            PhoneNumber = phoneNumber;
+            Address = address;
             Role_Id = role_Id;
             Role_Name = role_name;
             Created_By = created_By;

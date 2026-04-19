@@ -1,0 +1,86 @@
+@page
+@model EduTrack.Pages.ClassSubjects.CreateModel
+
+@{
+    ViewData["Title"] = "Add Subject to Class";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-book-fill me-2"></i>Add Subject to Class</h5>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" class="needs-validation">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert"></div>
+
+                        <div class="mb-3">
+                            <label for="Class_Id" class="form-label fw-bold">Class <span class="text-danger">*</span></label>
+                            <select class="form-select" id="Class_Id" name="ClassSubjectViewModel.Class_Id" required>
+                                <option value="">-- Select Class --</option>
+                                @foreach (var cls in Model.Classes)
+                                {
+                                    <option value="@cls.Class_Id">@cls.ClassName - @cls.Section</option>
+                                }
+                            </select>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.ClassSubjectViewModel.Class_Id)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Subject_Id" class="form-label fw-bold">Subject <span class="text-danger">*</span></label>
+                            <select class="form-select" id="Subject_Id" name="ClassSubjectViewModel.Subject_Id" required>
+                                <option value="">-- Select Subject --</option>
+                                @foreach (var subject in Model.Subjects)
+                                {
+                                    <option value="@subject.Subject_Id">@subject.Subject_Name</option>
+                                }
+                            </select>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.ClassSubjectViewModel.Subject_Id)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="IsCore" name="ClassSubjectViewModel.IsCore" value="true" checked>
+                                <label class="form-check-label" for="IsCore"><strong>Core Subject</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="IsActive" name="ClassSubjectViewModel.IsActive" value="true" checked>
+                                <label class="form-check-label" for="IsActive"><strong>Active</strong></label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Add Class Subject
+                            </button>
+                            <a asp-page="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        if (document.querySelectorAll('.text-danger').length > 0) {
+            var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none');
+        }
+    </script>
+}

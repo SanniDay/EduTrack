@@ -1,8 +1,224 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model EduTrack.ViewModels.DashboardViewModel
+@using EduTrack.Constants
+
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <!-- Welcome Banner with Glass-like subtle gradient -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 text-white" style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%);">
+                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+                    <div>
+                        <h2 class="fw-bold mb-1">Welcome back, @Model.DisplayName!</h2>
+                        <p class="mb-0 fs-5 text-white-50">You are securely logged in as an <span class="badge bg-white text-primary rounded-pill px-3 shadow-sm">@Model.UserRole</span>.</p>
+                    </div>
+                    <div class="d-none d-md-block px-4">
+                        <i class="bi bi-speedometer2" style="font-size: 5rem; opacity: 0.2;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    @if (Model.UserRole == AppRoles.Admin)
+    {
+        <div class="d-flex align-items-center mb-3 border-bottom pb-2">
+            <i class="bi bi-activity fs-4 text-primary me-2"></i>
+            <h4 class="mb-0 text-secondary fw-bold">System Overview</h4>
+        </div>
+        
+        <div class="row g-4 mb-4">
+            <!-- Total Users Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card shadow-sm border-0 h-100 hover-lift transition-all" style="transition: transform 0.2s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Registered Users</h6>
+                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalUsers</h2>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 rounded-3 p-3 text-primary shadow-sm">
+                                <i class="bi bi-people-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                        <a asp-controller="User" asp-action="Index" class="text-decoration-none fw-bold small">Manage Users <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Teachers Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Teachers</h6>
+                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalTeachers</h2>
+                            </div>
+                            <div class="bg-success bg-opacity-10 rounded-3 p-3 text-success shadow-sm">
+                                <i class="bi bi-person-badge fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                        <a asp-controller="Teacher" asp-action="Index" class="text-decoration-none text-success fw-bold small">Manage Teachers <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Students Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Students</h6>
+                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalStudents</h2>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-3 text-warning shadow-sm">
+                                <i class="bi bi-mortarboard-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                        <a asp-controller="Student" asp-action="Index" class="text-decoration-none text-warning fw-bold small">Manage Students <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Roles Card -->
+            <div class="col-xl-3 col-md-6">
+                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">System Roles</h6>
+                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalRoles</h2>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 rounded-3 p-3 text-danger shadow-sm">
+                                <i class="bi bi-shield-lock-fill fs-3"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-3">
+                        <a asp-controller="Role" asp-action="Index" class="text-decoration-none text-danger fw-bold small">Manage Roles <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- TEACHER DASHBOARD -->
+    @if (Model.UserRole == AppRoles.Teacher)
+    {
+        <div class="d-flex align-items-center mb-3 border-bottom pb-2 mt-2">
+            <i class="bi bi-journal-bookmark-fill fs-4 text-success me-2"></i>
+            <h4 class="mb-0 text-secondary fw-bold">My Classroom Hub</h4>
+        </div>
+        
+        <div class="row g-4 mb-4">
+            <!-- assigned classes -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="bg-success bg-opacity-10 rounded-circle p-3 text-success me-3">
+                                <i class="bi bi-book-half fs-2"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">My Active Classes</h5>
+                                <h3 class="mb-0 text-success">@Model.ActiveClasses <span class="fs-6 text-muted fw-normal">classes assigned</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top">
+                        <a href="#" class="btn btn-outline-success w-100"><i class="bi bi-eye"></i> View Schedules</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- total students -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                           <div class="bg-primary bg-opacity-10 rounded-circle p-3 text-primary me-3">
+                                <i class="bi bi-people fs-2"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-1">Total Students</h5>
+                                <h3 class="mb-0 text-primary">@Model.TotalStudents <span class="fs-6 text-muted fw-normal">across all classes</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-top">
+                        <a href="#" class="btn btn-outline-primary w-100"><i class="bi bi-journal-check"></i> Post Grades</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- STUDENT DASHBOARD -->
+    @if (Model.UserRole == AppRoles.Student)
+    {
+        <div class="d-flex align-items-center mb-3 border-bottom pb-2 mt-2">
+            <i class="bi bi-mortarboard-fill fs-4 text-warning me-2"></i>
+            <h4 class="mb-0 text-secondary fw-bold">Student Portal</h4>
+        </div>
+        
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 bg-warning bg-opacity-10 border-warning h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="bi bi-calendar3-range fs-1 text-warning mb-3"></i>
+                        <h4 class="fw-bold text-dark">@Model.ActiveClasses Enrolled Classes</h4>
+                        <p class="text-muted small">Your current semester schedule is active.</p>
+                        <a href="#" class="btn btn-warning w-100 text-dark fw-bold mt-2 shadow-sm">View Timetable</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-header bg-white border-bottom fw-bold py-3">
+                        <i class="bi bi-bell-fill text-danger"></i> Recent Announcements
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-0 pb-3 border-0">
+                                <div class="d-flex justify-content-between">
+                                    <h6 class="fw-bold mb-1">Welcome to EduTrack!</h6>
+                                    <small class="text-muted">Just now</small>
+                                </div>
+                                <p class="mb-0 text-secondary small">Your account has been successfully configured. Make sure to check your classes and meet your teachers.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.UserRole != AppRoles.Admin && Model.UserRole != AppRoles.Teacher && Model.UserRole != AppRoles.Student)
+    {
+        <div class="alert alert-info border-0 shadow-sm">
+            <i class="bi bi-info-circle-fill me-2"></i> You currently are not mapped to any active system roles. Please contact an Administrator.
+        </div>
+    }
 </div>
+
+@section Styles {
+    <style>
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,.08) !important;
+        }
+    </style>
+}

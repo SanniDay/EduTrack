@@ -1,4 +1,4 @@
-﻿using EduTrack.Interfaces;
+using EduTrack.Interfaces;
 using EduTrack.Models;
 using EduTrack.Helpers;
 using System.Data;
@@ -52,6 +52,8 @@ namespace EduTrack.Services
                 new SqlParameter("@User_Name", u.User_Name),
                 new SqlParameter("@PasswordHash", u.PasswordHash),
                 new SqlParameter("@Email", u.Email),
+                new SqlParameter("@PhoneNumber", u.PhoneNumber),
+                new SqlParameter("@Address", (object?)u.Address ?? DBNull.Value),
                 new SqlParameter("@Role_Id", (object?)u.Role_Id ?? DBNull.Value),
                 new SqlParameter("@Created_By", u.Created_By)
             };
@@ -71,6 +73,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Email", u.Email),
                 new SqlParameter("@Password", u.PasswordHash),
                 new SqlParameter("@Phone_Number", u.PhoneNumber),
+                new SqlParameter("@Address", (object?)u.Address ?? DBNull.Value),
                 new SqlParameter("@Role_Id", (object?)u.Role_Id ?? DBNull.Value),
                 new SqlParameter("@Modified_By", u.Modified_By),
                 new SqlParameter("@isActive", u.IsActive)
@@ -116,6 +119,8 @@ namespace EduTrack.Services
                 row["User_Name"]?.ToString() ?? "",
                 row["PasswordHash"]?.ToString() ?? "",
                 row["Email"]?.ToString() ?? "",
+                row["Phone_Number"]?.ToString() ?? "",
+                row["Address"]?.ToString() ?? "",
                 row["Role_Id"] == DBNull.Value ? null : (int?)row["Role_Id"],
                 row["Role_Name"]?.ToString() ?? "",
                 row["Created_By"]?.ToString() ?? "",

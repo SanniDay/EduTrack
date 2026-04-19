@@ -1,22 +1,43 @@
-﻿@model EduTrack.Models.Role
-
+@model EduTrack.Models.Role
 @{
-    ViewData["Title"] = "Create Role";
+    ViewData["Title"] = "Create New Role";
 }
 
-<h2>Create Role</h2>
-
-<form asp-action="Create" method="post" class="form-horizontal">
-    <div asp-validation-summary="All" class="text-danger"></div>
-
-    <div class="mb-3">
-        <label asp-for="Role_Name" class="form-label"></label>
-        <input asp-for="Role_Name" class="form-control" />
-        <span asp-validation-for="Role_Name" class="text-danger"></span>
+<div class="container mt-5">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="mb-0 text-primary fw-bold">Create System Role</h2>
+            <p class="text-muted">Define a new system access role.</p>
+        </div>
+        <div class="col-auto">
+             <a asp-action="Index" class="btn btn-outline-secondary">
+                 <i class="bi bi-arrow-left"></i> Back to List
+             </a>
+        </div>
     </div>
 
-    <div class="mt-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
-    </div>
-</form>
+    <form asp-action="Create" method="post" class="needs-validation">
+        <div asp-validation-summary="All" class="alert alert-danger" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
+
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom pb-0 pt-4">
+                <h5 class="fw-bold"><i class="bi bi-shield-plus text-primary me-2"></i> Role Definition</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4 mb-4">
+                    <div class="col-md-12">
+                        <label asp-for="Role_Name" class="form-label text-muted fw-bold small text-uppercase">Unique Role Name</label>
+                        <input asp-for="Role_Name" class="form-control form-control-lg bg-light border-0" placeholder="e.g. Administrator" />
+                        <span asp-validation-for="Role_Name" class="text-danger small"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                <i class="bi bi-check-circle"></i> Create System Role
+            </button>
+        </div>
+    </form>
+</div>

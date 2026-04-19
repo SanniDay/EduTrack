@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>EduTrack.DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{cb6ec0be-217b-4e2b-8f6d-9c033ae75428}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>EduTrack.DB</RootNamespace>
+    <AssemblyName>EduTrack.DB</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Tables\Roles.sql" />
+    <Build Include="dbo\Tables\Students.sql" />
+    <Build Include="dbo\Tables\Teachers.sql" />
+    <Build Include="dbo\Tables\StudentClass.sql" />
+    <Build Include="dbo\Tables\TeacherClass.sql" />
+    <Build Include="dbo\Tables\Subjects.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_Authenticate.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_Delete.sql" />
+    <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Tables\StudentFees.sql" />
+    <Build Include="dbo\Tables\Fees.sql" />
+    <Build Include="dbo\Tables\Classes.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_UpdateStatus.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetByStudentId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetByFeesId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_Create_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetByClassId.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_Create.sql" />
+    <Build Include="DEPLOYMENT_README.sql" />
+    <Build Include="dbo\Tables\ClassSubject.sql" />
+    <Build Include="dbo\Tables\Attendance.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_Create.sql" />
+    <Build Include="sp_Attendance_Delete.sql" />
+    <Build Include="sp_Attendance_Update.sql" />
+    <Build Include="sp_Attendance_GetById.sql" />
+    <Build Include="sp_ClassSubject_Delete.sql" />
+    <Build Include="sp_ClassSubject_Update.sql" />
+    <Build Include="sp_ClassSubject_GetById.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="EduTrack.DB.publish.xml" />
+    <None Include="DATABASE_FIX_SUMMARY.md" />
+    <None Include="ISSUES_FIXED_CHECKLIST.md" />
+    <None Include="SQL_SCHEMA_REFERENCE.md" />
+    <None Include="ERROR_FIX_REPORT.md" />
+    <None Include="README.md" />
+  </ItemGroup>
+</Project>

@@ -1,4 +1,4 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
     const toggle = document.getElementById("themeToggle");
 
@@ -28,27 +28,19 @@
 });
 
 function applyDarkMode() {
-    const body = document.body;
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
     const navbar = document.querySelector(".navbar");
-
-    body.classList.add("bg-dark", "text-white");
-    body.classList.remove("bg-white");
-
     if (navbar) {
         navbar.classList.add("navbar-dark", "bg-dark");
-        navbar.classList.remove("navbar-light", "bg-white");
+        navbar.classList.remove("navbar-light", "bg-white", "border-bottom");
     }
 }
 
 function applyLightMode() {
-    const body = document.body;
+    document.documentElement.setAttribute('data-bs-theme', 'light');
     const navbar = document.querySelector(".navbar");
-
-    body.classList.remove("bg-dark", "text-white");
-    body.classList.add("bg-white");
-
     if (navbar) {
         navbar.classList.remove("navbar-dark", "bg-dark");
-        navbar.classList.add("navbar-light", "bg-white");
+        navbar.classList.add("navbar-light", "bg-white", "border-bottom");
     }
 }

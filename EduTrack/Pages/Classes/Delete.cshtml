@@ -1,0 +1,71 @@
+@page
+@model EduTrack.Pages.Classes.DeleteModel
+@{
+    ViewData["Title"] = "Delete Class";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">⚠️ Confirm Deletion</h4>
+                <p>Are you sure you want to delete this class? This action cannot be undone.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Class Name:</strong></div>
+                        <div class="col-8">@Model.Class.ClassName</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Section:</strong></div>
+                        <div class="col-8">@Model.Class.Section</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Status:</strong></div>
+                        <div class="col-8">
+                            @if (Model.Class.IsActive)
+                            {
+                                <span class="badge bg-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Inactive</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Created:</strong></div>
+                        <div class="col-8">@Model.Class.Created_Date.ToString("dd MMM yyyy HH:mm")</div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4"><strong>Created By:</strong></div>
+                        <div class="col-8">@Model.Class.Created_By</div>
+                    </div>
+                </div>
+            </div>
+
+            <form method="post" class="mt-4">
+                <input type="hidden" name="id" value="@Model.Class.Class_Id" />
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+                    <div class="col-6">
+                        <a asp-page="Index" class="btn btn-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

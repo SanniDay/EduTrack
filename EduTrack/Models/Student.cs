@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace EduTrack.Models
 {
@@ -43,6 +43,8 @@ namespace EduTrack.Models
         public bool IsActive { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public Student() { }
 
         public Student(int student_Id, int user_Id, string fullName,
             DateTime dOB, Gender gender, string phone_No, string address,

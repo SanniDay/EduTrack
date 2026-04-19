@@ -1,0 +1,28 @@
+@{
+    var success = TempData["Success"] ?? TempData["Message"];
+    var error = TempData["Error"];
+}
+
+@if (success != null)
+{
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(){
+            try {
+                window._notyf = window._notyf || new Notyf({ duration: 4500, position: { x: 'right', y: 'top' } });
+                window._notyf.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(success)));
+            } catch(e) { console.error(e); }
+        });
+    </script>
+}
+
+@if (error != null)
+{
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(){
+            try {
+                window._notyf = window._notyf || new Notyf({ duration: 4500, position: { x: 'right', y: 'top' } });
+                window._notyf.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(error)));
+            } catch(e) { console.error(e); }
+        });
+    </script>
+}
