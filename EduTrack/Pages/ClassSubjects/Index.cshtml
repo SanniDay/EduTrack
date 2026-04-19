@@ -1,0 +1,124 @@
+@page
+@model EduTrack.Pages.ClassSubjects.IndexModel
+
+@{
+    ViewData["Title"] = "Class Subjects Management";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-gradient bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="bi bi-book-fill me-2"></i>Class Subjects Management
+                </h4>
+                <a asp-page="Create" class="btn btn-light btn-sm">
+                    <i class="bi bi-plus-circle me-1"></i>Add Subject to Class
+                </a>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Message))
+        {
+            <div class="alert alert-success alert-dismissible fade show m-3 mb-0" role="alert">
+                <i class="bi bi-check-circle me-2"></i>@Model.Message
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <div class="card-body">
+            @if (Model.ClassSubjects.Any())
+            {
+                <div class="table-responsive">
+                    <table id="classSubjectTable" class="table table-bordered table-hover align-middle w-100">
+                        <thead class="table-dark">
+                            <tr>
+                                <th style="width: 5%">
+                                    <i class="bi bi-hash"></i>
+                                </th>
+                                <th style="width: 20%">
+                                    <i class="bi bi-door-open me-2"></i>Class
+                                </th>
+                                <th style="width: 20%">
+                                    <i class="bi bi-book me-2"></i>Subject
+                                </th>
+                                <th style="width: 10%">Core</th>
+                                <th style="width: 15%">Created By</th>
+                                <th style="width: 12%">Created Date</th>
+                                <th style="width: 8%">Status</th>
+                                <th style="width: 15%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cs in Model.ClassSubjects)
+                            {
+                                <tr>
+                                    <td class="fw-bold">@cs.ClassSubject_Id</td>
+                                    <td>
+                                        <i class="bi bi-door-open text-primary me-2"></i>@cs.ClassName
+                                    </td>
+                                    <td>
+                                        <i class="bi bi-book text-info me-2"></i>@cs.SubjectName
+                                    </td>
+                                    <td>
+                                        @if (cs.IsCore)
+                                        {
+                                            <span class="badge bg-success">Yes</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">No</span>
+                                        }
+                                    </td>
+                                    <td>@cs.Created_By</td>
+                                    <td>
+                                        <small class="text-muted">@cs.Created_Date.ToString("dd/MM/yyyy")</small>
+                                    </td>
+                                    <td>
+                                        @if (cs.IsActive && !cs.IsDeleted)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success">
+                                                <i class="bi bi-check-circle me-1"></i>Active
+                                            </span>
+                                        }
+                                        else if (cs.IsDeleted)
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger border border-danger">
+                                                <i class="bi bi-x-circle me-1"></i>Deleted
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning-subtle text-warning border border-warning">
+                                                <i class="bi bi-dash-circle me-1"></i>Inactive
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                            <a asp-page="Edit" asp-route-id="@cs.ClassSubject_Id" 
+                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <a asp-page="Delete" asp-route-id="@cs.ClassSubject_Id" 
+                                               class="btn btn-sm btn-outline-danger" title="Delete"
+                                               onclick="return confirm('Are you sure?');">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>No class subjects found. <a asp-page="Create">Create one now</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>

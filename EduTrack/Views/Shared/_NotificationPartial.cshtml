@@ -1,5 +1,4 @@
-@* Unified toast notifications using local toast.js (Bootstrap-based) *@
-@{ 
+@{
     var success = TempData["Success"] ?? TempData["Message"];
     var error = TempData["Error"];
 }
@@ -9,7 +8,8 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function(){
             try {
-                Toast.show('success', '@Html.Raw(success.ToString().Replace("'","\'"))', 'Success');
+                window._notyf = window._notyf || new Notyf({ duration: 4500, position: { x: 'right', y: 'top' } });
+                window._notyf.success(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(success)));
             } catch(e) { console.error(e); }
         });
     </script>
@@ -20,7 +20,8 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function(){
             try {
-                Toast.show('error', '@Html.Raw(error.ToString().Replace("'","\'"))', 'Error');
+                window._notyf = window._notyf || new Notyf({ duration: 4500, position: { x: 'right', y: 'top' } });
+                window._notyf.error(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(error)));
             } catch(e) { console.error(e); }
         });
     </script>

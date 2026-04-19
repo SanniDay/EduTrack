@@ -1,0 +1,128 @@
+@page
+@model EduTrack.Pages.Attendance.EditModel
+
+@{
+    ViewData["Title"] = "Edit Attendance";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient bg-warning text-white">
+                    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Attendance</h5>
+                </div>
+
+                <div class="card-body p-4">
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @Model.ErrorMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" class="needs-validation">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert"></div>
+
+                        <input type="hidden" name="AttendanceViewModel.Attendance_Id" value="@Model.AttendanceViewModel.Attendance_Id" />
+
+                        <div class="mb-3">
+                            <label for="Student_Class_Id" class="form-label fw-bold">Student <span class="text-danger">*</span></label>
+                            <select class="form-select" id="Student_Class_Id" name="AttendanceViewModel.Student_Class_Id" required>
+                                <option value="">-- Select Student --</option>
+                                @{
+                                    foreach (var sc in Model.StudentClasses)
+                                    {
+                                        var student = Model.Students.FirstOrDefault(s => s.Student_Id == sc.Student_Id);
+                                        var cls = Model.Classes.FirstOrDefault(c => c.Class_Id == sc.Class_Id);
+                                        var isSelected = sc.Student_Class_Id == Model.AttendanceViewModel.Student_Class_Id;
+                                        <option value="@sc.Student_Class_Id" selected="@isSelected">
+                                            @student?.FullName - @cls?.ClassName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.AttendanceViewModel.Student_Class_Id)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ClassSubject_Id" class="form-label fw-bold">Class Subject <span class="text-danger">*</span></label>
+                            <select class="form-select" id="ClassSubject_Id" name="AttendanceViewModel.ClassSubject_Id" required>
+                                <option value="">-- Select Class Subject --</option>
+                                @{
+                                    foreach (var cs in Model.ClassSubjects)
+                                    {
+                                        var cls = Model.Classes.FirstOrDefault(c => c.Class_Id == cs.Class_Id);
+                                        var subj = Model.Subjects.FirstOrDefault(s => s.Subject_Id == cs.Subject_Id);
+                                        var isSelected = cs.ClassSubject_Id == Model.AttendanceViewModel.ClassSubject_Id;
+                                        <option value="@cs.ClassSubject_Id" selected="@isSelected">
+                                            @cls?.ClassName - @subj?.Subject_Name
+                                        </option>
+                                    }
+                                }
+                            </select>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.AttendanceViewModel.ClassSubject_Id)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Attendance_Date" class="form-label fw-bold">Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="Attendance_Date" name="AttendanceViewModel.Attendance_Date" value="@Model.AttendanceViewModel.Attendance_Date.ToString("yyyy-MM-dd")" required>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.AttendanceViewModel.Attendance_Date)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Status" class="form-label fw-bold">Status <span class="text-danger">*</span></label>
+                            <select class="form-select" id="Status" name="AttendanceViewModel.Status" required>
+                                <option value="">-- Select Status --</option>
+                                @{
+                                    var presentSelected = Model.AttendanceViewModel.Status == "Present";
+                                    var absentSelected = Model.AttendanceViewModel.Status == "Absent";
+                                    var lateSelected = Model.AttendanceViewModel.Status == "Late";
+                                    var leaveSelected = Model.AttendanceViewModel.Status == "Leave";
+                                }
+                                <option value="Present" selected="@presentSelected">Present</option>
+                                <option value="Absent" selected="@absentSelected">Absent</option>
+                                <option value="Late" selected="@lateSelected">Late</option>
+                                <option value="Leave" selected="@leaveSelected">Leave</option>
+                            </select>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.AttendanceViewModel.Status)</span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="Marked_By_Teacher_Id" class="form-label fw-bold">Marked By Teacher</label>
+                            <select class="form-select" id="Marked_By_Teacher_Id" name="AttendanceViewModel.Marked_By_Teacher_Id">
+                                <option value="">-- Select Teacher --</option>
+                                @{
+                                    foreach (var teacher in Model.Teachers)
+                                    {
+                                        var isSelected = teacher.Teacher_Id == Model.AttendanceViewModel.Marked_By_Teacher_Id;
+                                        <option value="@teacher.Teacher_Id" selected="@isSelected">
+                                            @teacher.FullName
+                                        </option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="bi bi-check-circle me-2"></i>Update Attendance
+                            </button>
+                            <a asp-page="Index" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-2"></i>Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        if (document.querySelectorAll('.text-danger').length > 0) {
+            var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none');
+        }
+    </script>
+}

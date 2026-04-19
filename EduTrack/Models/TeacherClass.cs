@@ -8,7 +8,7 @@
 
         public int Class_Id { get; set; }
 
-        public string Subject { get; set; }
+        public int? ClassSubject_Id { get; set; }
 
         public string Created_By { get; set; }
 

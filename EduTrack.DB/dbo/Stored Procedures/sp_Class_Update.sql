@@ -8,7 +8,7 @@
 AS
 BEGIN
 
-UPDATE Class
+UPDATE Classes
 SET
     ClassName = @ClassName,
     Section = @Section,

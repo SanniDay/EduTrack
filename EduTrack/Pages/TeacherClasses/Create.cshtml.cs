@@ -13,30 +13,28 @@ namespace EduTrack.Pages.TeacherClasses
         private readonly ITeacherClassService _teacherClassService;
         private readonly ITeacherService _teacherService;
         private readonly IClassService _classService;
-        private readonly ISubjectService _subjectService;
+        private readonly IClassSubjectService _classSubjectService;
 
-        public CreateModel(ITeacherClassService teacherClassService, ITeacherService teacherService, IClassService classService, ISubjectService subjectService)
+        public CreateModel(ITeacherClassService teacherClassService, ITeacherService teacherService, IClassService classService, IClassSubjectService classSubjectService)
         {
             _teacherClassService = teacherClassService;
             _teacherService = teacherService;
             _classService = classService;
-            _subjectService = subjectService;
+            _classSubjectService = classSubjectService;
         }
 
         [BindProperty]
         public TeacherClassViewModel TeacherClassViewModel { get; set; }
 
         public List<Teacher> Teachers { get; set; } = new();
-        public List<Class> Classes { get; set; } = new();
-        public List<Subject> Subjects { get; set; } = new();
+        public List<ClassSubject> ClassSubjects { get; set; } = new();
 
         public string ErrorMessage { get; set; }
 
         public void OnGet()
         {
             Teachers = _teacherService.GetAll();
-            Classes = _classService.GetAllClasses();
-            Subjects = _subjectService.GetAll();
+            ClassSubjects = _classSubjectService.GetAllClassSubjects();
         }
 
         public IActionResult OnPost()
@@ -44,21 +42,16 @@ namespace EduTrack.Pages.TeacherClasses
             if (!ModelState.IsValid)
             {
                 Teachers = _teacherService.GetAll();
-                Classes = _classService.GetAllClasses();
-                Subjects = _subjectService.GetAll();
+                ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 return Page();
             }
 
             try
             {
-                var subject = _subjectService.GetById(TeacherClassViewModel.Subject_Id);
-                var subjectName = subject?.Subject_Name ?? "Unknown";
-
                 var teacherClass = new TeacherClass
                 {
                     Teacher_Id = TeacherClassViewModel.Teacher_Id,
-                    Class_Id = TeacherClassViewModel.Class_Id,
-                    Subject = subjectName,
+                    ClassSubject_Id = TeacherClassViewModel.ClassSubject_Id,
                     Created_By = User.Identity?.Name ?? "System",
                     Created_Date = DateTime.UtcNow,
                     Modified_By = User.Identity?.Name ?? "System",
@@ -76,8 +69,7 @@ namespace EduTrack.Pages.TeacherClasses
             {
                 ErrorMessage = $"Error: {ex.Message}";
                 Teachers = _teacherService.GetAll();
-                Classes = _classService.GetAllClasses();
-                Subjects = _subjectService.GetAll();
+                ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 return Page();
             }
         }

@@ -5,10 +5,10 @@
 AS
 BEGIN
 
-UPDATE Class
+UPDATE Classes
 SET
-    isDeleted = 1,
-    isActive = 0
+    IsDeleted = 1,
+    IsActive = 0
 WHERE Class_Id = @Class_Id
 
 END

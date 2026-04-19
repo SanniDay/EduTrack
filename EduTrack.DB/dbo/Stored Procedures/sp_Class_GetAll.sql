@@ -10,9 +10,9 @@ SELECT
     Created_Date,
     Modified_By,
     Modified_Date,
-    isActive,
-    isDeleted
-FROM Class
-WHERE isDeleted = 0
+    IsActive,
+    IsDeleted
+FROM Classes
+WHERE IsDeleted = 0
 
 END

@@ -7,7 +7,7 @@
 AS
 BEGIN
 
-INSERT INTO Class
+INSERT INTO Classes
 (
     ClassName,
     Section,
@@ -15,8 +15,8 @@ INSERT INTO Class
     Created_Date,
     Modified_By,
     Modified_Date,
-    isActive,
-    isDeleted
+    IsActive,
+    IsDeleted
 )
 VALUES
 (

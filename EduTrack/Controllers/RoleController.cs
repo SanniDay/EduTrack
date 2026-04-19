@@ -80,10 +80,26 @@ namespace EduTrack.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int Role_Id)
         {
-            _roleService.Delete(id);
-            TempData["Success"] = "Role deleted successfully.";
+            // Ensure a valid id was provided
+            if (Role_Id <= 0)
+            {
+                TempData["Error"] = "Invalid role id.";
+                return RedirectToAction("Index");
+            }
+
+            try
+            {
+                _roleService.Delete(Role_Id);
+                TempData["Success"] = "Role deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                // Log exception in real app
+                TempData["Error"] = "Error deleting role: " + ex.Message;
+            }
+
             return RedirectToAction("Index");
         }
     }

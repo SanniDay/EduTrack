@@ -2,8 +2,7 @@
 (
     @Teacher_Class_Id INT,
     @Teacher_Id INT,
-    @Class_Id INT,
-    @Subject VARCHAR(100),
+    @ClassSubject_Id INT,
     @Modified_By VARCHAR(50)
 )
 AS
@@ -12,8 +11,7 @@ BEGIN
 UPDATE TeacherClass
 SET
     Teacher_Id = @Teacher_Id,
-    Class_Id = @Class_Id,
-    Subject = @Subject,
+    ClassSubject_Id = @ClassSubject_Id,
     Modified_By = @Modified_By,
     Modified_Date = GETDATE()
 WHERE Teacher_Class_Id = @Teacher_Class_Id

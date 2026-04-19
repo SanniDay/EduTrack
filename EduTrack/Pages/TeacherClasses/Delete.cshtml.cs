@@ -42,6 +42,7 @@ namespace EduTrack.Pages.TeacherClasses
                 Teacher_Class_Id = teacherClass.Teacher_Class_Id,
                 Teacher_Id = teacherClass.Teacher_Id,
                 Class_Id = teacherClass.Class_Id,
+                ClassSubject_Id = teacherClass.ClassSubject_Id ?? 0,
                 IsActive = teacherClass.isActive,
                 IsDeleted = teacherClass.isDeleted,
                 Created_By = teacherClass.Created_By,
@@ -50,8 +51,7 @@ namespace EduTrack.Pages.TeacherClasses
                 Modified_Date = teacherClass.Modified_Date,
                 TeacherName = teacher != null ? teacher.FullName : "N/A",
                 ClassName = cls?.ClassName ?? "N/A",
-                Section = cls?.Section ?? "N/A",
-                SubjectName = teacherClass.Subject
+                Section = cls?.Section ?? "N/A"
             };
 
             return Page();

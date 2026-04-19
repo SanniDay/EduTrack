@@ -38,27 +38,15 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="Class_Id" class="form-label fw-bold">Class <span class="text-danger">*</span></label>
-                            <select class="form-select" id="Class_Id" name="TeacherClassViewModel.Class_Id" required>
-                                <option value="">-- Select Class --</option>
-                                @foreach (var cls in Model.Classes)
+                            <label for="ClassSubject_Id" class="form-label fw-bold">Class Subject <span class="text-danger">*</span></label>
+                            <select class="form-select" id="ClassSubject_Id" name="TeacherClassViewModel.ClassSubject_Id" required>
+                                <option value="">-- Select Class Subject --</option>
+                                @foreach (var cs in Model.ClassSubjects)
                                 {
-                                    <option value="@cls.Class_Id">@cls.ClassName - @cls.Section</option>
+                                    <option value="@cs.ClassSubject_Id">@cs.Class_Id - @cs.Subject_Id</option>
                                 }
                             </select>
-                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.TeacherClassViewModel.Class_Id)</span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="Subject_Id" class="form-label fw-bold">Subject <span class="text-danger">*</span></label>
-                            <select class="form-select" id="Subject_Id" name="TeacherClassViewModel.Subject_Id" required>
-                                <option value="">-- Select Subject --</option>
-                                @foreach (var subject in Model.Subjects)
-                                {
-                                    <option value="@subject.Subject_Id">@subject.Subject_Name (@subject.Subject_Code)</option>
-                                }
-                            </select>
-                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.TeacherClassViewModel.Subject_Id)</span>
+                            <span class="text-danger small">@Html.ValidationMessageFor(m => m.TeacherClassViewModel.ClassSubject_Id)</span>
                         </div>
 
                         <div class="mb-3">
@@ -85,3 +73,4 @@
         if (document.querySelectorAll('.text-danger').length > 0) { var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none'); }
     </script>
 }
+

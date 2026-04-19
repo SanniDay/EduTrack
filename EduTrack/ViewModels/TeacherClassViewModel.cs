@@ -12,11 +12,8 @@ namespace EduTrack.ViewModels
         [Required(ErrorMessage = "Class is required")]
         public int Class_Id { get; set; }
 
-        [Required(ErrorMessage = "Subject is required")]
-        public int Subject_Id { get; set; }
-
-        [Required(ErrorMessage = "Assignment date is required")]
-        public DateTime AssignmentDate { get; set; } = DateTime.UtcNow;
+        [Required(ErrorMessage = "Class Subject is required")]
+        public int ClassSubject_Id { get; set; }
 
         public bool IsActive { get; set; } = true;
 
@@ -38,7 +35,5 @@ namespace EduTrack.ViewModels
         public string Section { get; set; }
 
         public string SubjectName { get; set; }
-
-        public string SubjectCode { get; set; }
     }
 }

@@ -1,0 +1,15 @@
+{
+  "version": "3.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "notyf@3.10.0",
+      "destination": "wwwroot/lib/notyf/",
+      "files": [
+        "notyf.min.css",
+        "notyf.min.js"
+      ]
+    }
+  ]
+}

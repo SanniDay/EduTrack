@@ -58,8 +58,7 @@ namespace EduTrack.Services
             var parameters = new[]
             {
                 new SqlParameter("@Teacher_Id", tc.Teacher_Id),
-                new SqlParameter("@Class_Id", tc.Class_Id),
-                new SqlParameter("@Subject", tc.Subject),
+                new SqlParameter("@ClassSubject_Id", tc.ClassSubject_Id.HasValue ? (object)tc.ClassSubject_Id : DBNull.Value),
                 new SqlParameter("@Created_By", tc.Created_By)
             };
 
@@ -75,8 +74,7 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@Teacher_Class_Id", tc.Teacher_Class_Id),
                 new SqlParameter("@Teacher_Id", tc.Teacher_Id),
-                new SqlParameter("@Class_Id", tc.Class_Id),
-                new SqlParameter("@Subject", tc.Subject),
+                new SqlParameter("@ClassSubject_Id", tc.ClassSubject_Id.HasValue ? (object)tc.ClassSubject_Id : DBNull.Value),
                 new SqlParameter("@Modified_By", tc.Modified_By)
             };
 
@@ -106,7 +104,7 @@ namespace EduTrack.Services
                 Teacher_Class_Id = Convert.ToInt32(row["Teacher_Class_Id"]),
                 Teacher_Id = Convert.ToInt32(row["Teacher_Id"]),
                 Class_Id = Convert.ToInt32(row["Class_Id"]),
-                Subject = row["Subject"]?.ToString() ?? "",
+                ClassSubject_Id = row["ClassSubject_Id"] != DBNull.Value ? (int)row["ClassSubject_Id"] : null,
                 Created_By = row["Created_By"]?.ToString() ?? "",
                 Created_Date = row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 Modified_By = row["Modified_By"]?.ToString() ?? "",
