@@ -59,6 +59,8 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@Class_Id", cs.Class_Id),
                 new SqlParameter("@Subject_Id", cs.Subject_Id),
+                new SqlParameter("@IsCore", cs.IsCore),
+                new SqlParameter("@IsActive", cs.IsActive),
                 new SqlParameter("@Created_By", cs.Created_By)
             };
 
@@ -76,6 +78,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Class_Id", cs.Class_Id),
                 new SqlParameter("@Subject_Id", cs.Subject_Id),
                 new SqlParameter("@IsCore", cs.IsCore),
+                new SqlParameter("@IsActive", cs.IsActive),
                 new SqlParameter("@Modified_By", cs.Modified_By)
             };
 

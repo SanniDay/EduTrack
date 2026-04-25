@@ -39,8 +39,7 @@ namespace EduTrack.Controllers
             if (Role == AppRoles.Teacher)
             {
                 lstTeacher = lstTeacher
-                    .Where(u => u.Teacher_Id != adminRoleId
-                             && u.User_Id.ToString() == UserId)
+                    .Where(u => u.User_Id.ToString() == UserId)
                     .ToList();
             }
 
@@ -69,6 +68,11 @@ namespace EduTrack.Controllers
             {
                 return NotFound();
             }
+
+            if (Role == AppRoles.Teacher && teacher.User_Id.ToString() != UserId)
+            {
+                return Forbid();
+            }
             TeacherViewModel model = new TeacherViewModel(teacher.Teacher_Id, teacher.User_Id,
                 teacher.FullName, teacher.Phone_No, teacher.Created_By, teacher.Created_Date,
                 teacher.Modified_By, teacher.Modified_Date, teacher.IsActive, teacher.IsDeleted);
@@ -78,6 +82,11 @@ namespace EduTrack.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(TeacherViewModel model)
         {
+            if (Role == AppRoles.Teacher && model.User_Id.ToString() != UserId)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 model.Modified_By = HttpContext.User.Identity?.Name ?? "System";
@@ -105,6 +114,7 @@ namespace EduTrack.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -131,6 +141,7 @@ namespace EduTrack.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(TeacherViewModel model)

@@ -41,6 +41,8 @@ namespace EduTrack.Pages.TeacherClasses
         {
             if (!ModelState.IsValid)
             {
+
+
                 Teachers = _teacherService.GetAll();
                 ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 return Page();

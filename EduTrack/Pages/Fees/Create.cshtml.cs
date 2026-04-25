@@ -44,6 +44,17 @@ namespace EduTrack.Pages.Fees
         {
             if (!ModelState.IsValid)
             {
+                foreach (var entry in ModelState)
+                {
+                    string fieldName = entry.Key;
+
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        string errorMessage = error.ErrorMessage;
+
+                        Console.WriteLine($"Field: {fieldName} - Error: {errorMessage}");
+                    }
+                }
                 LoadClasses();
                 return Page();
             }
@@ -57,6 +68,7 @@ namespace EduTrack.Pages.Fees
                     Amount = Fee.Amount,
                     Currency = Fee.Currency,
                     Description = Fee.Description ?? string.Empty,
+                    DueDate = Fee.DueDate ?? DateTime.MinValue,
                     IsActive = Fee.IsActive,
                     IsDeleted = Fee.IsDeleted,
                     Created_By = User.Identity?.Name ?? "System",

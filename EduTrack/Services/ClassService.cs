@@ -35,7 +35,7 @@ namespace EduTrack.Services
         // =============================
         // GET BY ID
         // =============================
-        public Class GetClassById(int id)
+        public Class? GetClassById(int id)
         {
             var parameters = new[]
             {
@@ -108,8 +108,8 @@ namespace EduTrack.Services
                 Created_Date = row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 Modified_By = row["Modified_By"]?.ToString() ?? "",
                 Modified_Date = row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                isActive = row["isActive"] == DBNull.Value ? false : (bool)row["isActive"],
-                isDeleted = row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
+                isActive = row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
+                isDeleted = row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
             };
         }
     }

@@ -12,9 +12,12 @@
                 <h4 class="mb-0">
                     <i class="bi bi-people-fill me-2"></i>Student Classes Management
                 </h4>
-                <a asp-page="Create" class="btn btn-light btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i>Add Assignment
-                </a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-page="Create" class="btn btn-light btn-sm">
+                        <i class="bi bi-plus-circle me-1"></i>Add Assignment
+                    </a>
+                }
             </div>
         </div>
 
@@ -46,7 +49,10 @@
                                 <th style="width: 15%">Created By</th>
                                 <th style="width: 12%">Created Date</th>
                                 <th style="width: 8%">Status</th>
-                                <th style="width: 15%">Actions</th>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <th style="width: 15%">Actions</th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -83,18 +89,21 @@
                                             </span>
                                         }
                                     </td>
-                                    <td>
-                                        <div class="d-flex gap-2 justify-content-center flex-wrap">
-                                            <a asp-page="Edit" asp-route-id="@sc.Student_Class_Id" 
-                                               class="btn btn-sm btn-outline-primary" title="Edit">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-                                            <a asp-page="Delete" asp-route-id="@sc.Student_Class_Id" 
-                                               class="btn btn-sm btn-outline-danger" title="Delete">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <td>
+                                            <div class="d-flex gap-2 justify-content-center flex-wrap">
+                                                <a asp-page="Edit" asp-route-id="@sc.Student_Class_Id" 
+                                                   class="btn btn-sm btn-outline-primary" title="Edit">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                                <a asp-page="Delete" asp-route-id="@sc.Student_Class_Id" 
+                                                   class="btn btn-sm btn-outline-danger" title="Delete">
+                                                    <i class="bi bi-trash"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    }
                                 </tr>
                             }
                         </tbody>
@@ -106,7 +115,10 @@
                 <div class="text-center py-5">
                     <i class="bi bi-inbox display-1 text-muted"></i>
                     <h5 class="text-muted mt-3">No Student Classes Found</h5>
-                    <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new assignment</a></p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <p class="text-secondary">Get started by <a asp-page="Create" class="text-decoration-none">creating a new assignment</a></p>
+                    }
                 </div>
             }
         </div>

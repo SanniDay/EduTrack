@@ -54,11 +54,17 @@ namespace EduTrack.Services
                 new SqlParameter("@FeeType", (int)fees.FeeType),
                 new SqlParameter("@Amount", fees.Amount),
                 new SqlParameter("@Currency", fees.Currency),
-                new SqlParameter("@Description", fees.Description),
+                new SqlParameter("@Description", string.IsNullOrWhiteSpace(fees.Description) ? (object)DBNull.Value : fees.Description),
+                new SqlParameter("@DueDate", fees.DueDate == DateTime.MinValue ? (object)DBNull.Value : fees.DueDate),
                 new SqlParameter("@Created_By", fees.Created_By)
             };
 
-            _db.ExecuteProcedureNonQuery("sp_Fees_Create", parameters);
+            // sp_Fees_Create returns inserted identity (SCOPE_IDENTITY())
+            var result = _db.ExecuteProcedureScalar("sp_Fees_Create", parameters);
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                fees.Fees_Id = newId;
+            }
         }
 
         public void Update(Fees fees)
@@ -71,8 +77,9 @@ namespace EduTrack.Services
                 new SqlParameter("@Amount", fees.Amount),
                 new SqlParameter("@Currency", fees.Currency),
                 new SqlParameter("@Description", fees.Description),
+                new SqlParameter("@DueDate", fees.DueDate),
                 new SqlParameter("@Modified_By", fees.Modified_By),
-                new SqlParameter("@isActive", fees.IsActive)
+                new SqlParameter("@IsActive", fees.IsActive)
             };
 
             _db.ExecuteProcedureNonQuery("sp_Fees_Update", parameters);
@@ -101,10 +108,10 @@ namespace EduTrack.Services
 
         private Fees Map(DataRow row)
         {
-            return new Fees(
+            var fees = new Fees(
                 Convert.ToInt32(row["Fees_Id"]),
                 Convert.ToInt32(row["Class_Id"]),
-                (FeeType)Enum.Parse(typeof(FeeType), row["FeeType"]?.ToString() ?? "1"),
+                (FeeType)Convert.ToInt32(row["FeeType"]),
                 Convert.ToDecimal(row["Amount"]),
                 row["Currency"]?.ToString() ?? "USD",
                 row["Description"]?.ToString() ?? "",
@@ -112,9 +119,14 @@ namespace EduTrack.Services
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
                 row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                row["isActive"] == DBNull.Value ? false : (bool)row["isActive"],
-                row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
+                row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
+                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
             );
+
+            // DueDate may be present in the database
+            fees.DueDate = row["DueDate"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["DueDate"];
+
+            return fees;
         }
     }
 }

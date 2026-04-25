@@ -41,11 +41,15 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@Subject_Name", subject.Subject_Name),
                 new SqlParameter("@Subject_Code", subject.Subject_Code),
-                new SqlParameter("@Description", subject.Description),
+                new SqlParameter("@Description", string.IsNullOrWhiteSpace(subject.Description) ? (object)DBNull.Value : subject.Description),
                 new SqlParameter("@Created_By", subject.Created_By)
             };
 
-            _db.ExecuteProcedureNonQuery("sp_Subject_Create", parameters);
+            var result = _db.ExecuteProcedureScalar("sp_Subject_Create", parameters);
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                subject.Subject_Id = newId;
+            }
         }
 
         public void Update(Subject subject)
@@ -57,7 +61,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Subject_Code", subject.Subject_Code),
                 new SqlParameter("@Description", subject.Description),
                 new SqlParameter("@Modified_By", subject.Modified_By),
-                new SqlParameter("@isActive", subject.IsActive)
+                new SqlParameter("@IsActive", subject.IsActive)
             };
 
             _db.ExecuteProcedureNonQuery("sp_Subject_Update", parameters);
@@ -95,8 +99,8 @@ namespace EduTrack.Services
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
                 row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                row["isActive"] == DBNull.Value ? false : (bool)row["isActive"],
-                row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
+                row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
+                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
             );
         }
     }

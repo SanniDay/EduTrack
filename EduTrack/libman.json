@@ -3,12 +3,31 @@
   "defaultProvider": "cdnjs",
   "libraries": [
     {
-      "provider": "cdnjs",
       "library": "notyf@3.10.0",
       "destination": "wwwroot/lib/notyf/",
       "files": [
         "notyf.min.css",
         "notyf.min.js"
+      ]
+    },
+    {
+      "library": "choices.js@11.1.0",
+      "destination": "wwwroot/lib/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/"
+    },
+    {
+      "library": "flatpickr@4.6.13",
+      "destination": "wwwroot/lib/flatpickr/",
+      "files": [
+        "flatpickr.min.js",
+        "flatpickr.css",
+        "flatpickr.js",
+        "flatpickr.min.css",
+        "ie.css",
+        "ie.min.css"
       ]
     }
   ]

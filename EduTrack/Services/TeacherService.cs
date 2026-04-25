@@ -34,7 +34,8 @@ namespace EduTrack.Services
 
         public int Insert(Teacher t)
         {
-            return _db.ExecuteProcedureNonQuery("sp_Teacher_Insert", Params(t));
+            // sp_Teacher_Create expects: @User_Id, @FullName, @Created_By
+            return _db.ExecuteProcedureNonQuery("sp_Teacher_Create", Params(t));
         }
 
         public int Update(Teacher t)
@@ -46,8 +47,8 @@ namespace EduTrack.Services
                 new SqlParameter("@FullName", t.FullName),
                 new SqlParameter("@Created_By", t.Created_By),
                 new SqlParameter("@Modified_By", t.Modified_By),    
-                new SqlParameter("@IsActive", t.IsActive),
-                new SqlParameter("@IsDeleted", t.IsDeleted)
+                new SqlParameter("@isActive", t.IsActive),
+                new SqlParameter("@isDeleted", t.IsDeleted)
             };
 
             return _db.ExecuteProcedureNonQuery("sp_Teacher_Update", parameters.ToArray());
@@ -80,8 +81,8 @@ namespace EduTrack.Services
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
                 row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
-                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
+                row["isActive"] == DBNull.Value ? false : (bool)row["isActive"],
+                row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
             );
         }
 
@@ -92,9 +93,6 @@ namespace EduTrack.Services
                 new SqlParameter("@User_Id", (object?)t.User_Id ?? DBNull.Value),
                 new SqlParameter("@FullName", (object?)t.FullName ?? DBNull.Value),
                 new SqlParameter("@Created_By", t.Created_By),
-                new SqlParameter("@Modified_By", t.Modified_By),
-                new SqlParameter("@IsActive", (object?)t.IsActive ?? DBNull.Value),
-                new SqlParameter("@IsDeleted", (object?)t.IsDeleted ?? DBNull.Value),
             };
         }
     }

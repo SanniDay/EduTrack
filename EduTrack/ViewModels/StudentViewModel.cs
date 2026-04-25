@@ -80,5 +80,23 @@ namespace EduTrack.ViewModels
             IsActive = isActive;
             IsDeleted = isDeleted;
         }
+
+        // Parameterless constructor required for model binding
+        public StudentViewModel()
+        {
+            Student_Id = 0;
+            User_Id = 0;
+            FullName = string.Empty;
+            DOB = DateTime.UtcNow;
+            Gender = Gender.Male;
+            Phone_No = string.Empty;
+            Address = string.Empty;
+            Created_By = string.Empty;
+            Created_Date = DateTime.UtcNow;
+            Modified_By = string.Empty;
+            Modified_Date = DateTime.UtcNow;
+            IsActive = true;
+            IsDeleted = false;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 
 namespace EduTrack.ViewModels
@@ -29,9 +30,9 @@ namespace EduTrack.ViewModels
         public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
 
         [Required(ErrorMessage = "Due date is required")]
-        public DateTime DueDate { get; set; }
+        public DateTime DueDate { get; set; } = DateTime.UtcNow;
 
-        public DateTime? PaidDate { get; set; }
+        public DateTime? PaidDate { get; set; } = DateTime.UtcNow;
 
         [StringLength(50, ErrorMessage = "Payment method cannot exceed 50 characters")]
         public string PaymentMethod { get; set; }
@@ -53,7 +54,9 @@ namespace EduTrack.ViewModels
         public DateTime Modified_Date { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public string StudentName { get; set; }
-        public string FeeDescription { get; set; }
+        [BindNever]
+        public string? StudentName { get; set; }
+        [BindNever]
+        public string? FeeDescription { get; set; }
     }
 }

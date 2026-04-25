@@ -62,6 +62,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Date", a.Attendance_Date),
                 new SqlParameter("@Status", a.Status),
                 new SqlParameter("@Teacher", a.Marked_By_Teacher_Id.HasValue ? (object)a.Marked_By_Teacher_Id : DBNull.Value),
+                new SqlParameter("@IsActive", a.IsActive),
                 new SqlParameter("@Created_By", a.Created_By)
             };
 
@@ -81,6 +82,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Date", a.Attendance_Date),
                 new SqlParameter("@Status", a.Status),
                 new SqlParameter("@Teacher", a.Marked_By_Teacher_Id.HasValue ? (object)a.Marked_By_Teacher_Id : DBNull.Value),
+                new SqlParameter("@IsActive", a.IsActive),
                 new SqlParameter("@Modified_By", a.Modified_By)
             };
 

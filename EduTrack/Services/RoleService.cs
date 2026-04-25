@@ -46,7 +46,11 @@ namespace EduTrack.Services
                 new SqlParameter("@Created_By", role.Created_By)
             };
 
-            _db.ExecuteProcedureNonQuery("sp_Role_Create", parameters);
+            var result = _db.ExecuteProcedureScalar("sp_Role_Create", parameters);
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                role.Role_Id = newId;
+            }
         }
 
         // UPDATE

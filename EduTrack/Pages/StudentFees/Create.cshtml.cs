@@ -58,6 +58,18 @@ namespace EduTrack.Pages.StudentFees
         {
             if (!ModelState.IsValid)
             {
+
+                foreach (var entry in ModelState)
+                {
+                    string fieldName = entry.Key;
+
+                    foreach (var error in entry.Value.Errors)
+                    {
+                        string errorMessage = error.ErrorMessage;
+
+                        Console.WriteLine($"Field: {fieldName} - Error: {errorMessage}");
+                    }
+                }
                 LoadStudents();
                 LoadFees();
                 return Page();

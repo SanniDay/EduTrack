@@ -33,12 +33,16 @@ namespace EduTrack.ViewModels
         public DateTime Modified_Date { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public string StudentName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? StudentName { get; set; }
 
-        public string ClassName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? ClassName { get; set; }
 
-        public string SubjectName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? SubjectName { get; set; }
 
-        public string TeacherName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? TeacherName { get; set; }
     }
 }

@@ -39,11 +39,16 @@
 
                         <div class="mb-3">
                             <label for="ClassSubject_Id" class="form-label fw-bold">Class Subject <span class="text-danger">*</span></label>
+@inject EduTrack.Interfaces.IClassService ClassService
+@inject EduTrack.Interfaces.ISubjectService SubjectService
+
                             <select class="form-select" id="ClassSubject_Id" name="TeacherClassViewModel.ClassSubject_Id" required>
                                 <option value="">-- Select Class Subject --</option>
                                 @foreach (var cs in Model.ClassSubjects)
                                 {
-                                    <option value="@cs.ClassSubject_Id">@cs.Class_Id - @cs.Subject_Id</option>
+                                    var cls = ClassService.GetAllClasses().FirstOrDefault(c => c.Class_Id == cs.Class_Id);
+                                    var subj = SubjectService.GetAll().FirstOrDefault(s => s.Subject_Id == cs.Subject_Id);
+                                    <option value="@cs.ClassSubject_Id">@cls?.ClassName - @subj?.Subject_Name</option>
                                 }
                             </select>
                             <span class="text-danger small">@Html.ValidationMessageFor(m => m.TeacherClassViewModel.ClassSubject_Id)</span>
@@ -51,7 +56,7 @@
 
                         <div class="mb-3">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="IsActive" name="TeacherClassViewModel.IsActive" value="true" checked>
+                                <input class="form-check-input" type="checkbox" id="IsActive" asp-for="TeacherClassViewModel.IsActive">
                                 <label class="form-check-label" for="IsActive"><strong>Active</strong></label>
                             </div>
                         </div>

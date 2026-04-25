@@ -131,26 +131,17 @@
     <Build Include="dbo\Stored Procedures\sp_Fees_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\sp_Fees_Delete.sql" />
     <Build Include="dbo\Stored Procedures\sp_Fees_Create.sql" />
-    <Build Include="DEPLOYMENT_README.sql" />
     <Build Include="dbo\Tables\ClassSubject.sql" />
     <Build Include="dbo\Tables\Attendance.sql" />
     <Build Include="dbo\Stored Procedures\sp_ClassSubject_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\sp_ClassSubject_Create.sql" />
     <Build Include="dbo\Stored Procedures\sp_Attendance_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\sp_Attendance_Create.sql" />
-    <Build Include="sp_Attendance_Delete.sql" />
-    <Build Include="sp_Attendance_Update.sql" />
-    <Build Include="sp_Attendance_GetById.sql" />
-    <Build Include="sp_ClassSubject_Delete.sql" />
-    <Build Include="sp_ClassSubject_Update.sql" />
-    <Build Include="sp_ClassSubject_GetById.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="EduTrack.DB.publish.xml" />
-    <None Include="DATABASE_FIX_SUMMARY.md" />
-    <None Include="ISSUES_FIXED_CHECKLIST.md" />
-    <None Include="SQL_SCHEMA_REFERENCE.md" />
-    <None Include="ERROR_FIX_REPORT.md" />
-    <None Include="README.md" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_Update_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_GetById_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_Delete_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_Update_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_GetById_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_Delete_1.sql" />
   </ItemGroup>
 </Project>

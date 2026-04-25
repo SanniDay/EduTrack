@@ -23,6 +23,8 @@ namespace EduTrack.Models
 
         public string Description { get; set; } = string.Empty;
 
+        public DateTime DueDate { get; set; } = DateTime.UtcNow;
+
         public string Created_By { get; set; } = string.Empty;
 
         public DateTime Created_Date { get; set; }

@@ -58,7 +58,11 @@ namespace EduTrack.Services
                 new SqlParameter("@Created_By", u.Created_By)
             };
 
-            _db.ExecuteProcedureNonQuery("sp_User_Create", parameters);
+            var result = _db.ExecuteProcedureScalar("sp_User_Create", parameters);
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                u.User_Id = newId;
+            }
         }
 
         // =============================

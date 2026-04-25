@@ -20,6 +20,10 @@ namespace EduTrack.Controllers
         private string Role => User.FindFirstValue(ClaimTypes.Role) ?? "";
         private string UserId => User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
 
+        private readonly IStudentService _studentService;
+
+        private readonly ITeacherService _teacherService;
+
         public UserController(IUserService userService, IRoleService roleService)
         {
             _userService = userService;
@@ -84,6 +88,10 @@ namespace EduTrack.Controllers
 
             if (Role == AppRoles.Teacher)
             {
+                if (u.Role_Id != studentRoleId)
+                {
+                    return Forbid();
+                }
                 // Teachers should only be able to assign the Student role when editing users
                 roles = roles.Where(r => r.Role_Id == studentRoleId).ToList();
             }
@@ -119,46 +127,83 @@ namespace EduTrack.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(UserViewModel model)
         {
+            // Handle optional password
             if (string.IsNullOrWhiteSpace(model.PasswordHash))
             {
                 ModelState.Remove(nameof(model.PasswordHash));
             }
+
+            // Validate Role_Id early
+            if (!model.Role_Id.HasValue)
+            {
+                ModelState.AddModelError(nameof(model.Role_Id), "Role is required");
+            }
+
             if (!ModelState.IsValid)
             {
-                var roles = _roleService.GetAll();
-                ViewBag.Roles = new SelectList(roles, "Role_Id", "Role_Name", model.Role_Id);
+                LoadRoles(model.Role_Id);
                 return View(model);
             }
 
-            var existing = _userService.GetById(model.User_Id);
-            if (existing == null) return NotFound();
+            try
+            {
+                var existing = _userService.GetById(model.User_Id);
+                if (existing == null) return NotFound();
 
-            // Preserve created metadata; update other fields. If password left blank, keep existing hash.
-            var updated = new User(
-                model.User_Id,
-                model.User_Name,
-                string.IsNullOrWhiteSpace(model.PasswordHash) ? existing.PasswordHash : PasswordHelper.HashPassword(model.PasswordHash),
-                model.Email,
-                model.PhoneNumber,
-                model.Address,
-                model.Role_Id,
-                string.Empty,
-                existing.Created_By,
-                existing.Created_Date,
-                "System",
-                DateTime.UtcNow,
-                model.IsActive,
-                model.IsDeleted
-            );
+                var allRoles = _roleService.GetAll();
+                var studentRoleId = allRoles.FirstOrDefault(r => r.Role_Name == AppRoles.Student)?.Role_Id;
 
-            _userService.Update(updated);
-            TempData["Success"] = "User updated successfully.";
-            return RedirectToAction("Index");
+                if (Role == AppRoles.Teacher)
+                {
+                    if (existing.Role_Id != studentRoleId || model.Role_Id != studentRoleId)
+                    {
+                        return Forbid();
+                    }
+                }
+
+                var role = _roleService.GetById(model.Role_Id.Value);
+                if (role == null) return NotFound();
+
+                var updated = new User(
+                    existing.User_Id,
+                    model.User_Name,
+                    string.IsNullOrWhiteSpace(model.PasswordHash)
+                        ? existing.PasswordHash
+                        : PasswordHelper.HashPassword(model.PasswordHash),
+                    model.Email,
+                    existing.PhoneNumber,
+                    existing.Address,
+                    role.Role_Id,
+                    role.Role_Name,
+                    existing.Created_By,
+                    existing.Created_Date,
+                    UserId.ToString(),
+                    DateTime.UtcNow,
+                    model.IsActive,
+                    model.IsDeleted
+                );
+
+                _userService.Update(updated);
+
+                TempData["Success"] = "User updated successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error: {ex.Message}");
+                LoadRoles(model.Role_Id);
+                return View(model);
+            }
         }
-
+        private void LoadRoles(int? selectedRoleId = null)
+        {
+            var roles = _roleService.GetAll();
+            ViewBag.Roles = new SelectList(roles, "Role_Id", "Role_Name", selectedRoleId);
+        }
         // =========================
         // DELETE
         // =========================
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -196,6 +241,7 @@ namespace EduTrack.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int User_Id)

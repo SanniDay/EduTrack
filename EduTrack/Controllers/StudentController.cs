@@ -130,6 +130,7 @@ namespace EduTrack.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -155,6 +156,7 @@ namespace EduTrack.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int Student_Id)
