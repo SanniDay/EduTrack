@@ -143,5 +143,6 @@
     <Build Include="dbo\Stored Procedures\sp_Attendance_Update_1.sql" />
     <Build Include="dbo\Stored Procedures\sp_Attendance_GetById_1.sql" />
     <Build Include="dbo\Stored Procedures\sp_Attendance_Delete_1.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_GetByEmailOrUsername.sql" />
   </ItemGroup>
 </Project>

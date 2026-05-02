@@ -50,7 +50,8 @@ namespace EduTrack.Services
                 new SqlParameter("@Student_Id", s.Student_Id),
                 new SqlParameter("@FullName", s.FullName),
                 new SqlParameter("@DOB", s.DOB),
-                new SqlParameter("@Gender", s.Gender),
+                // Stored procedure expects Gender as VARCHAR so pass string value
+                new SqlParameter("@Gender", s.Gender.ToString()),
                 new SqlParameter("@Modified_By", s.Modified_By),
                 new SqlParameter("@isActive", s.IsActive)
             };

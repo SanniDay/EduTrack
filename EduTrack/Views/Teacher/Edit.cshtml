@@ -39,6 +39,11 @@
                         <input asp-for="Phone_No" class="form-control form-control-lg bg-light border-0" placeholder="(555) 555-5555" />
                         <span asp-validation-for="Phone_No" class="text-danger small"></span>
                     </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Address" class="form-label text-muted fw-bold small text-uppercase">Address</label>
+                        <textarea asp-for="Address" class="form-control form-control-lg bg-light border-0" rows="3" placeholder="Enter complete address"></textarea>
+                    </div>
                 </div>
             </div>
         </div>

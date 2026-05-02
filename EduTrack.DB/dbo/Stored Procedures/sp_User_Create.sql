@@ -53,7 +53,7 @@ BEGIN
             GETDATE(),
             @Created_By,
             GETDATE(),
-            0,
+            1,
             0
         );
 

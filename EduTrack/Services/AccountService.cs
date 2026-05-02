@@ -14,7 +14,8 @@ namespace EduTrack.Services
         {
             _db = db;
         }
-        public bool Register(RegisterViewModel newUser)
+
+        public AuthenticationResult Register(RegisterViewModel newUser)
         {
             try
             {
@@ -33,18 +34,33 @@ namespace EduTrack.Services
                 object? result = _db.ExecuteProcedureScalar("sp_User_Create", parameters);
 
                 if (result == null)
-                    return false;
+                    return AuthenticationResult.Fail("An error occurred during registration. Please try again.");
 
                 int newUserId = Convert.ToInt32(result);
 
-                return newUserId > 0;
+                if (newUserId > 0)
+                    return AuthenticationResult.Ok(newUserId);
+                else
+                    return AuthenticationResult.Fail("Failed to create user account. Please try again.");
             }
-            catch
+            catch (SqlException ex)
             {
-                return false;
+                // Handle specific SQL errors
+                if (ex.Message.Contains("Username already exists"))
+                    return AuthenticationResult.Fail("This username is already registered. Please use a different username.");
+
+                if (ex.Message.Contains("Email already exists"))
+                    return AuthenticationResult.Fail("This email is already registered. Please use a different email or try logging in.");
+
+                return AuthenticationResult.Fail("Registration failed. Please check your information and try again.");
+            }
+            catch (Exception ex)
+            {
+                return AuthenticationResult.Fail("An unexpected error occurred. Please try again later.");
             }
         }
-        public bool Authenticate(string email, string password)
+
+        public AuthenticationResult Authenticate(string email, string password)
         {
             try
             {
@@ -58,11 +74,36 @@ namespace EduTrack.Services
 
                 DataTable dt = _db.ExecuteProcedure("sp_User_Authenticate", parameters);
 
-                return dt.Rows.Count > 0;
+                if (dt.Rows.Count > 0)
+                {
+                    int userId = Convert.ToInt32(dt.Rows[0]["User_Id"]);
+                    return AuthenticationResult.Ok(userId);
+                }
+
+                // User not found - need to check why
+                DataTable userCheck = _db.ExecuteProcedure("sp_User_GetByEmailOrUsername", new[]
+                {
+                    new SqlParameter("@EmailOrUsername", email)
+                });
+
+                if (userCheck.Rows.Count == 0)
+                    return AuthenticationResult.Fail("Email or username not found. Please register first.");
+
+                // User exists but password is wrong or account is inactive
+                bool isActive = (bool)userCheck.Rows[0]["isActive"];
+                bool isDeleted = (bool)userCheck.Rows[0]["isDeleted"];
+
+                if (isDeleted)
+                    return AuthenticationResult.Fail("Your account has been deleted. Please contact support.");
+
+                if (!isActive)
+                    return AuthenticationResult.Fail("Your account is inactive. Please contact the administrator.");
+
+                return AuthenticationResult.Fail("Invalid email/username or password. Please try again.");
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                return AuthenticationResult.Fail("An error occurred during login. Please try again later.");
             }
         }
     }
