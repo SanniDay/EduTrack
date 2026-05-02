@@ -14,12 +14,14 @@ namespace EduTrack.Controllers
         private readonly IAccountService _accountService;
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IEmailService _emailService;
 
-        public AccountController(IAccountService accountService, IUserService userService, IRoleService roleService)
+        public AccountController(IAccountService accountService, IUserService userService, IRoleService roleService, IEmailService emailService)
         {
             _accountService = accountService;
             _userService = userService;
             _roleService = roleService;
+            _emailService = emailService;
         }
 
         // =========================
@@ -73,6 +75,27 @@ namespace EduTrack.Controllers
                     {
                         IsPersistent = false
                     });
+            }
+
+            // Send registration confirmation email (non-blocking)
+            try
+            {
+                var to = model.Email;
+                var subject = "EduTrack - Registration Received";
+                var html = $@"
+                    <p>Dear {model.FullName},</p>
+                    <p>Thank you for registering with EduTrack.</p>
+                    <p>Your account has been created and is pending activation. You will receive an email confirmation once your account is activated (typically within 3-4 business days). Please wait until you receive the confirmation before attempting to access role-specific features.</p>
+                    <p>If you have any questions, reply to this email or contact support at <strong>support@edutrack.local</strong>.</p>
+                    <p>Regards,<br/>EduTrack Team</p>
+                ";
+
+                // fire-and-forget (don't block user flow)
+                _ = _emailService.SendEmailAsync(to, subject, html);
+            }
+            catch
+            {
+                // swallow - email failure should not block registration
             }
 
             return RedirectToAction("Index", "Home");

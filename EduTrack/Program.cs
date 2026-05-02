@@ -30,6 +30,10 @@ builder.Services.AddScoped<IStudentFeesService, StudentFeesService>();
 builder.Services.AddScoped<IClassSubjectService, ClassSubjectService>();
 builder.Services.AddScoped<IAttendanceService, AttendanceService>();
 
+// Email service (MailKit) - configuration in appsettings.json
+builder.Services.Configure<EduTrack.ViewModels.EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<EduTrack.Interfaces.IEmailService, EduTrack.Services.EmailService>();
+
 
 
 // =============================
