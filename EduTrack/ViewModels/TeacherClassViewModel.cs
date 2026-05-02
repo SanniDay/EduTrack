@@ -9,7 +9,6 @@ namespace EduTrack.ViewModels
         [Required(ErrorMessage = "Teacher is required")]
         public int Teacher_Id { get; set; }
 
-        [Required(ErrorMessage = "Class is required")]
         public int Class_Id { get; set; }
 
         [Required(ErrorMessage = "Class Subject is required")]
@@ -28,12 +27,16 @@ namespace EduTrack.ViewModels
         public DateTime Modified_Date { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public string TeacherName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? TeacherName { get; set; }
 
-        public string ClassName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? ClassName { get; set; }
 
-        public string Section { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? Section { get; set; }
 
-        public string SubjectName { get; set; }
+        [Microsoft.AspNetCore.Mvc.ModelBinding.BindNever]
+        public string? SubjectName { get; set; }
     }
 }

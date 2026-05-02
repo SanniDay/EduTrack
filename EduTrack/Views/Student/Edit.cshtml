@@ -4,70 +4,83 @@
     ViewData["Title"] = "Edit Student";
 }
 
-<div class="container-fluid mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-6">
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Student</h5>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post" class="needs-validation">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert"></div>
-                        <input type="hidden" asp-for="Student_Id" />
+<div class="container mt-5">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h2 class="mb-0 text-primary fw-bold">Edit Student Profile</h2>
+            <p class="text-muted">Update student contact information and enrollment status.</p>
+        </div>
+        <div class="col-auto">
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
-                            <input asp-for="FullName" class="form-control" required />
-                            <span asp-validation-for="FullName" class="text-danger small"></span>
-                        </div>
+    <form asp-action="Edit" method="post" class="needs-validation">
+        <div asp-validation-summary="All" class="alert alert-danger" style="@(ViewData.ModelState.IsValid ? "display:none;" : "")"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="DOB" class="form-label fw-bold">Date of Birth</label>
-                            <input asp-for="DOB" class="form-control" type="date" required />
-                            <span asp-validation-for="DOB" class="text-danger small"></span>
-                        </div>
+        <input asp-for="User_Id" type="hidden" />
+        <input asp-for="Student_Id" type="hidden" />
 
-                        <div class="mb-3">
-                            <label asp-for="Gender" class="form-label fw-bold">Gender</label>
-                            <select asp-for="Gender" class="form-select">
-                                <option value="1">Male</option>
-                                <option value="2">Female</option>
-                                <option value="3">Other</option>
-                            </select>
-                            <span asp-validation-for="Gender" class="text-danger small"></span>
-                        </div>
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-white border-bottom pb-0 pt-4">
+                <h5 class="fw-bold"><i class="bi bi-person-lines-fill text-primary me-2"></i> Personal Information</h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <label asp-for="FullName" class="form-label text-muted fw-bold small text-uppercase">Full Name</label>
+                        <input asp-for="FullName" class="form-control form-control-lg bg-light border-0" placeholder="e.g. John Doe" />
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Phone_No" class="form-label fw-bold">Phone</label>
-                            <input asp-for="Phone_No" class="form-control" />
-                            <span asp-validation-for="Phone_No" class="text-danger small"></span>
-                        </div>
+                    <div class="col-md-6">
+                        <label asp-for="Phone_No" class="form-label text-muted fw-bold small text-uppercase">Phone Number</label>
+                        <input asp-for="Phone_No" class="form-control form-control-lg bg-light border-0" placeholder="(555) 555-5555" />
+                        <span asp-validation-for="Phone_No" class="text-danger small"></span>
+                    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Address" class="form-label fw-bold">Address</label>
-                            <textarea asp-for="Address" class="form-control" rows="3"></textarea>
-                        </div>
+                    <div class="col-12">
+                        <label asp-for="Address" class="form-label text-muted fw-bold small text-uppercase">Address</label>
+                        <textarea asp-for="Address" class="form-control form-control-lg bg-light border-0" rows="3"></textarea>
+                    </div>
 
-                        <div class="mb-3 text-muted small">
-                            <div><strong>Created:</strong> @Model.Created_Date.ToString("dd MMM yyyy HH:mm") by @Model.Created_By</div>
-                            <div><strong>Last Modified:</strong> @Model.Modified_Date.ToString("dd MMM yyyy HH:mm")</div>
-                        </div>
+                    <div class="col-md-4">
+                        <label asp-for="DOB" class="form-label text-muted fw-bold small text-uppercase">Date of Birth</label>
+                        <input asp-for="DOB" class="form-control form-control-lg bg-light border-0" type="date" />
+                        <span asp-validation-for="DOB" class="text-danger small"></span>
+                    </div>
 
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-warning btn-lg"><i class="bi bi-check-circle me-2"></i>Update Student</button>
-                            <a asp-action="Index" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left me-2"></i>Back to List</a>
-                        </div>
-                    </form>
+                    <div class="col-md-4">
+                        <label asp-for="Gender" class="form-label text-muted fw-bold small text-uppercase">Gender</label>
+                        <select asp-for="Gender" class="form-select form-select-lg bg-light border-0">
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            <option value="3">Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="IsActive" class="form-label text-muted fw-bold small text-uppercase">Account Status</label>
+                        <select asp-for="IsActive" class="form-select form-select-lg fw-bold p-2 px-4 shadow-sm @(Model.IsActive ? "border-success text-success bg-success bg-opacity-10" : "border-danger text-danger bg-danger bg-opacity-10")" style="appearance: none; cursor: pointer;">
+                            <option value="true">Active Status</option>
+                            <option value="false">Inactive Status</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                <i class="bi bi-save2"></i> Update Student Profile
+            </button>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        if (document.querySelectorAll('.text-danger').length > 0) { var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none'); }
-    </script>
 }

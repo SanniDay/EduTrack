@@ -10,10 +10,12 @@ namespace EduTrack.Controllers
     public class RoleController : Controller
     {
         private readonly IRoleService _roleService;
+        private readonly IWebHostEnvironment _env;
 
-        public RoleController(IRoleService roleService)
+        public RoleController(IRoleService roleService, IWebHostEnvironment env)
         {
             _roleService = roleService;
+            _env = env;
         }
 
         public IActionResult Index()
@@ -97,7 +99,14 @@ namespace EduTrack.Controllers
             catch (Exception ex)
             {
                 // Log exception in real app
-                TempData["Error"] = "Error deleting role: " + ex.Message;
+                if (_env.IsDevelopment())
+                {
+                    TempData["Error"] = "Error deleting role: " + ex.Message;
+                }
+                else
+                {
+                    TempData["Error"] = "This role cannot be deleted at this time. It may be associated with existing users or system components.";
+                }
             }
 
             return RedirectToAction("Index");

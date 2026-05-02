@@ -1,9 +1,9 @@
-CREATE PROCEDURE [dbo].[sp_User_Create]
+﻿CREATE PROCEDURE [dbo].[sp_User_Create]
     @User_Name VARCHAR(50),
     @PasswordHash VARCHAR(225),
     @Email VARCHAR(50),
     @PhoneNumber VARCHAR(50),
-    @Address VARCHAR(255),
+    @Address VARCHAR(255) = '',
     @Role_Id INT = NULL,   
     @Created_By VARCHAR(50)
 AS
@@ -53,7 +53,7 @@ BEGIN
             GETDATE(),
             @Created_By,
             GETDATE(),
-            0,
+            1,
             0
         );
 

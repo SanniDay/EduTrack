@@ -6,7 +6,7 @@ namespace EduTrack.Interfaces
     {
         List<Class> GetAllClasses();
 
-        Class GetClassById(int id);
+        Class? GetClassById(int id);
 
         void CreateClass(Class model);
 

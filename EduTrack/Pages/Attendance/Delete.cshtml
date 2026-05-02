@@ -1,0 +1,56 @@
+@page "{id:int}"
+@model EduTrack.Pages.Attendance.DeleteModel
+@inject EduTrack.Interfaces.IStudentClassService StudentClassService
+@inject EduTrack.Interfaces.IStudentService StudentService
+
+@{
+    ViewData["Title"] = "Delete Attendance";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg border-0 border-danger">
+                <div class="card-header bg-gradient bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Delete Attendance Record</h5>
+                </div>
+                <div class="card-body p-4 text-center">
+                    <h4 class="text-danger mb-3">Are you sure you want to delete this record?</h4>
+                    <p class="text-muted">This will mark the attendance record as deleted.</p>
+                    
+                    <div class="bg-light p-3 rounded mb-4 text-start">
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold text-muted">Student:</div>
+                            @{
+                                var sc = StudentClassService.GetStudentClassById(Model.AttendanceItem.Student_Class_Id);
+                                var student = sc != null ? StudentService.GetById(sc.Student_Id) : null;
+                            }
+                            <div class="col-sm-8">@(student?.FullName ?? "N/A")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold text-muted">Date:</div>
+                            <div class="col-sm-8">@Model.AttendanceItem.Attendance_Date.ToString("yyyy-MM-dd")</div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-sm-4 fw-bold text-muted">Status:</div>
+                            <div class="col-sm-8">
+                                <span class="badge bg-secondary">@Model.AttendanceItem.Status</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="post">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-danger px-4">
+                                <i class="bi bi-trash-fill me-2"></i>Delete Confirm
+                            </button>
+                            <a asp-page="Index" class="btn btn-outline-secondary px-4">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

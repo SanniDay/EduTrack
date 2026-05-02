@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/bootstrap-icon/bootstrap-icons.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
     <link rel="stylesheet" href="~/lib/notyf/notyf.min.css" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/flatpickr/flatpickr.min.css" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -263,7 +265,23 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="~/lib/notyf/notyf.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/lib/flatpickr/flatpickr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize Select2 on all select elements that don't explicitly opt-out
+            $('select').not('.no-select2').select2({
+                width: '100%'
+            });
+            
+            // Initialize Flatpickr on date inputs
+            $('input[type="date"]').flatpickr({
+                dateFormat: "Y-m-d",
+                allowInput: true
+            });
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

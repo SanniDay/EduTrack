@@ -63,15 +63,20 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@Student_Id", studentFees.Student_Id),
                 new SqlParameter("@Fees_Id", studentFees.Fees_Id),
-                new SqlParameter("@DueDate", studentFees.DueDate),
                 new SqlParameter("@Amount", studentFees.Amount),
-                new SqlParameter("@Status", (int)studentFees.Status),
-                new SqlParameter("@PaymentMethod", studentFees.PaymentMethod),
-                new SqlParameter("@Notes", studentFees.Notes),
+                new SqlParameter("@PaymentStatus", (int)studentFees.Status),
+                new SqlParameter("@DueDate", studentFees.DueDate),
+                new SqlParameter("@PaymentMethod", string.IsNullOrWhiteSpace(studentFees.PaymentMethod) ? (object)DBNull.Value : studentFees.PaymentMethod),
+                new SqlParameter("@Notes", string.IsNullOrWhiteSpace(studentFees.Notes) ? (object)DBNull.Value : studentFees.Notes),
                 new SqlParameter("@Created_By", studentFees.Created_By)
             };
 
-            _db.ExecuteProcedureNonQuery("sp_StudentFees_Create", parameters);
+            // sp_StudentFees_Create returns inserted identity (SCOPE_IDENTITY())
+            var result = _db.ExecuteProcedureScalar("sp_StudentFees_Create", parameters);
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                studentFees.StudentFees_Id = newId;
+            }
         }
 
         public void Update(StudentFees studentFees)
@@ -79,12 +84,9 @@ namespace EduTrack.Services
             var parameters = new[]
             {
                 new SqlParameter("@StudentFees_Id", studentFees.StudentFees_Id),
-                new SqlParameter("@Student_Id", studentFees.Student_Id),
-                new SqlParameter("@Fees_Id", studentFees.Fees_Id),
                 new SqlParameter("@DueDate", studentFees.DueDate),
-                new SqlParameter("@PaidDate", (object?)studentFees.PaidDate ?? DBNull.Value),
                 new SqlParameter("@Amount", studentFees.Amount),
-                new SqlParameter("@Status", (int)studentFees.Status),
+                new SqlParameter("@PaymentStatus", (int)studentFees.Status),
                 new SqlParameter("@PaymentMethod", studentFees.PaymentMethod),
                 new SqlParameter("@Receipt_No", studentFees.Receipt_No),
                 new SqlParameter("@Notes", studentFees.Notes),
@@ -99,7 +101,7 @@ namespace EduTrack.Services
             var parameters = new[]
             {
                 new SqlParameter("@StudentFees_Id", studentFeesId),
-                new SqlParameter("@Status", (int)status),
+                new SqlParameter("@PaymentStatus", (int)status),
                 new SqlParameter("@PaidDate", (object?)paidDate ?? DBNull.Value),
                 new SqlParameter("@Modified_By", "System")
             };
@@ -137,7 +139,7 @@ namespace EduTrack.Services
                 row["DueDate"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["DueDate"],
                 row["PaidDate"] == DBNull.Value ? null : (DateTime)row["PaidDate"],
                 Convert.ToDecimal(row["Amount"]),
-                (PaymentStatus)Enum.Parse(typeof(PaymentStatus), row["Status"]?.ToString() ?? "1"),
+                (PaymentStatus)Convert.ToInt32(row["PaymentStatus"]),
                 row["PaymentMethod"]?.ToString() ?? "",
                 row["Receipt_No"]?.ToString() ?? "",
                 row["Notes"]?.ToString() ?? "",
@@ -145,7 +147,7 @@ namespace EduTrack.Services
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
                 row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
+                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
             );
         }
     }

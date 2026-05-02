@@ -4,8 +4,8 @@ namespace EduTrack.Interfaces
 {
     public interface IAccountService
     {
-        bool Register(RegisterViewModel model);
-        bool Authenticate(string userName, string password);
+        AuthenticationResult Register(RegisterViewModel model);
+        AuthenticationResult Authenticate(string userName, string password);
     }
 }
 

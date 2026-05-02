@@ -1,6 +1,6 @@
-﻿
-CREATE PROCEDURE [dbo].[sp_Fees_Update]
+﻿CREATE PROCEDURE [dbo].[sp_Fees_Update]
     @Fees_Id INT,
+    @Class_Id INT,
     @FeeType INT,
     @Amount DECIMAL(10, 2),
     @Currency NVARCHAR(3),
@@ -11,9 +11,11 @@ CREATE PROCEDURE [dbo].[sp_Fees_Update]
 AS
 BEGIN
     SET NOCOUNT ON;
+
     BEGIN TRY
         UPDATE [dbo].[Fees]
         SET 
+            [Class_Id] = @Class_Id,      
             [FeeType] = @FeeType,
             [Amount] = @Amount,
             [Currency] = @Currency,
@@ -22,7 +24,8 @@ BEGIN
             [IsActive] = @IsActive,
             [Modified_By] = @Modified_By,
             [Modified_Date] = GETDATE()
-        WHERE [Fees_Id] = @Fees_Id AND [IsDeleted] = 0;
+        WHERE [Fees_Id] = @Fees_Id 
+          AND [IsDeleted] = 0;
     END TRY
     BEGIN CATCH
         THROW;

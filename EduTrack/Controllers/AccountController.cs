@@ -14,12 +14,14 @@ namespace EduTrack.Controllers
         private readonly IAccountService _accountService;
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IEmailService _emailService;
 
-        public AccountController(IAccountService accountService, IUserService userService, IRoleService roleService)
+        public AccountController(IAccountService accountService, IUserService userService, IRoleService roleService, IEmailService emailService)
         {
             _accountService = accountService;
             _userService = userService;
             _roleService = roleService;
+            _emailService = emailService;
         }
 
         // =========================
@@ -33,20 +35,70 @@ namespace EduTrack.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
             { return View(model); }
 
-            bool result = _accountService.Register(model);
+            var registrationResult = _accountService.Register(model);
 
-            if (!result)
+            if (!registrationResult.Success)
             {
-                ModelState.AddModelError("", "Registration failed.");
+                ModelState.AddModelError("", registrationResult.Message);
                 return View(model);
             }
 
-            return RedirectToAction("Login");
+            // Auto-login the newly registered user
+            var user = _userService.GetAll().FirstOrDefault(u => string.Equals(u.Email, model.Email, StringComparison.OrdinalIgnoreCase));
+
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, model.Email),
+                    new Claim(ClaimTypes.NameIdentifier, user.User_Id.ToString())
+                };
+
+                if (user.Role_Id.HasValue)
+                {
+                    var role = _roleService.GetById(user.Role_Id.Value);
+                    if (role != null && !string.IsNullOrWhiteSpace(role.Role_Name))
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role.Role_Name));
+                    }
+                }
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity),
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = false
+                    });
+            }
+
+            // Send registration confirmation email (non-blocking)
+            try
+            {
+                var to = model.Email;
+                var subject = "EduTrack - Registration Received";
+                var html = $@"
+                    <p>Dear {model.FullName},</p>
+                    <p>Thank you for registering with EduTrack.</p>
+                    <p>Your account has been created and is pending activation. You will receive an email confirmation once your account is activated (typically within 3-4 business days). Please wait until you receive the confirmation before attempting to access role-specific features.</p>
+                    <p>If you have any questions, reply to this email or contact support at <strong>support@edutrack.local</strong>.</p>
+                    <p>Regards,<br/>EduTrack Team</p>
+                ";
+
+                // fire-and-forget (don't block user flow)
+                _ = _emailService.SendEmailAsync(to, subject, html);
+            }
+            catch
+            {
+                // swallow - email failure should not block registration
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         // =========================
@@ -65,11 +117,11 @@ namespace EduTrack.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            bool isValid = _accountService.Authenticate(model.Email, model.Password);
+            var authResult = _accountService.Authenticate(model.Email, model.Password);
 
-            if (!isValid)
+            if (!authResult.Success)
             {
-                ModelState.AddModelError("", "Invalid email or password.");
+                ModelState.AddModelError("", authResult.Message);
                 return View(model);
             }
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace EduTrack.ViewModels
 {
@@ -16,6 +17,7 @@ namespace EduTrack.ViewModels
         public int Fees_Id { get; set; }
 
         [Required(ErrorMessage = "Class is required")]
+        [Display(Name = "Class")]
         public int Class_Id { get; set; }
 
         [Required(ErrorMessage = "Fee type is required")]
@@ -30,7 +32,10 @@ namespace EduTrack.ViewModels
         public string Currency { get; set; } = "USD";
 
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
-        public string Description { get; set; }
+        public string? Description { get; set; }
+
+        // DueDate is nullable in database; keep it optional in the view model
+        public DateTime? DueDate { get; set; }
 
         public bool IsActive { get; set; } = true;
 
@@ -45,6 +50,7 @@ namespace EduTrack.ViewModels
         public DateTime Modified_Date { get; set; } = DateTime.UtcNow;
 
         // Navigation properties
-        public string ClassName { get; set; }
+        [BindNever]
+        public string? ClassName { get; set; }
     }
 }

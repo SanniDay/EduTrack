@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Microsoft.Data.SqlClient;
 using EduTrack.Helpers;
 using EduTrack.Interfaces;
@@ -59,6 +59,7 @@ namespace EduTrack.Services
             {
                 new SqlParameter("@Teacher_Id", tc.Teacher_Id),
                 new SqlParameter("@ClassSubject_Id", tc.ClassSubject_Id.HasValue ? (object)tc.ClassSubject_Id : DBNull.Value),
+                new SqlParameter("@isActive", tc.isActive),
                 new SqlParameter("@Created_By", tc.Created_By)
             };
 
@@ -75,6 +76,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Teacher_Class_Id", tc.Teacher_Class_Id),
                 new SqlParameter("@Teacher_Id", tc.Teacher_Id),
                 new SqlParameter("@ClassSubject_Id", tc.ClassSubject_Id.HasValue ? (object)tc.ClassSubject_Id : DBNull.Value),
+                new SqlParameter("@isActive", tc.isActive),
                 new SqlParameter("@Modified_By", tc.Modified_By)
             };
 

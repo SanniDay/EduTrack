@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 
 namespace EduTrack.Services
 {
-    public class StudentService:IStudentService
+    public class StudentService : IStudentService
     {
         private readonly DbHelper _db;
 
@@ -34,15 +34,29 @@ namespace EduTrack.Services
 
         public int Insert(Student s)
         {
-            return _db.ExecuteProcedureNonQuery("sp_Student_Insert", Params(s));
+            var result = _db.ExecuteProcedureScalar("sp_Student_Insert", Params(s));
+            if (result != null && int.TryParse(result.ToString(), out int newId))
+            {
+                s.Student_Id = newId;
+                return newId;
+            }
+            return 0;
         }
 
         public int Update(Student s)
         {
-            var list = Params(s).ToList();
-            list.Add(new SqlParameter("@Student_Id", s.Student_Id));
+            var parameters = new[]
+            {
+                new SqlParameter("@Student_Id", s.Student_Id),
+                new SqlParameter("@FullName", s.FullName),
+                new SqlParameter("@DOB", s.DOB),
+                // Stored procedure expects Gender as VARCHAR so pass string value
+                new SqlParameter("@Gender", s.Gender.ToString()),
+                new SqlParameter("@Modified_By", s.Modified_By),
+                new SqlParameter("@isActive", s.IsActive)
+            };
 
-            return _db.ExecuteProcedureNonQuery("sp_Student_Update", list.ToArray());
+            return _db.ExecuteProcedureNonQuery("sp_Student_Update", parameters);
         }
 
         public int Delete(int id)
@@ -74,8 +88,8 @@ namespace EduTrack.Services
                 row["Created_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Created_Date"],
                 row["Modified_By"]?.ToString() ?? "",
                 row["Modified_Date"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["Modified_Date"],
-                row["IsActive"] == DBNull.Value ? false : (bool)row["IsActive"],
-                row["IsDeleted"] == DBNull.Value ? false : (bool)row["IsDeleted"]
+                row["isActive"] == DBNull.Value ? false : (bool)row["isActive"],
+                row["isDeleted"] == DBNull.Value ? false : (bool)row["isDeleted"]
             );
         }
 
@@ -90,6 +104,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Created_By", s.Created_By),
                 new SqlParameter("@Modified_By", s.Modified_By),
                 new SqlParameter("@isActive", (object?)s.IsActive ?? DBNull.Value),
+                new SqlParameter("@isDeleted", (object?)s.IsDeleted ?? DBNull.Value),
             };
         }
 

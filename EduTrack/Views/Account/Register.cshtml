@@ -1,4 +1,4 @@
-﻿@model EduTrack.ViewModels.RegisterViewModel
+@model EduTrack.ViewModels.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -17,8 +17,21 @@
 
                     <form asp-action="Register" method="post" novalidate>
 
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-warning"></div>
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    if (typeof Notyf !== 'undefined') {
+                                        var notyf = new Notyf({ duration: 5000, position: { x: 'right', y: 'top' }, dismissible: true });
+                                        @foreach (var error in errors)
+                                        {
+                                            <text>notyf.error('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(error))');</text>
+                                        }
+                                    }
+                                });
+                            </script>
+                        }
 
                         <!-- Full Name -->
                         <div class="form-floating mb-3">

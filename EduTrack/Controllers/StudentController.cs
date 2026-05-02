@@ -12,11 +12,13 @@ namespace EduTrack.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
+        private readonly IUserService _userService;
         private string Role => User.FindFirstValue(ClaimTypes.Role) ?? "";
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, IUserService userService)
         {
             _studentService = studentService;
+            _userService = userService;
         }
 
         public IActionResult Index()
@@ -119,17 +121,26 @@ namespace EduTrack.Controllers
             existing.FullName = model.FullName;
             existing.DOB = model.DOB;
             existing.Gender = (Models.Gender)model.Gender;
-            existing.Phone_No = model.Phone_No;
-            existing.Address = model.Address;
             existing.Modified_By = HttpContext.User.Identity?.Name ?? "System";
             existing.Modified_Date = DateTime.UtcNow;
             existing.IsActive = model.IsActive;
 
             _studentService.Update(existing);
+
+            var userAccount = _userService.GetById(model.User_Id);
+            if (userAccount != null)
+            {
+                userAccount.PhoneNumber = model.Phone_No;
+                userAccount.Address = model.Address;
+                userAccount.IsActive = model.IsActive;
+                userAccount.Modified_By = existing.Modified_By;
+                _userService.Update(userAccount);
+            }
             TempData["Success"] = "Student updated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -155,6 +166,7 @@ namespace EduTrack.Controllers
             return View(vm);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int Student_Id)

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace EduTrack.Pages.TeacherClasses
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Teacher")]
     public class IndexModel : PageModel
     {
         private readonly ITeacherClassService _teacherClassService;

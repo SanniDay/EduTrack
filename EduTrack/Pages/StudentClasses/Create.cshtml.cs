@@ -39,6 +39,7 @@ namespace EduTrack.Pages.StudentClasses
         {
             if (!ModelState.IsValid)
             {
+                
                 Students = _studentService.GetAll();
                 Classes = _classService.GetAllClasses();
                 return Page();

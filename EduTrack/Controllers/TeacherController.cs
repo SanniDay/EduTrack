@@ -39,8 +39,7 @@ namespace EduTrack.Controllers
             if (Role == AppRoles.Teacher)
             {
                 lstTeacher = lstTeacher
-                    .Where(u => u.Teacher_Id != adminRoleId
-                             && u.User_Id.ToString() == UserId)
+                    .Where(u => u.User_Id.ToString() == UserId)
                     .ToList();
             }
 
@@ -50,6 +49,7 @@ namespace EduTrack.Controllers
                     t.User_Id,
                     t.FullName,
                     t.Phone_No,
+                    t.Address,
                     t.Created_By,
                     t.Created_Date,
                     t.Modified_By,
@@ -69,8 +69,13 @@ namespace EduTrack.Controllers
             {
                 return NotFound();
             }
+
+            if (Role == AppRoles.Teacher && teacher.User_Id.ToString() != UserId)
+            {
+                return Forbid();
+            }
             TeacherViewModel model = new TeacherViewModel(teacher.Teacher_Id, teacher.User_Id,
-                teacher.FullName, teacher.Phone_No, teacher.Created_By, teacher.Created_Date,
+                teacher.FullName, teacher.Phone_No, teacher.Address, teacher.Created_By, teacher.Created_Date,
                 teacher.Modified_By, teacher.Modified_Date, teacher.IsActive, teacher.IsDeleted);
             return View(model);
         }
@@ -78,23 +83,29 @@ namespace EduTrack.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(TeacherViewModel model)
         {
+            if (Role == AppRoles.Teacher && model.User_Id.ToString() != UserId)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
                 model.Modified_By = HttpContext.User.Identity?.Name ?? "System";
                 model.Modified_Date = DateTime.Now;
 
-                // Teacher table no longer stores Phone_No — only FullName, IsActive, etc.
+                // Teacher table no longer stores Phone_No or Address — only FullName, IsActive, etc.
                 Teacher teacher = new Teacher(model.Teacher_Id, model.User_Id, model.FullName,
-                    model.Phone_No, model.Created_By, model.Created_Date,
+                    model.Phone_No, model.Address, model.Created_By, model.Created_Date,
                     model.Modified_By, model.Modified_Date, model.IsActive, model.IsDeleted);
                 _teacherService.Update(teacher);
 
-                // Phone_No and IsActive live in the User table — always sync them
+                // Phone_No, Address and IsActive live in the User table — always sync them
                 var userAccount = _userService.GetById(model.User_Id);
                 if (userAccount != null)
                 {
                     userAccount.IsActive = model.IsActive;
                     userAccount.PhoneNumber = model.Phone_No;
+                    userAccount.Address = model.Address;
                     userAccount.Modified_By = model.Modified_By;
                     _userService.Update(userAccount);
                 }
@@ -105,6 +116,7 @@ namespace EduTrack.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -120,6 +132,7 @@ namespace EduTrack.Controllers
                 teacher.User_Id,
                 teacher.FullName,
                 teacher.Phone_No,
+                teacher.Address,
                 teacher.Created_By,
                 teacher.Created_Date,
                 teacher.Modified_By,
@@ -131,6 +144,7 @@ namespace EduTrack.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.Admin)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(TeacherViewModel model)

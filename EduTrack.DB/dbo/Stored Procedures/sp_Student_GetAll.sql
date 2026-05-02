@@ -1,4 +1,4 @@
-CREATE PROCEDURE sp_Student_GetAll
+﻿CREATE PROCEDURE [dbo].[sp_Student_GetAll]
 AS
 BEGIN
     SELECT 
@@ -7,5 +7,5 @@ BEGIN
         U.Address AS Address
     FROM Students S
     JOIN Users U ON S.User_Id = U.User_Id
-    WHERE S.isDeleted = 0
+    WHERE S.isDeleted = 0 AND U.isDeleted = 0
 END

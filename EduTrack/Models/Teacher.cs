@@ -15,6 +15,8 @@ namespace EduTrack.Models
         
         public string Phone_No { get; set; }
 
+        public string Address { get; set; } = string.Empty;
+
         
         public string Created_By { get; set; } = string.Empty;
 
@@ -34,6 +36,7 @@ namespace EduTrack.Models
             User_Id = 0;
             FullName = string.Empty;
             Phone_No = string.Empty;
+            Address = string.Empty;
             Created_By = string.Empty;
             Created_Date = DateTime.MinValue;
             Modified_By = string.Empty;
@@ -46,6 +49,7 @@ namespace EduTrack.Models
             int user_Id,
             string fullName,
             string phone_No,
+            string address,
             string created_By,
             DateTime created_Date,
             string modified_By,
@@ -57,6 +61,7 @@ namespace EduTrack.Models
             User_Id = user_Id;
             FullName = fullName;
             Phone_No = phone_No;
+            Address = address;
             Created_By = created_By;
             Created_Date = created_Date;
             Modified_By = modified_By;
