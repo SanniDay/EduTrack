@@ -27,7 +27,9 @@
                 </thead>
 
                 <tbody>
-                    @{ int counter = 0; }
+                    @{
+                        int counter = 0;
+                    }
                     @if (Model != null)
                     {
                         @foreach (var teacher in Model)
@@ -57,11 +59,15 @@
                                            class="btn btn-sm btn-outline-warning" title="Edit">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
-                                        <a asp-action="Delete"
-                                           asp-route-id="@teacher.Teacher_Id"
-                                           class="btn btn-sm btn-outline-danger" title="Delete">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <a asp-action="Delete"
+                                               asp-route-id="@teacher.Teacher_Id"
+                                               class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        }
+
                                     </div>
                                 </td>
                             </tr>

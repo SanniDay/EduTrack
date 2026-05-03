@@ -54,6 +54,21 @@
                             </a>
                         </li>
 
+                        @* Quick links for Students *@
+                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/StudentFees/Index">
+                                    <i class="bi bi-receipt-cutoff me-1"></i> My Fees
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/Attendance/Index">
+                                    <i class="bi bi-calendar-check me-1"></i> Attendance
+                                </a>
+                            </li>
+                        }
+
                         @if (User?.Identity != null && User.Identity.IsAuthenticated)
                         {
                             if (User.IsInRole("Admin"))
@@ -143,6 +158,15 @@
                                         <i class="bi bi-person-lines-fill me-1"></i> Students
                                     </a>
                                 </li>
+                                if (User.IsInRole("Teacher"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-page="/StudentFees/Index">
+                                            <i class="bi bi-receipt-cutoff me-1"></i> Student Fees
+                                        </a>
+                                    </li>
+                                }
+                                
 
                             }
                         }
@@ -274,7 +298,7 @@
             $('select').not('.no-select2').select2({
                 width: '100%'
             });
-            
+
             // Initialize Flatpickr on date inputs
             $('input[type="date"]').flatpickr({
                 dateFormat: "Y-m-d",

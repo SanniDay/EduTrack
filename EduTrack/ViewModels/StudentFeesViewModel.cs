@@ -38,7 +38,7 @@ namespace EduTrack.ViewModels
         public string PaymentMethod { get; set; }
 
         [StringLength(100, ErrorMessage = "Receipt number cannot exceed 100 characters")]
-        public string Receipt_No { get; set; }
+        public string Receipt_No { get; set; } = string.Empty;
 
         [StringLength(500, ErrorMessage = "Notes cannot exceed 500 characters")]
         public string Notes { get; set; }
