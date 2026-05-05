@@ -96,7 +96,7 @@ namespace EduTrack.Controllers
                 // Teacher table no longer stores Phone_No or Address — only FullName, IsActive, etc.
                 Teacher teacher = new Teacher(model.Teacher_Id, model.User_Id, model.FullName,
                     model.Phone_No, model.Address, model.Created_By, model.Created_Date,
-                    model.Modified_By, model.Modified_Date, model.IsActive, model.IsDeleted);
+                    model.Modified_By, model.Modified_Date, (Role == AppRoles.Teacher) || model.IsActive, model.IsDeleted);
                 _teacherService.Update(teacher);
 
                 // Phone_No, Address and IsActive live in the User table — always sync them
@@ -104,6 +104,11 @@ namespace EduTrack.Controllers
                 if (userAccount != null)
                 {
                     userAccount.IsActive = model.IsActive;
+                    if(Role == AppRoles.Teacher)
+                    {
+                        userAccount.IsActive = true;
+                    }
+
                     userAccount.PhoneNumber = model.Phone_No;
                     userAccount.Address = model.Address;
                     userAccount.Modified_By = model.Modified_By;

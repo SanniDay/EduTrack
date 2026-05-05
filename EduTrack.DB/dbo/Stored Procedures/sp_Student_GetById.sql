@@ -1,4 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[sp_Student_GetById]
+﻿
+/* ===============================
+   FIX: STUDENT
+================================ */
+
+CREATE PROCEDURE [dbo].[sp_Student_GetById]
 (
     @Student_Id INT
 )
@@ -10,5 +15,8 @@ BEGIN
         U.Address AS Address
     FROM Students S
     JOIN Users U ON S.User_Id = U.User_Id
-    WHERE S.Student_Id = @Student_Id AND U.isDeleted = 0
+    WHERE 
+        S.Student_Id = @Student_Id 
+        AND S.isDeleted = 0   -- FIX ADDED
+        AND U.isDeleted = 0
 END

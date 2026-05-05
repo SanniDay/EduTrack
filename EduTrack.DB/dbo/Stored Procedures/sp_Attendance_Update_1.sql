@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[sp_Attendance_Update]
+﻿
+
+/* ===============================
+   FIX: ATTENDANCE (Already correct, kept for safety)
+================================ */
+
+CREATE PROCEDURE [dbo].[sp_Attendance_Update]
     @Attendance_Id INT,
     @Student_Class_Id INT,
     @ClassSubject_Id INT,
@@ -18,5 +24,7 @@ BEGIN
         IsActive = @IsActive,
         Modified_By = @Modified_By,
         Modified_Date = GETDATE()
-    WHERE Attendance_Id = @Attendance_Id AND IsDeleted = 0;
+    WHERE 
+        Attendance_Id = @Attendance_Id 
+        AND IsDeleted = 0
 END
