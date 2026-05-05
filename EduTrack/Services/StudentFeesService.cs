@@ -66,6 +66,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Amount", studentFees.Amount),
                 new SqlParameter("@PaymentStatus", (int)studentFees.Status),
                 new SqlParameter("@DueDate", studentFees.DueDate),
+                new SqlParameter("@PaidDate", studentFees.PaidDate),
                 new SqlParameter("@PaymentMethod", string.IsNullOrWhiteSpace(studentFees.PaymentMethod) ? (object)DBNull.Value : studentFees.PaymentMethod),
                 new SqlParameter("@Notes", string.IsNullOrWhiteSpace(studentFees.Notes) ? (object)DBNull.Value : studentFees.Notes),
                 new SqlParameter("@Created_By", studentFees.Created_By)

@@ -1,4 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[sp_StudentClass_Update]
+﻿
+
+/* ===============================
+   FIX: STUDENTCLASS UPDATE
+================================ */
+
+CREATE PROCEDURE [dbo].[sp_StudentClass_Update]
 (
     @Student_Class_Id INT,
     @Student_Id INT,
@@ -14,5 +20,7 @@ BEGIN
         isActive = @isActive,
         Modified_By = @Modified_By,
         Modified_Date = GETDATE()
-    WHERE Student_Class_Id = @Student_Class_Id
+    WHERE 
+        Student_Class_Id = @Student_Class_Id
+        AND isDeleted = 0   -- FIX ADDED
 END

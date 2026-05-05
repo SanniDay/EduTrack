@@ -13,9 +13,11 @@
     [Modified_By]   NVARCHAR (100)  NULL,
     [Modified_Date] DATETIME        NULL,
     PRIMARY KEY CLUSTERED ([Fees_Id] ASC),
-    CONSTRAINT [FK_Fees_Class] FOREIGN KEY ([Class_Id]) REFERENCES [dbo].[Classes] ([Class_Id]),
+    CONSTRAINT [FK_Fees_Class] FOREIGN KEY ([Class_Id]) REFERENCES [dbo].[Classes] ([Class_Id]) ON DELETE CASCADE,
     CONSTRAINT [UC_Fees_ClassType] UNIQUE NONCLUSTERED ([Class_Id] ASC, [FeeType] ASC)
 );
+
+
 
 
 GO

@@ -1,3 +1,5 @@
+﻿
+
 CREATE PROCEDURE [dbo].[sp_Teacher_Update]
 (
     @Teacher_Id INT,
@@ -19,5 +21,7 @@ BEGIN
         IsActive = @IsActive,
         IsDeleted = @IsDeleted,
         Modified_Date = GETDATE()
-    WHERE Teacher_Id = @Teacher_Id
+    WHERE 
+        Teacher_Id = @Teacher_Id
+        AND isDeleted = 0   -- FIX ADDED
 END

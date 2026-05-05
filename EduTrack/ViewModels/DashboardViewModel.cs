@@ -15,5 +15,7 @@ namespace EduTrack.ViewModels
         // Metrics for Teacher
         public int ActiveClasses { get; set; }
         public int EnrolledStudents { get; set; }
+        public int TotalSubjects { get; set; }
+        public string CurrentDateTime { get; set; } = string.Empty;
     }
 }

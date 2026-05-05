@@ -30,6 +30,6 @@ BEGIN
     JOIN [dbo].[Students] s ON s.[Student_Id] = sf.[Student_Id]
     JOIN [dbo].[Fees] f ON f.[Fees_Id] = sf.[Fees_Id]
     JOIN [dbo].[Classes] c ON c.[Class_Id] = f.[Class_Id]
-    WHERE sf.[IsDeleted] = 0
+    WHERE sf.[IsDeleted] = 0 AND s.isDeleted=0 AND c.IsDeleted = 0
     ORDER BY sf.[DueDate] DESC;
 END;

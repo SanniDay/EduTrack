@@ -8,22 +8,81 @@ using EduTrack.Constants;
 
 namespace EduTrack.Controllers
 {
-    [Authorize(Roles = "" + AppRoles.Admin + "," + AppRoles.Teacher + "")]
+    [Authorize(Roles = "" + AppRoles.Admin + "," + AppRoles.Teacher + "," + AppRoles.Student + "")]
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
         private readonly IUserService _userService;
+        private readonly ITeacherService _teacherService;
+        private readonly IStudentClassService _studentClassService;
+        private readonly ITeacherClassService _teacherClassService;
         private string Role => User.FindFirstValue(ClaimTypes.Role) ?? "";
 
-        public StudentController(IStudentService studentService, IUserService userService)
+        public StudentController(
+            IStudentService studentService,
+            IUserService userService,
+            ITeacherService teacherService,
+            IStudentClassService studentClassService,
+            ITeacherClassService teacherClassService)
         {
             _studentService = studentService;
             _userService = userService;
+            _teacherService = teacherService;
+            _studentClassService = studentClassService;
+            _teacherClassService = teacherClassService;
         }
 
         public IActionResult Index()
         {
-            var students = _studentService.GetAll();
+            List<Student> students;
+
+            if (User.IsInRole("Admin"))
+            {
+                students = _studentService.GetAll();
+            }
+            else if (User.IsInRole("Teacher"))
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdClaim, out var userId))
+                {
+                    var teacher = _teacherService.GetAll().FirstOrDefault(t => t.User_Id == userId);
+                    if (teacher != null)
+                    {
+                        var classIds = _teacherClassService.GetAllTeacherClasses()
+                            .Where(tc => tc.Teacher_Id == teacher.Teacher_Id)
+                            .Select(tc => tc.Class_Id)
+                            .ToHashSet();
+
+                        var studentIds = _studentClassService.GetAllStudentClasses()
+                            .Where(sc => classIds.Contains(sc.Class_Id))
+                            .Select(sc => sc.Student_Id)
+                            .ToHashSet();
+
+                        students = _studentService.GetAll().Where(s => studentIds.Contains(s.Student_Id)).ToList();
+                    }
+                    else
+                    {
+                        students = new List<Student>();
+                    }
+                }
+                else
+                {
+                    students = new List<Student>();
+                }
+            }
+            else // Student
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if (int.TryParse(userIdClaim, out var userId))
+                {
+                    var student = _studentService.GetAll().FirstOrDefault(s => s.User_Id == userId);
+                    students = student != null ? new List<Student> { student } : new List<Student>();
+                }
+                else
+                {
+                    students = new List<Student>();
+                }
+            }
 
             var model = students.Select(s => new StudentViewModel(
                 s.Student_Id,
