@@ -15,7 +15,14 @@
 );
 
 
+
+
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [UX_ClassSubject]
+    ON [dbo].[ClassSubject]([Class_Id] ASC, [Subject_Id] ASC) WHERE ([IsDeleted]=(0));
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_ClassSubject_Active]
     ON [dbo].[ClassSubject]([Class_Id] ASC, [Subject_Id] ASC) WHERE ([IsDeleted]=(0));
 

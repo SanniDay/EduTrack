@@ -19,7 +19,14 @@
 );
 
 
+
+
 GO
 CREATE UNIQUE NONCLUSTERED INDEX [UX_Attendance]
     ON [dbo].[Attendance]([Student_Class_Id] ASC, [ClassSubject_Id] ASC, [Attendance_Date] ASC) WHERE ([IsDeleted]=(0));
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Attendance_Unique]
+    ON [dbo].[Attendance]([Student_Class_Id] ASC, [Attendance_Date] ASC) WHERE ([IsDeleted]=(0));
 

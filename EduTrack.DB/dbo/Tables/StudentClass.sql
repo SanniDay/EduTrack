@@ -11,3 +11,8 @@
     PRIMARY KEY CLUSTERED ([Student_Class_Id] ASC)
 );
 
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_StudentClass_Active]
+    ON [dbo].[StudentClass]([Student_Id] ASC, [Class_Id] ASC) WHERE ([isDeleted]=(0));
+

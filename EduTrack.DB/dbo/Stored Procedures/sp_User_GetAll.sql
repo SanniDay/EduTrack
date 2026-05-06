@@ -1,4 +1,4 @@
-
+﻿
 CREATE PROCEDURE[dbo].[sp_User_GetAll]
 	
 AS
@@ -11,4 +11,5 @@ BEGIN
 	FROM Users U
 	LEFT JOIN Roles R	ON R.Role_Id=U.Role_Id
 	WHERE U.isDeleted=0
+	ORDER BY [User_Id] DESC
 END

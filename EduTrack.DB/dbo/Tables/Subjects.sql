@@ -9,9 +9,10 @@
     [Created_Date]  DATETIME       DEFAULT (getdate()) NOT NULL,
     [Modified_By]   NVARCHAR (100) NULL,
     [Modified_Date] DATETIME       NULL,
-    PRIMARY KEY CLUSTERED ([Subject_Id] ASC),
-    UNIQUE NONCLUSTERED ([Subject_Code] ASC)
+    PRIMARY KEY CLUSTERED ([Subject_Id] ASC)
 );
+
+
 
 
 GO
@@ -22,4 +23,9 @@ CREATE NONCLUSTERED INDEX [IX_Subjects_IsDeleted]
 GO
 CREATE NONCLUSTERED INDEX [IX_Subjects_IsActive]
     ON [dbo].[Subjects]([IsActive] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Subjects_Code_Active]
+    ON [dbo].[Subjects]([Subject_Code] ASC) WHERE ([IsDeleted]=(0));
 

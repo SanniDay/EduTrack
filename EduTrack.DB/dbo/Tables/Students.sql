@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[Students] (
+﻿CREATE TABLE [dbo].[Students] (
     [Student_Id]    INT           IDENTITY (1, 1) NOT NULL,
     [User_Id]       INT           NOT NULL,
     [FullName]      VARCHAR (100) NOT NULL,
@@ -11,7 +11,11 @@ CREATE TABLE [dbo].[Students] (
     [isActive]      BIT           DEFAULT ((0)) NOT NULL,
     [isDeleted]     BIT           DEFAULT ((0)) NOT NULL,
     PRIMARY KEY CLUSTERED ([Student_Id] ASC),
-    CONSTRAINT [FK_Students_User] FOREIGN KEY ([User_Id]) REFERENCES [dbo].[Users] ([User_Id]) ON DELETE CASCADE,
-    CONSTRAINT [UQ__Students__206D9171A4561648] UNIQUE NONCLUSTERED ([User_Id] ASC)
+    CONSTRAINT [FK_Students_User] FOREIGN KEY ([User_Id]) REFERENCES [dbo].[Users] ([User_Id]) ON DELETE CASCADE
 );
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Students_User_Active]
+    ON [dbo].[Students]([User_Id] ASC) WHERE ([isDeleted]=(0));
 

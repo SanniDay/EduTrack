@@ -1,4 +1,4 @@
-CREATE TABLE [dbo].[Users] (
+﻿CREATE TABLE [dbo].[Users] (
     [User_Id]       INT           IDENTITY (1, 1) NOT NULL,
     [User_Name]     VARCHAR (50)  NOT NULL,
     [PasswordHash]  VARCHAR (225) NOT NULL,
@@ -13,8 +13,16 @@ CREATE TABLE [dbo].[Users] (
     [isActive]      BIT           DEFAULT ((0)) NOT NULL,
     [isDeleted]     BIT           DEFAULT ((0)) NOT NULL,
     PRIMARY KEY CLUSTERED ([User_Id] ASC),
-    CONSTRAINT [FK_Users_Role] FOREIGN KEY ([Role_Id]) REFERENCES [dbo].[Roles] ([Role_Id]),
-    UNIQUE NONCLUSTERED ([Email] ASC),
-    UNIQUE NONCLUSTERED ([User_Name] ASC)
+    CONSTRAINT [FK_Users_Role] FOREIGN KEY ([Role_Id]) REFERENCES [dbo].[Roles] ([Role_Id])
 );
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Users_UserName_Active]
+    ON [dbo].[Users]([User_Name] ASC) WHERE ([isDeleted]=(0));
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Users_Email_Active]
+    ON [dbo].[Users]([Email] ASC) WHERE ([isDeleted]=(0));
 

@@ -1,4 +1,4 @@
-
+﻿
 CREATE PROCEDURE [dbo].[sp_User_GetById]
 	@User_Id INT
 AS
@@ -11,5 +11,6 @@ BEGIN
 			U.[Created_Date],U.[Modified_By],U.[Modified_Date],U.[isActive],U.[isDeleted] 
 	FROM Users U
 	LEFT JOIN Roles R ON R.Role_Id=U.Role_Id
-	WHERE U.isDeleted=0 AND [User_Id]=@User_Id
+	WHERE U.isDeleted=0 AND [User_Id]=@User_Id 
+	ORDER BY [User_Id] DESC
 END

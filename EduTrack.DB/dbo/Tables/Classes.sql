@@ -12,6 +12,8 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_Classes_IsDeleted]
     ON [dbo].[Classes]([IsDeleted] ASC);
@@ -20,4 +22,9 @@ CREATE NONCLUSTERED INDEX [IX_Classes_IsDeleted]
 GO
 CREATE NONCLUSTERED INDEX [IX_Classes_IsActive]
     ON [dbo].[Classes]([IsActive] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_Classes_Name_Section_Active]
+    ON [dbo].[Classes]([ClassName] ASC, [Section] ASC) WHERE ([IsDeleted]=(0));
 

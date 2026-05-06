@@ -26,6 +26,7 @@ namespace EduTrack.ViewModels
         [Required(ErrorMessage = "Full Name is required.")]
         [StringLength(100, ErrorMessage = "Full Name cannot exceed 100 characters.")]
         [Display(Name = "Full Name")]
+        [RegularExpression(@"^[A-Za-z\s]+$", ErrorMessage = "Only letters and spaces are allowed.")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "Phone Number is required.")]

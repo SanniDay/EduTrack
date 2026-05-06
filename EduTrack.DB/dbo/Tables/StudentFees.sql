@@ -23,6 +23,8 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_StudentFees_IsDeleted]
     ON [dbo].[StudentFees]([IsDeleted] ASC);
@@ -46,4 +48,9 @@ CREATE NONCLUSTERED INDEX [IX_StudentFees_FeesId]
 GO
 CREATE NONCLUSTERED INDEX [IX_StudentFees_StudentId]
     ON [dbo].[StudentFees]([Student_Id] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [UX_StudentFees_Unique]
+    ON [dbo].[StudentFees]([Student_Id] ASC, [Fees_Id] ASC) WHERE ([IsDeleted]=(0));
 
