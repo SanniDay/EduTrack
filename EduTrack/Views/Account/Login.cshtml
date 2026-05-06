@@ -4,29 +4,47 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+    <div class="row w-100 justify-content-center">
+        <div class="col-lg-5 col-md-7 col-sm-10">
 
-            <div class="card shadow-lg border-0">
-                <div class="card-header bg-gradient bg-primary text-white text-center">
-                    <h4 class="mb-0">Login to Your Account</h4>
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- Header -->
+                <div class="bg-primary bg-gradient text-white text-center py-4">
+                    <h2 class="fw-bold mb-1">
+                        <i class="bi bi-person-circle me-2"></i>Welcome Back
+                    </h2>
+                    <p class="mb-0 opacity-75">
+                        Login to continue to EduTrack
+                    </p>
                 </div>
 
-                <div class="card-body p-4">
+                <!-- Body -->
+                <div class="card-body p-4 p-lg-5">
 
                     <form asp-action="Login" method="post" novalidate>
 
                         @if (!ViewData.ModelState.IsValid)
                         {
-                            var errors = ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                            var errors = ViewData.ModelState.Values
+                            .SelectMany(v => v.Errors)
+                            .Select(e => e.ErrorMessage);
+
                             <script>
-                                document.addEventListener('DOMContentLoaded', function() {
+                                document.addEventListener('DOMContentLoaded', function () {
                                     if (typeof Notyf !== 'undefined') {
-                                        var notyf = new Notyf({ duration: 5000, position: { x: 'right', y: 'top' }, dismissible: true });
+                                        var notyf = new Notyf({
+                                            duration: 5000,
+                                            position: { x: 'right', y: 'top' },
+                                            dismissible: true
+                                        });
+
                                         @foreach (var error in errors)
                                         {
-                                                            <text>notyf.error('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(error))');</text>
+                                                <text>
+                                                    notyf.error('@Html.Raw(System.Web.HttpUtility.JavaScriptStringEncode(error))');
+                                                </text>
                                         }
                                     }
                                 });
@@ -34,60 +52,93 @@
                         }
 
                         <!-- Email -->
-                        <div class="form-floating mb-3">
-                            <input asp-for="Email"
-                                   class="form-control"
-                                   placeholder="" />
-                            <label asp-for="Email"></label>
-                            <span asp-validation-for="Email"
-                                  class="invalid-feedback d-block"></span>
-                        </div>
-                        <!-- Password -->
-                        <!-- Password -->
-                        <div class="form-floating mb-3">
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-semibold">
+                                Email Address
+                            </label>
+
                             <div class="input-group">
-                                <div class="form-floating">
-                                    <input asp-for="Password"
-                                           class="form-control"
-                                           placeholder=""
-                                           type="password"
-                                           id="Password" />
-                                    <label asp-for="Password"></label>
-                                </div>
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-envelope-fill text-primary"></i>
+                                </span>
+
+                                <input asp-for="Email"
+                                       class="form-control border-start-0 py-2"
+                                       placeholder="Enter your email" />
+                            </div>
+
+                            <span asp-validation-for="Email"
+                                  class="text-danger small"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-semibold">
+                                Password
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text bg-light border-end-0">
+                                    <i class="bi bi-lock-fill text-primary"></i>
+                                </span>
+
+                                <input asp-for="Password"
+                                       class="form-control border-start-0 border-end-0 py-2"
+                                       placeholder="Enter your password"
+                                       type="password"
+                                       id="Password" />
 
                                 <button type="button"
-                                        class="btn btn-outline-secondary password-toggle"
-                                        data-target="#Password"
-                                        title="Show/Hide Password">
+                                        class="btn btn-light border password-toggle"
+                                        data-target="#Password">
+
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
 
                             <span asp-validation-for="Password"
-                                  class="invalid-feedback d-block"></span>
-                        </div>
-                        <!-- Remember Me -->
-                        <div class="form-check mb-4">
-                            <input asp-for="RememberMe"
-                                   class="form-check-input" />
-                            <label asp-for="RememberMe"
-                                   class="form-check-label">
-                                Remember Me
-                            </label>
+                                  class="text-danger small"></span>
                         </div>
 
-                        <div class="d-grid">
+                        <!-- Remember Me + Forgot -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+
+                            <div class="form-check">
+                                <input asp-for="RememberMe"
+                                       class="form-check-input" />
+
+                                <label asp-for="RememberMe"
+                                       class="form-check-label">
+                                    Remember Me
+                                </label>
+                            </div>
+
+                            <a href="#"
+                               class="text-decoration-none small fw-semibold">
+                                Forgot Password?
+                            </a>
+                        </div>
+
+                        <!-- Login Button -->
+                        <div class="d-grid mb-3">
                             <button type="submit"
-                                    class="btn btn-primary btn-lg">
+                                    class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm">
+
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
                                 Login
                             </button>
                         </div>
 
-                        <div class="text-center mt-3">
-                            Don't have an account?
+                        <!-- Register -->
+                        <div class="text-center pt-2">
+                            <span class="text-muted">
+                                Don't have an account?
+                            </span>
+
                             <a asp-action="Register"
-                               class="text-decoration-none">
-                                Register
+                               class="fw-semibold text-decoration-none ms-1">
+                                Create Account
                             </a>
                         </div>
 
@@ -105,9 +156,11 @@
         $(document).ready(function () {
 
             $("input").not("[type='password']").on("blur keyup", function () {
+
                 if ($(this).hasClass("input-validation-error")) {
                     $(this).addClass("is-invalid").removeClass("is-valid");
-                } else {
+                }
+                else {
                     if ($(this).val().length > 0) {
                         $(this).removeClass("is-invalid").addClass("is-valid");
                     }
@@ -116,16 +169,27 @@
 
             // Password show/hide toggle
             $(document).on('click', '.password-toggle', function () {
+
                 var targetSelector = $(this).data('target');
                 var $target = $(targetSelector);
+
                 if (!$target || $target.length === 0) return;
+
                 var $icon = $(this).find('i');
+
                 if ($target.attr('type') === 'password') {
+
                     $target.attr('type', 'text');
-                    $icon.removeClass('bi-eye').addClass('bi-eye-slash');
+
+                    $icon.removeClass('bi-eye')
+                         .addClass('bi-eye-slash');
+
                 } else {
+
                     $target.attr('type', 'password');
-                    $icon.removeClass('bi-eye-slash').addClass('bi-eye');
+
+                    $icon.removeClass('bi-eye-slash')
+                         .addClass('bi-eye');
                 }
             });
 
