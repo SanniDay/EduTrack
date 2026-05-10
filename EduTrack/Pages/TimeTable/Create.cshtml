@@ -1,0 +1,108 @@
+@page
+@model EduTrack.Pages.TimeTable.CreateModel
+@{
+    ViewData["Title"] = "Create TimeTable";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow border-0">
+                <div class="card-header bg-gradient bg-primary text-white">
+                    <h5 class="mb-0">Create TimeTable Entry</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Class</label>
+                                <select asp-for="TimeTable.Class_Id" class="form-select">
+                                    <option value="">-- Select Class --</option>
+                                    @foreach (var c in Model.Classes)
+                                    {
+                                        <option value="@c.Class_Id">@c.ClassName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="TimeTable.Class_Id" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Class Subject</label>
+                                <select asp-for="TimeTable.ClassSubject_Id" class="form-select">
+                                    <option value="">-- Select Subject --</option>
+                                    @foreach (var kv in Model.ClassSubjectOptions)
+                                    {
+                                        <option value="@kv.Key">@kv.Value</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Teacher</label>
+                                <select asp-for="TimeTable.Teacher_Id" class="form-select">
+                                    <option value="">-- Select Teacher --</option>
+                                    @foreach (var t in Model.Teachers)
+                                    {
+                                        <option value="@t.Teacher_Id">@t.FullName</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Day</label>
+                                <select asp-for="TimeTable.Day_Name" class="form-select">
+                                    <option>Monday</option>
+                                    <option>Tuesday</option>
+                                    <option>Wednesday</option>
+                                    <option>Thursday</option>
+                                    <option>Friday</option>
+                                    <option>Saturday</option>
+                                </select>
+                                <span asp-validation-for="TimeTable.Day_Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Period No</label>
+                                <input asp-for="TimeTable.Period_No" class="form-control" />
+                                <span asp-validation-for="TimeTable.Period_No" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Start Time</label>
+                                <input asp-for="TimeTable.Start_Time" type="time" class="form-control" />
+                                <span asp-validation-for="TimeTable.Start_Time" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">End Time</label>
+                                <input asp-for="TimeTable.End_Time" type="time" class="form-control" />
+                                <span asp-validation-for="TimeTable.End_Time" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Room No</label>
+                                <input asp-for="TimeTable.Room_No" class="form-control" />
+                            </div>
+
+                            <div class="col-md-6 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input asp-for="TimeTable.IsActive" class="form-check-input" />
+                                    <label class="form-check-label">Is Active</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">Create</button>
+                                <a asp-page="Index" class="btn btn-outline-secondary">Back to List</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

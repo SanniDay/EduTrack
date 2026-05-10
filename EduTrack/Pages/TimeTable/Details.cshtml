@@ -1,0 +1,42 @@
+@page
+@model EduTrack.Pages.TimeTable.DetailsModel
+@{
+    ViewData["Title"] = "TimeTable Details";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-gradient bg-primary text-white">
+            <h5 class="mb-0">TimeTable Details</h5>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Class</dt>
+                <dd class="col-sm-9">@Model.Item.ClassName</dd>
+
+                <dt class="col-sm-3">Subject</dt>
+                <dd class="col-sm-9">@Model.Item.SubjectName</dd>
+
+                <dt class="col-sm-3">Teacher</dt>
+                <dd class="col-sm-9">@Model.Item.TeacherName</dd>
+
+                <dt class="col-sm-3">Day</dt>
+                <dd class="col-sm-9">@Model.Item.Day_Name</dd>
+
+                <dt class="col-sm-3">Period</dt>
+                <dd class="col-sm-9">@Model.Item.Period_No</dd>
+
+                <dt class="col-sm-3">Time</dt>
+                <dd class="col-sm-9">@Model.Item.Start_Time.ToString() - @Model.Item.End_Time.ToString()</dd>
+
+                <dt class="col-sm-3">Room</dt>
+                <dd class="col-sm-9">@Model.Item.Room_No</dd>
+
+                <dt class="col-sm-3">Status</dt>
+                <dd class="col-sm-9">@(Model.Item.IsActive ? "Active" : "Inactive")</dd>
+            </dl>
+
+            <a asp-page="Index" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
+</div>

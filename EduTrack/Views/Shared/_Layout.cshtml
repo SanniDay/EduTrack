@@ -1,5 +1,6 @@
 @using System.Security.Claims
 @using System.Linq
+@using EduTrack.Constants
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,11 +56,16 @@
                         </li>
 
                         @* Student quick links (visible only to Students) *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Student))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-page="/StudentFees/Index">
                                     <i class="bi bi-receipt-cutoff me-1"></i> My Fees
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="/TimeTable/Index">
+                                    <i class="bi bi-calendar3 me-1"></i> TimeTable
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -70,7 +76,7 @@
                         }
 
                         @* Admin menu: management + academic *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Admin))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
@@ -111,6 +117,11 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a class="dropdown-item" asp-page="/TimeTable/Index">
+                                            <i class="bi bi-calendar3 me-2"></i> TimeTable
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a class="dropdown-item" asp-page="/ClassSubjects/Index">
                                             <i class="bi bi-book-half me-2"></i> Class Subjects
                                         </a>
@@ -132,12 +143,23 @@
                                             <i class="bi bi-check-circle me-2"></i> Attendance
                                         </a>
                                     </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="DeletedRecords" asp-action="Index">
+                                            <i class="bi bi-trash2-fill me-2 text-danger"></i> Deleted Records Manager
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="SystemIntegrity" asp-action="Index">
+                                            <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i> System Integrity
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         }
 
                         @* Admin or Teacher: important management links (visible to both) *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && (User.IsInRole("Admin") || User.IsInRole("Teacher")))
+                        @if (User?.Identity != null && User.Identity.IsAuthenticated && (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Teacher)))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="User" asp-action="Index">
@@ -158,7 +180,7 @@
                             </li>
 
                             @* Teachers also need quick access to fees/student-fees for their classes; keep link visible to Teacher *@
-                            @if (User.IsInRole("Teacher"))
+                            @if (User.IsInRole(AppRoles.Teacher))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-page="/Fees/Index">
@@ -174,6 +196,11 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-page="/Attendance/Index">
                                         <i class="bi bi-calendar-check me-1"></i> Attendance
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-page="/TimeTable/Index">
+                                        <i class="bi bi-calendar3 me-1"></i> TimeTable
                                     </a>
                                 </li>
                             }
@@ -311,6 +338,15 @@
             // Initialize Flatpickr on date inputs
             $('input[type="date"]').flatpickr({
                 dateFormat: "Y-m-d",
+                allowInput: true
+            });
+
+            // Initialize Flatpickr on time inputs
+            $('input[type="time"]').flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i",
+                time_24hr: true,
                 allowInput: true
             });
         });

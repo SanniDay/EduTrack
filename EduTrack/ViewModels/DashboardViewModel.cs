@@ -17,5 +17,11 @@ namespace EduTrack.ViewModels
         public int EnrolledStudents { get; set; }
         public int TotalSubjects { get; set; }
         public string CurrentDateTime { get; set; } = string.Empty;
+
+        // Timetable widgets
+        public List<EduTrack.ViewModels.TimeTableViewModel> TodayClasses { get; set; } = new();
+        public EduTrack.ViewModels.TimeTableViewModel? CurrentClass { get; set; }
+        public EduTrack.ViewModels.TimeTableViewModel? NextClass { get; set; }
+        public Dictionary<string, List<EduTrack.ViewModels.TimeTableViewModel>> WeeklyTimetable { get; set; } = new();
     }
 }

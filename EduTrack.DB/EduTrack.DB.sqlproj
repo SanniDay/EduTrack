@@ -144,5 +144,13 @@
     <Build Include="dbo\Stored Procedures\sp_Attendance_GetById_1.sql" />
     <Build Include="dbo\Stored Procedures\sp_Attendance_Delete_1.sql" />
     <Build Include="dbo\Stored Procedures\sp_User_GetByEmailOrUsername.sql" />
+    <Build Include="dbo\Tables\TimeTable.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_Update.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_Restore.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_GetById.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_GetByClass.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_GetAll.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_Create.sql" />
   </ItemGroup>
 </Project>

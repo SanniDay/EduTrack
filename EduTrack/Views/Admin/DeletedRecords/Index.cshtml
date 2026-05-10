@@ -1,0 +1,211 @@
+@model List<EduTrack.ViewModels.DeletedRecordViewModel>
+@{
+    ViewData["Title"] = "Deleted Records";
+    var modules = ViewBag.Modules as List<string> ?? new List<string>();
+    var selectedModule = ViewBag.SelectedModule as string ?? "Student";
+    int total = ViewBag.Total ?? 0;
+    int currentPage = ViewBag.Page ?? 1;
+    int pageSize = ViewBag.PageSize ?? 25;
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Deleted Records</h5>
+            <div>
+                <a href="/" class="btn btn-sm btn-outline-secondary">Back</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-2 mb-3">
+                <div class="col-md-3">
+                    <select name="module" class="form-select">
+                        @foreach (var m in modules)
+                        {
+                            <option value="@m" selected="@(m==selectedModule)">@m</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input name="search" class="form-control" placeholder="Search..." />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+
+            <form id="bulkForm" method="post" asp-action="BulkAction" asp-controller="DeletedRecords" asp-area="Admin">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="module" value="@selectedModule" />
+                <input type="hidden" name="actionType" id="bulkActionType" />
+
+                <div class="mb-2 d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-outline-secondary" id="selectAllBtn">Select All</button>
+                            <button type="button" class="btn btn-outline-secondary" id="clearAllBtn">Clear</button>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-success" id="bulkRestoreBtn">Restore Selected</button>
+                            <button type="button" class="btn btn-danger" id="bulkDeleteBtn">Permanent Delete Selected</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width:40px;"><input type="checkbox" id="selectAllCheckbox" /></th>
+                                <th>ID</th>
+                                <th>Module</th>
+                                <th>Display</th>
+                                <th>Deleted By</th>
+                                <th>Deleted Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><input type="checkbox" name="ids" value="@item.RecordId" data-module="@item.Module" class="rowCheckbox" /></td>
+                                    <td>@item.RecordId</td>
+                                    <td>@item.Module</td>
+                                    <td>@item.DisplayText</td>
+                                    <td>@item.DeletedBy</td>
+                                    <td>@(item.DeletedDate?.ToString("yyyy-MM-dd HH:mm") ?? "-")</td>
+                                    <td>
+                                        @if (item.IsDeleted)
+                                        {
+                                            <span class="badge bg-danger">Deleted</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success">Active</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a asp-action="Details" asp-route-module="@item.Module" asp-route-id="@item.RecordId" class="btn btn-sm btn-outline-primary">View</a>
+                                            <form method="post" asp-action="Restore" asp-controller="DeletedRecords" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="module" value="@item.Module" />
+                                                <input type="hidden" name="id" value="@item.RecordId" />
+                                                <button type="submit" class="btn btn-sm btn-outline-success">Restore</button>
+                                            </form>
+                                            <form method="post" asp-action="PermanentDelete" asp-controller="DeletedRecords" class="d-inline ms-1 permanent-delete-form">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="module" value="@item.Module" />
+                                                <input type="hidden" name="id" value="@item.RecordId" />
+                                                <button type="submit" class="btn btn-sm btn-outline-danger permanent-delete-btn">Permanent Delete</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </form>
+
+            <div class="mt-3 d-flex justify-content-between align-items-center">
+                <div>Total: @total</div>
+                <div>Page @currentPage</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(function(){
+            // Select all behavior
+            $('#selectAllCheckbox').on('change', function(){
+                $('.rowCheckbox').prop('checked', $(this).prop('checked'));
+            });
+
+            $('#selectAllBtn').on('click', function(){ $('.rowCheckbox').prop('checked', true); $('#selectAllCheckbox').prop('checked', true); });
+            $('#clearAllBtn').on('click', function(){ $('.rowCheckbox').prop('checked', false); $('#selectAllCheckbox').prop('checked', false); });
+
+            // Helper to get antiforgery token
+            function getAntiForgeryToken(){
+                return $('input[name="__RequestVerificationToken"]').first().val();
+            }
+
+            // AJAX bulk restore
+            $('#bulkRestoreBtn').on('click', function(){
+                var rows = $('.rowCheckbox:checked');
+                if(rows.length==0){ alert('No items selected'); return; }
+                if(!confirm('Restore selected records?')) return;
+                var ids = rows.map(function(){ return $(this).val(); }).get();
+                var modules = rows.map(function(){ return $(this).data('module'); }).get();
+                ajaxBulkAction('restore', ids, modules);
+            });
+
+            // AJAX bulk permanent delete with progress
+            $('#bulkDeleteBtn').on('click', function(){
+                var rows = $('.rowCheckbox:checked');
+                if(rows.length==0){ alert('No items selected'); return; }
+                if(!confirm('Permanently delete selected records? This cannot be undone.')) return;
+                var ids = rows.map(function(){ return $(this).val(); }).get();
+                var modules = rows.map(function(){ return $(this).data('module'); }).get();
+                ajaxBulkAction('permanentdelete', ids, modules);
+            });
+
+            function showSpinner(){
+                if($('#bulkSpinner').length==0){
+                    $('body').append('<div id="bulkSpinner" style="position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.35);z-index:2000;display:flex;align-items:center;justify-content:center;"><div class="spinner-border text-light" role="status"><span class="visually-hidden">Loading...</span></div></div>');
+                }
+            }
+
+            function hideSpinner(){ $('#bulkSpinner').remove(); }
+
+            function ajaxBulkAction(actionType, ids, modules){
+                showSpinner();
+                $.ajax({
+                    url: '@Url.Action("BulkAction","DeletedRecords", new { area = "Admin" })',
+                    method: 'POST',
+                    headers: { 'RequestVerificationToken': getAntiForgeryToken(), 'X-Requested-With': 'XMLHttpRequest' },
+                    data: { module: $('#bulkForm input[name="module"]').val(), actionType: actionType, ids: ids },
+                    traditional: true,
+                    success: function(resp){
+                        hideSpinner();
+                        if(resp && resp.success !== undefined){
+                            alert('Bulk operation completed. Success: ' + resp.success + ', Failed: ' + resp.failed);
+                            location.reload();
+                        } else if (resp && resp.error){
+                            alert('Error: ' + resp.error);
+                        } else {
+                            location.reload();
+                        }
+                    },
+                    error: function(){ hideSpinner(); alert('Bulk operation failed'); }
+                });
+            }
+
+            // Intercept permanent delete single action to check dependencies first
+            $('.permanent-delete-form').on('submit', function(e){
+                e.preventDefault();
+                var form = $(this);
+                var module = form.find('input[name="module"]').val();
+                var id = form.find('input[name="id"]').val();
+                showSpinner();
+                $.get('@Url.Action("CheckDependencies","DeletedRecords", new { area = "Admin" })', { module: module, id: id })
+                .done(function(resp){
+                    hideSpinner();
+                    if(resp && resp.hasDependencies){
+                        if(!confirm('There are ' + resp.count + ' dependent references. Are you sure you want to permanently delete?')) return;
+                    }
+                    // submit original form
+                    form.off('submit').submit();
+                })
+                .fail(function(){ hideSpinner(); alert('Could not check dependencies.'); });
+            });
+        });
+    </script>
+}
