@@ -87,6 +87,7 @@ namespace EduTrack.Services
                 new SqlParameter("@Start_Time", t.Start_Time),
                 new SqlParameter("@End_Time", t.End_Time),
                 new SqlParameter("@Room_No", string.IsNullOrWhiteSpace(t.Room_No) ? (object)DBNull.Value : t.Room_No),
+                new SqlParameter("@IsActive", t.IsActive),
                 new SqlParameter("@Modified_By", t.Modified_By ?? "System")
             };
 

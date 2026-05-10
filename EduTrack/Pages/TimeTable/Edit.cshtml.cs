@@ -68,6 +68,7 @@ namespace EduTrack.Pages.TimeTable
         {
             if (!ModelState.IsValid)
             {
+                TempData["Error"] = "Please correct the highlighted errors.";
                 Classes = _classService.GetAllClasses();
                 ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 Teachers = _teacherService.GetAll();
@@ -76,41 +77,51 @@ namespace EduTrack.Pages.TimeTable
 
             if (TimeTable.End_Time <= TimeTable.Start_Time)
             {
-                ModelState.AddModelError(string.Empty, "End Time must be greater than Start Time.");
+                TempData["Error"] = "End Time must be greater than Start Time.";
                 Classes = _classService.GetAllClasses();
                 ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 Teachers = _teacherService.GetAll();
                 return Page();
             }
 
-            var model = new EduTrack.Models.TimeTable
+            try
             {
-                TimeTable_Id = TimeTable.TimeTable_Id,
-                Class_Id = TimeTable.Class_Id,
-                ClassSubject_Id = TimeTable.ClassSubject_Id,
-                Teacher_Id = TimeTable.Teacher_Id,
-                Day_Name = TimeTable.Day_Name,
-                Period_No = TimeTable.Period_No,
-                Start_Time = TimeTable.Start_Time,
-                End_Time = TimeTable.End_Time,
-                Room_No = TimeTable.Room_No,
-                IsActive = TimeTable.IsActive,
-                Modified_By = User.Identity?.Name ?? "System",
-                Modified_Date = DateTime.UtcNow
-            };
+                var model = new EduTrack.Models.TimeTable
+                {
+                    TimeTable_Id = TimeTable.TimeTable_Id,
+                    Class_Id = TimeTable.Class_Id,
+                    ClassSubject_Id = TimeTable.ClassSubject_Id,
+                    Teacher_Id = TimeTable.Teacher_Id,
+                    Day_Name = TimeTable.Day_Name,
+                    Period_No = TimeTable.Period_No,
+                    Start_Time = TimeTable.Start_Time,
+                    End_Time = TimeTable.End_Time,
+                    Room_No = TimeTable.Room_No,
+                    IsActive = TimeTable.IsActive,
+                    Modified_By = User.Identity?.Name ?? "System",
+                    Modified_Date = DateTime.UtcNow
+                };
 
-            var res = _timeTableService.Update(model);
-            if (res == 0)
+                var res = _timeTableService.Update(model);
+                if (res == 0)
+                {
+                    TempData["Error"] = "Duplicate timetable entry or unable to update record.";
+                    Classes = _classService.GetAllClasses();
+                    ClassSubjects = _classSubjectService.GetAllClassSubjects();
+                    Teachers = _teacherService.GetAll();
+                    return Page();
+                }
+                TempData["Message"] = "TimeTable entry updated successfully!";
+                return RedirectToPage("Index");
+            }
+            catch (Exception ex)
             {
-                ModelState.AddModelError(string.Empty, "Duplicate timetable entry or unable to update.");
+                TempData["Error"] = "An error occurred: " + ex.Message;
                 Classes = _classService.GetAllClasses();
                 ClassSubjects = _classSubjectService.GetAllClassSubjects();
                 Teachers = _teacherService.GetAll();
                 return Page();
             }
-
-            TempData["Message"] = "TimeTable updated successfully.";
-            return RedirectToPage("Index");
         }
     }
 }

@@ -77,5 +77,5 @@ BEGIN
         @Created_By,
         GETDATE()
     )
-
+    SELECT SCOPE_IDENTITY();
 END

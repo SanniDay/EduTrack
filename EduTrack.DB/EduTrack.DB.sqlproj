@@ -152,5 +152,19 @@
     <Build Include="dbo\Stored Procedures\sp_TimeTable_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\sp_TimeTable_Delete.sql" />
     <Build Include="dbo\Stored Procedures\sp_TimeTable_Create.sql" />
+    <Build Include="dbo\Stored Procedures\sp_User_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TimeTable_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_TeacherClass_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Teacher_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_System_FindBrokenRelations.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Subject_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentFees_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_StudentClass_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Student_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Role_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Fees_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ClassSubject_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Class_PermanentDelete.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Attendance_PermanentDelete.sql" />
   </ItemGroup>
 </Project>
