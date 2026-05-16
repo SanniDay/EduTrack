@@ -15,7 +15,9 @@ namespace EduTrack.Models
 
         public int User_Id { get; set; }
 
-       
+        public int Class_Id { get; set; }   
+
+
         public string FullName { get; set; }
 
         
@@ -46,7 +48,7 @@ namespace EduTrack.Models
 
         public Student() { }
 
-        public Student(int student_Id, int user_Id, string fullName,
+        public Student(int student_Id, int user_Id, int classId, string fullName,
             DateTime dOB, Gender gender, string phone_No, string address,
             string created_By, DateTime created_Date, 
             string modified_By, DateTime modified_Date,
@@ -54,6 +56,7 @@ namespace EduTrack.Models
         {
             Student_Id = student_Id;
             User_Id = user_Id;
+            Class_Id = classId;
             FullName = fullName;
             DOB = dOB;
             Gender = gender;

@@ -3,71 +3,413 @@
 
 @{
     ViewData["Title"] = "Dashboard";
+
+    var roleTone = Model.UserRole == AppRoles.Admin ? "primary"
+        : Model.UserRole == AppRoles.Teacher ? "success"
+        : Model.UserRole == AppRoles.Student ? "warning"
+        : "secondary";
+
+    var displayName = Model.UserRole == AppRoles.Teacher && !string.IsNullOrWhiteSpace(Model.TeacherName)
+        ? Model.TeacherName
+        : Model.UserRole == AppRoles.Student && !string.IsNullOrWhiteSpace(Model.StudentName)
+            ? Model.StudentName
+            : Model.DisplayName;
 }
 
-<div class="container mt-4">
-    <!-- Welcome Banner with Glass-like subtle gradient -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card shadow-sm border-0 text-white" style="background: linear-gradient(135deg, #0d6efd 0%, #084298 100%);">
-                <div class="card-body p-4 d-flex align-items-center justify-content-between">
+<div class="dashboard-page py-3 py-lg-4">
+    <section class="dashboard-hero mb-4">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="dashboard-role-icon text-@roleTone bg-@roleTone bg-opacity-10">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
                     <div>
-                        <h2 class="fw-bold mb-1">Welcome back, @Model.DisplayName!</h2>
-                        <p class="mb-0 fs-5 text-white-50">You are securely logged in as an <span class="badge bg-white text-primary rounded-pill px-3 shadow-sm">@Model.UserRole</span>.</p>
+                        <div class="text-uppercase text-secondary small fw-semibold">EduTrack Dashboard</div>
+                        <h1 class="h2 fw-bold mb-0">Welcome back, @displayName</h1>
                     </div>
-
-                    <div class="d-none d-md-block px-4">
-                        <i class="bi bi-speedometer2" style="font-size: 5rem; opacity: 0.2;"></i>
-                    </div>
+                </div>
+                <p class="text-secondary mb-0">
+                    Signed in as <span class="badge rounded-pill bg-@roleTone">@Model.UserRole</span>
+                    <span class="mx-2 text-muted">|</span>
+                    @Model.CurrentDateTime
+                </p>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-now p-3">
+                    <div class="small text-secondary fw-semibold mb-2">Today at a glance</div>
+                    @if (Model.CurrentClass != null)
+                    {
+                        <div class="fw-bold">Current class: @Model.CurrentClass.SubjectName</div>
+                        <div class="text-secondary small">
+                            @Model.CurrentClass.Start_Time.ToString("hh\\:mm") - @Model.CurrentClass.End_Time.ToString("hh\\:mm")
+                            in @Model.CurrentClass.Room_No
+                        </div>
+                    }
+                    else if (Model.NextClass != null)
+                    {
+                        <div class="fw-bold">Next class: @Model.NextClass.SubjectName</div>
+                        <div class="text-secondary small">
+                            Starts at @Model.NextClass.Start_Time.ToString("hh\\:mm") in @Model.NextClass.Room_No
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="fw-bold">No more scheduled classes today</div>
+                        <div class="text-secondary small">Use the quick actions below to continue your work.</div>
+                    }
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- TIMETABLE -->
+    @if (Model.UserRole == AppRoles.Admin)
+    {
+        <section class="mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">Institution Overview</h2>
+                    <p class="text-secondary mb-0">Live operational summary across users, academics, fees, and attendance.</p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-people-fill"></i></div>
+                        <div class="text-secondary small fw-semibold">Users</div>
+                        <div class="metric-value">@Model.TotalUsers</div>
+                        <div class="text-secondary small">@Model.ActiveUsers active accounts</div>
+                        <a asp-controller="User" asp-action="Index" class="stretched-link" aria-label="Manage users"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-success bg-opacity-10 text-success"><i class="bi bi-person-badge"></i></div>
+                        <div class="text-secondary small fw-semibold">Teachers</div>
+                        <div class="metric-value">@Model.TotalTeachers</div>
+                        <div class="text-secondary small">@Model.ActiveTeachers active teacher profiles</div>
+                        <a asp-controller="Teacher" asp-action="Index" class="stretched-link" aria-label="Manage teachers"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-mortarboard-fill"></i></div>
+                        <div class="text-secondary small fw-semibold">Students</div>
+                        <div class="metric-value">@Model.TotalStudents</div>
+                        <div class="text-secondary small">@Model.ActiveStudents active student profiles</div>
+                        <a asp-controller="Student" asp-action="Index" class="stretched-link" aria-label="Manage students"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-shield-lock-fill"></i></div>
+                        <div class="text-secondary small fw-semibold">Roles</div>
+                        <div class="metric-value">@Model.TotalRoles</div>
+                        <div class="text-secondary small">Configured access groups</div>
+                        <a asp-controller="Role" asp-action="Index" class="stretched-link" aria-label="Manage roles"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="dashboard-panel h-100">
+                        <div class="panel-title">
+                            <i class="bi bi-building text-primary"></i>
+                            Academic Setup
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-value">@Model.TotalClasses</div>
+                                    <div class="text-secondary small">Classes</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-value">@Model.TotalSubjects</div>
+                                    <div class="text-secondary small">Subjects</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-value">@Model.TotalClassSubjects</div>
+                                    <div class="text-secondary small">Class subjects</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mini-stat">
+                                    <div class="mini-value">@Model.TimetableEntries</div>
+                                    <div class="text-secondary small">Timetable entries</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quick-actions mt-3">
+                            <a asp-page="/Classes/Index" class="btn btn-outline-primary btn-sm"><i class="bi bi-door-open me-1"></i>Classes</a>
+                            <a asp-page="/Subjects/Index" class="btn btn-outline-primary btn-sm"><i class="bi bi-book me-1"></i>Subjects</a>
+                            <a asp-page="/TimeTable/Index" class="btn btn-outline-primary btn-sm"><i class="bi bi-calendar3 me-1"></i>Timetable</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="dashboard-panel h-100">
+                        <div class="panel-title">
+                            <i class="bi bi-cash-stack text-success"></i>
+                            Fee Snapshot
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span class="text-secondary">Fee structures</span>
+                            <strong>@Model.TotalFeeStructures</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span class="text-secondary">Collected</span>
+                            <strong>@Model.CollectedFeesAmount.ToString("C0")</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <span class="text-secondary">Pending or overdue</span>
+                            <strong>@Model.PendingFeesAmount.ToString("C0")</strong>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <span class="text-secondary">Overdue records</span>
+                            <strong class="text-danger">@Model.OverdueFeesCount</strong>
+                        </div>
+                        <div class="quick-actions mt-3">
+                            <a asp-page="/Fees/Index" class="btn btn-outline-success btn-sm"><i class="bi bi-cash me-1"></i>Fees</a>
+                            <a asp-page="/StudentFees/Index" class="btn btn-outline-success btn-sm"><i class="bi bi-receipt me-1"></i>Student Fees</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="dashboard-panel h-100">
+                        <div class="panel-title">
+                            <i class="bi bi-calendar-check text-info"></i>
+                            Attendance Today
+                        </div>
+                        <div class="attendance-ring mx-auto my-3">
+                            <div>
+                                <div class="metric-value">@Model.TodayAttendanceMarked</div>
+                                <div class="text-secondary small">marked</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <div class="mini-stat flex-fill">
+                                <div class="mini-value text-success">@Model.PresentToday</div>
+                                <div class="text-secondary small">Present</div>
+                            </div>
+                            <div class="mini-stat flex-fill">
+                                <div class="mini-value text-danger">@Model.AbsentToday</div>
+                                <div class="text-secondary small">Absent</div>
+                            </div>
+                        </div>
+                        <div class="quick-actions mt-3">
+                            <a asp-page="/Attendance/Index" class="btn btn-outline-info btn-sm"><i class="bi bi-calendar-check me-1"></i>Attendance</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+    else if (Model.UserRole == AppRoles.Teacher)
+    {
+        <section class="mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">Classroom Hub</h2>
+                    <p class="text-secondary mb-0">Your assigned classes, students, timetable, and daily attendance work.</p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-success bg-opacity-10 text-success"><i class="bi bi-door-open"></i></div>
+                        <div class="text-secondary small fw-semibold">Assigned Classes</div>
+                        <div class="metric-value">@Model.ActiveClasses</div>
+                        <div class="text-secondary small">Active class assignments</div>
+                        <a asp-page="/TeacherClasses/Index" class="stretched-link" aria-label="View teacher classes"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-people"></i></div>
+                        <div class="text-secondary small fw-semibold">Students Reached</div>
+                        <div class="metric-value">@Model.EnrolledStudents</div>
+                        <div class="text-secondary small">Across assigned classes</div>
+                        <a asp-controller="Student" asp-action="Index" class="stretched-link" aria-label="View students"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-book-half"></i></div>
+                        <div class="text-secondary small fw-semibold">Subjects</div>
+                        <div class="metric-value">@Model.TotalSubjects</div>
+                        <div class="text-secondary small">Distinct subjects assigned</div>
+                        <a asp-page="/ClassSubjects/Index" class="stretched-link" aria-label="View class subjects"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-info bg-opacity-10 text-info"><i class="bi bi-calendar-check"></i></div>
+                        <div class="text-secondary small fw-semibold">Marked Today</div>
+                        <div class="metric-value">@Model.AttendanceMarkedByMeToday</div>
+                        <div class="text-secondary small">Attendance records</div>
+                        <a asp-page="/Attendance/Index" class="stretched-link" aria-label="Manage attendance"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="dashboard-panel">
+                <div class="panel-title">
+                    <i class="bi bi-lightning-charge text-success"></i>
+                    Teacher Actions
+                </div>
+                <div class="quick-actions">
+                    <a asp-page="/Attendance/Index" class="btn btn-outline-success"><i class="bi bi-calendar-check me-1"></i>Attendance</a>
+                    <a asp-page="/TimeTable/Index" class="btn btn-outline-primary"><i class="bi bi-calendar3 me-1"></i>Timetable</a>
+                    <a asp-page="/StudentFees/Index" class="btn btn-outline-secondary"><i class="bi bi-receipt me-1"></i>Student Fees</a>
+                    <a asp-controller="Student" asp-action="Index" class="btn btn-outline-secondary"><i class="bi bi-person-lines-fill me-1"></i>Students</a>
+                </div>
+            </div>
+        </section>
+    }
+    else if (Model.UserRole == AppRoles.Student)
+    {
+        <section class="mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">Student Portal</h2>
+                    <p class="text-secondary mb-0">
+                        @if (!string.IsNullOrWhiteSpace(Model.PrimaryClassName))
+                        {
+                            <span>Class: <strong>@Model.PrimaryClassName</strong></span>
+                        }
+                        else
+                        {
+                            <span>Your classes, attendance, fees, and schedule in one place.</span>
+                        }
+                    </p>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-warning bg-opacity-10 text-warning"><i class="bi bi-mortarboard-fill"></i></div>
+                        <div class="text-secondary small fw-semibold">Classes</div>
+                        <div class="metric-value">@Model.ActiveClasses</div>
+                        <div class="text-secondary small">@Model.TotalSubjects subjects assigned</div>
+                        <a asp-page="/TimeTable/Index" class="stretched-link" aria-label="View timetable"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-success bg-opacity-10 text-success"><i class="bi bi-clipboard2-check"></i></div>
+                        <div class="text-secondary small fw-semibold">Attendance</div>
+                        <div class="metric-value">@Model.AttendancePercentage.ToString("0.#")%</div>
+                        <div class="text-secondary small">@Model.PresentRecords of @Model.AttendanceRecords records present</div>
+                        <a asp-page="/Attendance/Index" class="stretched-link" aria-label="View attendance"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-danger bg-opacity-10 text-danger"><i class="bi bi-receipt-cutoff"></i></div>
+                        <div class="text-secondary small fw-semibold">Pending Fees</div>
+                        <div class="metric-value">@Model.PendingFeesCount</div>
+                        <div class="text-secondary small">@Model.MyPendingFeesAmount.ToString("C0") pending</div>
+                        <a asp-page="/StudentFees/Index" class="stretched-link" aria-label="View fees"></a>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="metric-card">
+                        <div class="metric-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-calendar3"></i></div>
+                        <div class="text-secondary small fw-semibold">Today</div>
+                        <div class="metric-value">@Model.TodayClassCount</div>
+                        <div class="text-secondary small">Classes scheduled</div>
+                        <a asp-page="/TimeTable/Index" class="stretched-link" aria-label="View timetable"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <div class="dashboard-panel">
+                <div class="panel-title">
+                    <i class="bi bi-compass text-warning"></i>
+                    Student Shortcuts
+                </div>
+                <div class="quick-actions">
+                    <a asp-page="/StudentFees/Index" class="btn btn-outline-warning"><i class="bi bi-receipt-cutoff me-1"></i>My Fees</a>
+                    <a asp-page="/Attendance/Index" class="btn btn-outline-success"><i class="bi bi-calendar-check me-1"></i>My Attendance</a>
+                    <a asp-page="/TimeTable/Index" class="btn btn-outline-primary"><i class="bi bi-calendar3 me-1"></i>My Timetable</a>
+                </div>
+            </div>
+        </section>
+    }
+    else
+    {
+        <div class="alert alert-info border-0 shadow-sm">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            You currently are not mapped to an active system role. Please contact an administrator.
+        </div>
+    }
+
     @if (Model.WeeklyTimetable != null && Model.WeeklyTimetable.Any())
     {
-        <div class="d-flex align-items-center mb-3 border-bottom pb-2">
-            <i class="bi bi-calendar3 fs-4 text-info me-2"></i>
-            <h4 class="mb-0 text-secondary fw-bold">My Timetable</h4>
-        </div>
+        <section class="mb-4">
+            <div class="section-heading">
+                <div>
+                    <h2 class="h5 fw-bold mb-1">Schedule</h2>
+                    <p class="text-secondary mb-0">Today and weekly timetable based on your current role.</p>
+                </div>
+                <a asp-page="/TimeTable/Index" class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-calendar3 me-1"></i>Open Timetable
+                </a>
+            </div>
 
-        <div class="row mb-4 g-4">
-            <!-- Today's Classes -->
-            <div class="col-lg-4">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                        <h6 class="fw-bold mb-0 text-uppercase text-muted" style="letter-spacing: 1px;">Today's Classes</h6>
-                    </div>
-                    <div class="card-body">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <div class="dashboard-panel h-100">
+                        <div class="panel-title">
+                            <i class="bi bi-clock-history text-primary"></i>
+                            Today's Classes
+                        </div>
+
                         @if (Model.TodayClasses != null && Model.TodayClasses.Any())
                         {
-                            <div class="timeline-container">
+                            <div class="timeline-list">
                                 @foreach (var c in Model.TodayClasses)
                                 {
-                                    bool isCurrent = Model.CurrentClass != null && Model.CurrentClass.Start_Time == c.Start_Time && Model.CurrentClass.Room_No == c.Room_No;
-                                    bool isNext = Model.NextClass != null && Model.NextClass.Start_Time == c.Start_Time && Model.NextClass.Room_No == c.Room_No;
-                                    
-                                    <div class="d-flex mb-3 position-relative">
-                                        <div class="d-flex flex-column align-items-center me-3">
-                                            <div class="rounded-circle @(isCurrent ? "bg-primary" : (isNext ? "bg-info" : "bg-light border")) text-center" style="width: 16px; height: 16px; margin-top: 4px;"></div>
-                                            <div class="flex-grow-1 @(isCurrent ? "bg-primary" : "bg-light")" style="width: 2px; min-height: 40px; margin-top: 4px; opacity: 0.5;"></div>
-                                        </div>
-                                        <div class="flex-grow-1 p-3 rounded-3 shadow-sm @(isCurrent ? "bg-primary text-white" : (isNext ? "bg-info bg-opacity-10 border border-info" : "bg-light"))">
-                                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                                <div class="fw-bold @(isCurrent ? "text-white" : "text-dark")">@c.SubjectName</div>
-                                                <div class="small fw-bold @(isCurrent ? "text-white-50" : "text-primary")">@c.Start_Time.ToString("hh\\:mm") - @c.End_Time.ToString("hh\\:mm")</div>
+                                    var isCurrent = Model.CurrentClass != null && Model.CurrentClass.TimeTable_Id == c.TimeTable_Id;
+                                    var isNext = Model.NextClass != null && Model.NextClass.TimeTable_Id == c.TimeTable_Id;
+
+                                    <div class="timeline-item @(isCurrent ? "is-current" : isNext ? "is-next" : "")">
+                                        <div class="timeline-dot"></div>
+                                        <div class="timeline-content">
+                                            <div class="d-flex justify-content-between gap-2">
+                                                <strong>@c.SubjectName</strong>
+                                                <span class="small text-secondary">@c.Start_Time.ToString("hh\\:mm")</span>
                                             </div>
-                                            <div class="small @(isCurrent ? "text-white-50" : "text-muted")">
-                                                <i class="bi bi-people-fill me-1"></i> @c.ClassName &nbsp; | &nbsp; <i class="bi bi-geo-alt-fill me-1"></i> @c.Room_No
+                                            <div class="small text-secondary">
+                                                @c.ClassName
+                                                @if (!string.IsNullOrWhiteSpace(c.Room_No))
+                                                {
+                                                    <span>| Room @c.Room_No</span>
+                                                }
                                             </div>
                                             @if (isCurrent)
                                             {
-                                                <span class="badge bg-white text-primary mt-2">Happening Now</span>
+                                                <span class="badge bg-primary mt-2">Happening now</span>
                                             }
-                                            @if (isNext)
+                                            else if (isNext)
                                             {
-                                                <span class="badge bg-info text-white mt-2">Up Next</span>
+                                                <span class="badge bg-info mt-2">Up next</span>
                                             }
                                         </div>
                                     </div>
@@ -76,276 +418,269 @@
                         }
                         else
                         {
-                            <div class="text-center text-muted p-4">
-                                <i class="bi bi-cup-hot fs-1 d-block mb-3 text-secondary" style="opacity: 0.5;"></i>
-                                <p class="mb-0">You have no classes today. Enjoy your day!</p>
+                            <div class="empty-state">
+                                <i class="bi bi-calendar2-x"></i>
+                                <div class="fw-semibold">No classes today</div>
+                                <div class="text-secondary small">Your schedule is clear for today.</div>
                             </div>
                         }
                     </div>
                 </div>
-            </div>
 
-            <!-- Weekly Schedule -->
-            <div class="col-lg-8">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                        <h6 class="fw-bold mb-0 text-uppercase text-muted" style="letter-spacing: 1px;">Weekly Schedule</h6>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive p-3" style="-webkit-overflow-scrolling:touch;">
-                            <div class="d-flex gap-3 pb-2">
-                                @{
-                                    var palette = new[] { "#4e73df", "#1cc88a", "#f6c23e", "#e74a3b", "#36b9cc", "#858796", "#5a5c69" };
-                                }
-                                @foreach (var day in Model.WeeklyTimetable)
-                                {
-                                    <div class="card border-0 bg-light shadow-sm flex-shrink-0" style="width: 240px;">
-                                        <div class="card-header bg-white border-bottom py-2">
-                                            <h6 class="mb-0 text-center fw-bold text-dark">@day.Key</h6>
-                                        </div>
-                                        <div class="card-body p-2 d-flex flex-column gap-2">
-                                            @if (day.Value != null && day.Value.Any())
-                                            {
-                                                foreach (var entry in day.Value)
-                                                {
-                                                    var colorIndex = Math.Abs(entry.SubjectName?.GetHashCode() ?? 0) % palette.Length;
-                                                    var color = palette[colorIndex];
-                                                    <div class="p-3 rounded-3 text-white shadow-sm hover-lift" style="background: linear-gradient(135deg, @(color) 0%, @(color)dd 100%);">
-                                                        <div class="fw-bold fs-6 mb-1 text-truncate" title="@entry.SubjectName">@entry.SubjectName</div>
-                                                        <div class="d-flex justify-content-between align-items-center small text-white-50 mb-1">
-                                                            <span><i class="bi bi-clock me-1"></i> @entry.Start_Time.ToString("hh\\:mm")</span>
-                                                            <span class="badge bg-white bg-opacity-25 rounded-pill">P @entry.Period_No</span>
-                                                        </div>
-                                                        <div class="small">
-                                                            <span class="fw-semibold">@entry.ClassName</span> • @entry.Room_No
-                                                        </div>
-                                                    </div>
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <div class="text-center text-muted small p-4 my-auto">
-                                                    <i class="bi bi-calendar2-x fs-4 d-block mb-2 text-black-50"></i>
-                                                    No classes
+                <div class="col-lg-8">
+                    <div class="dashboard-panel h-100">
+                        <div class="panel-title">
+                            <i class="bi bi-calendar-week text-primary"></i>
+                            Weekly Schedule
+                        </div>
+                        <div class="weekly-strip">
+                            @{
+                                var palette = new[] { "primary", "success", "warning", "danger", "info", "secondary" };
+                            }
+                            @foreach (var day in Model.WeeklyTimetable)
+                            {
+                                <div class="day-column">
+                                    <div class="day-title">@day.Key</div>
+                                    @if (day.Value != null && day.Value.Any())
+                                    {
+                                        var entryIndex = 0;
+                                        foreach (var entry in day.Value)
+                                        {
+                                            var tone = palette[entryIndex % palette.Length];
+                                            entryIndex++;
+                                            <div class="schedule-chip border-@tone">
+                                                <div class="d-flex justify-content-between align-items-center gap-2">
+                                                    <strong class="text-truncate" title="@entry.SubjectName">@entry.SubjectName</strong>
+                                                    <span class="badge bg-@tone">P @entry.Period_No</span>
                                                 </div>
-                                            }
-                                        </div>
-                                    </div>
-                                }
-                            </div>
+                                                <div class="small text-secondary">
+                                                    @entry.Start_Time.ToString("hh\\:mm") - @entry.End_Time.ToString("hh\\:mm")
+                                                </div>
+                                                <div class="small text-secondary text-truncate">
+                                                    @entry.ClassName
+                                                    @if (!string.IsNullOrWhiteSpace(entry.Room_No))
+                                                    {
+                                                        <span>| @entry.Room_No</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="empty-day">No classes</div>
+                                    }
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
-
-    <!-- ADMIN DASHBOARD -->
-    @if (Model.UserRole == AppRoles.Admin)
-    {
-        <div class="d-flex align-items-center mb-3 border-bottom pb-2">
-            <i class="bi bi-activity fs-4 text-primary me-2"></i>
-            <h4 class="mb-0 text-secondary fw-bold">System Overview</h4>
-        </div>
-        
-        <div class="row g-4 mb-4">
-            <!-- Total Users Card -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card shadow-sm border-0 h-100 hover-lift transition-all" style="transition: transform 0.2s;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Registered Users</h6>
-                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalUsers</h2>
-                            </div>
-                            <div class="bg-primary bg-opacity-10 rounded-3 p-3 text-primary shadow-sm">
-                                <i class="bi bi-people-fill fs-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-3">
-                        <a asp-controller="User" asp-action="Index" class="text-decoration-none fw-bold small">Manage Users <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Teachers Card -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Teachers</h6>
-                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalTeachers</h2>
-                            </div>
-                            <div class="bg-success bg-opacity-10 rounded-3 p-3 text-success shadow-sm">
-                                <i class="bi bi-person-badge fs-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-3">
-                        <a asp-controller="Teacher" asp-action="Index" class="text-decoration-none text-success fw-bold small">Manage Teachers <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Students Card -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">Students</h6>
-                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalStudents</h2>
-                            </div>
-                            <div class="bg-warning bg-opacity-10 rounded-3 p-3 text-warning shadow-sm">
-                                <i class="bi bi-mortarboard-fill fs-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-3">
-                        <a asp-controller="Student" asp-action="Index" class="text-decoration-none text-warning fw-bold small">Manage Students <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Total Roles Card -->
-            <div class="col-xl-3 col-md-6">
-                <div class="card shadow-sm border-0 h-100" style="transition: transform 0.2s;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase text-muted fw-bold mb-1" style="letter-spacing: 0.5px;">System Roles</h6>
-                                <h2 class="mb-0 fw-bold text-dark">@Model.TotalRoles</h2>
-                            </div>
-                            <div class="bg-danger bg-opacity-10 rounded-3 p-3 text-danger shadow-sm">
-                                <i class="bi bi-shield-lock-fill fs-3"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-3">
-                        <a asp-controller="Role" asp-action="Index" class="text-decoration-none text-danger fw-bold small">Manage Roles <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    }
-
-    <!-- TEACHER DASHBOARD -->
-    @if (Model.UserRole == AppRoles.Teacher)
-    {
-        <div class="d-flex align-items-center mb-3 border-bottom pb-2 mt-2">
-            <i class="bi bi-journal-bookmark-fill fs-4 text-success me-2"></i>
-            <h4 class="mb-0 text-secondary fw-bold">My Classroom Hub</h4>
-        </div>
-        
-        <div class="row g-4 mb-4">
-            <!-- assigned classes -->
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                            <div class="bg-success bg-opacity-10 rounded-circle p-3 text-success me-3">
-                                <i class="bi bi-book-half fs-2"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold mb-1">My Active Classes</h5>
-                                <h3 class="mb-0 text-success">@Model.ActiveClasses <span class="fs-6 text-muted fw-normal">classes assigned</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-outline-success"><i class="bi bi-eye"></i> View Schedules</a>
-                        <div class="small text-muted">@Model.CurrentDateTime</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- total students -->
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center">
-                           <div class="bg-primary bg-opacity-10 rounded-circle p-3 text-primary me-3">
-                                <i class="bi bi-journal-bookmark fs-2"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold mb-1">Subjects You Teach</h5>
-                                <h3 class="mb-0 text-primary">@Model.TotalSubjects <span class="fs-6 text-muted fw-normal">distinct subjects</span></h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-outline-primary"><i class="bi bi-journal-check"></i> Manage Classwork</a>
-                        <div class="small text-muted">@Model.CurrentDateTime</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- timetable intentionally removed from header for clarity -->
-    }
-
-    <!-- STUDENT DASHBOARD -->
-    @if (Model.UserRole == AppRoles.Student)
-    {
-        <div class="d-flex align-items-center mb-3 border-bottom pb-2 mt-2">
-            <i class="bi bi-mortarboard-fill fs-4 text-warning me-2"></i>
-            <h4 class="mb-0 text-secondary fw-bold">Student Portal</h4>
-        </div>
-        
-        <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="me-3 p-3 bg-warning bg-opacity-10 rounded-circle text-warning">
-                            <i class="bi bi-mortarboard-fill fs-2"></i>
-                        </div>
-                        <div>
-                            <h5 class="fw-bold mb-1">Enrolled Classes</h5>
-                            <h3 class="mb-0 text-warning">@Model.ActiveClasses <span class="fs-6 text-muted">classes</span></h3>
-                            <div class="small text-muted mt-2">Subjects: <strong>@Model.TotalSubjects</strong></div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-top d-flex justify-content-between align-items-center">
-                        <a href="#" class="btn btn-outline-warning">View Timetable</a>
-                        <div class="small text-muted">@Model.CurrentDateTime</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="card shadow-sm border-0 h-100">
-                    <div class="card-body">
-                        <h5 class="fw-bold">Quick Links</h5>
-                        <div class="d-flex gap-2 mt-3">
-                            <a class="btn btn-outline-primary" asp-controller="Home" asp-action="Index">Dashboard</a>
-                            <a class="btn btn-outline-secondary" asp-page="/StudentFees/Index">My Fees</a>
-                            <a class="btn btn-outline-success" asp-page="/Attendance/Index">My Attendance</a>
-                        </div>
-                        <div class="mt-4">
-                            <h6 class="fw-bold">Recent Notices</h6>
-                            <p class="text-muted small mb-0">No new notices. Check back later or contact your administrator.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-    @if (Model.UserRole != AppRoles.Admin && Model.UserRole != AppRoles.Teacher && Model.UserRole != AppRoles.Student)
-    {
-        <div class="alert alert-info border-0 shadow-sm">
-            <i class="bi bi-info-circle-fill me-2"></i> You currently are not mapped to any active system roles. Please contact an Administrator.
-        </div>
+        </section>
     }
 </div>
 
 @section Styles {
     <style>
-        .hover-lift:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,.08) !important;
+        .dashboard-page {
+            color: #172033;
+        }
+
+        .dashboard-hero,
+        .dashboard-panel,
+        .metric-card {
+            background: #fff;
+            border: 1px solid rgba(15, 23, 42, .08);
+            box-shadow: 0 .75rem 2rem rgba(15, 23, 42, .07);
+        }
+
+        .dashboard-hero {
+            border-radius: .75rem;
+            padding: 1.5rem;
+        }
+
+        .dashboard-role-icon,
+        .metric-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: .75rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex: 0 0 auto;
+        }
+
+        .dashboard-now {
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: .75rem;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-card {
+            position: relative;
+            min-height: 11rem;
+            border-radius: .75rem;
+            padding: 1.25rem;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 1rem 2.25rem rgba(15, 23, 42, .1);
+        }
+
+        .metric-value {
+            font-size: clamp(1.85rem, 3vw, 2.6rem);
+            line-height: 1;
+            font-weight: 800;
+            margin: .75rem 0 .35rem;
+        }
+
+        .dashboard-panel {
+            border-radius: .75rem;
+            padding: 1.25rem;
+        }
+
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: .55rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .mini-stat {
+            background: #f8fafc;
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: .6rem;
+            padding: .85rem;
+        }
+
+        .mini-value {
+            font-weight: 800;
+            font-size: 1.35rem;
+            line-height: 1.1;
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .65rem;
+        }
+
+        .attendance-ring {
+            width: 9.5rem;
+            height: 9.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background:
+                radial-gradient(circle at center, #fff 56%, transparent 57%),
+                conic-gradient(#0dcaf0 0 72%, #e9ecef 72% 100%);
+        }
+
+        .timeline-list {
+            display: grid;
+            gap: .85rem;
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1rem 1fr;
+            gap: .75rem;
+        }
+
+        .timeline-dot {
+            width: .75rem;
+            height: .75rem;
+            border-radius: 50%;
+            background: #adb5bd;
+            margin-top: .45rem;
+        }
+
+        .timeline-item.is-current .timeline-dot {
+            background: #0d6efd;
+        }
+
+        .timeline-item.is-next .timeline-dot {
+            background: #0dcaf0;
+        }
+
+        .timeline-content,
+        .schedule-chip {
+            border: 1px solid rgba(15, 23, 42, .08);
+            border-radius: .6rem;
+            padding: .85rem;
+            background: #f8fafc;
+        }
+
+        .timeline-item.is-current .timeline-content {
+            background: rgba(13, 110, 253, .08);
+            border-color: rgba(13, 110, 253, .25);
+        }
+
+        .weekly-strip {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(13rem, 1fr);
+            gap: .85rem;
+            overflow-x: auto;
+            padding-bottom: .25rem;
+        }
+
+        .day-column {
+            min-width: 13rem;
+        }
+
+        .day-title {
+            font-weight: 800;
+            margin-bottom: .65rem;
+        }
+
+        .schedule-chip {
+            border-left-width: .25rem;
+            margin-bottom: .65rem;
+        }
+
+        .empty-state,
+        .empty-day {
+            text-align: center;
+            color: #6c757d;
+            background: #f8fafc;
+            border: 1px dashed rgba(15, 23, 42, .16);
+            border-radius: .6rem;
+            padding: 1.25rem;
+        }
+
+        .empty-state i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: .5rem;
+        }
+
+        @@media (max-width: 767.98px) {
+            .dashboard-hero {
+                padding: 1rem;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .metric-card {
+                min-height: auto;
+            }
         }
     </style>
 }

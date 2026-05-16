@@ -84,8 +84,10 @@
     <script>
         $(document).ready(function () {
             $('#teacherTable').DataTable({
-                "pageLength": 10,
-                "responsive": true
+                pageLength: 10,
+                responsive: true,
+                stateSave: true,
+                stateDuration: -1
             });
         });
     </script>

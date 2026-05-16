@@ -79,6 +79,7 @@ namespace EduTrack.Services
             return new Student(
                 Convert.ToInt32(row["Student_Id"]),
                 row["User_Id"] == DBNull.Value ? 0 : (int)row["User_Id"],
+                row["Class_Id"] == DBNull.Value ? 0 : (int)row["Class_Id"],
                 row["FullName"]?.ToString(),
                 row["DOB"] == DBNull.Value ? DateTime.MinValue : (DateTime)row["DOB"],
                 Enum.TryParse<Gender>(row["Gender"]?.ToString(), out var g) ? g : default,
