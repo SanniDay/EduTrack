@@ -59,14 +59,14 @@
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
 
-                                        @if (user.User_Id.ToString() != loggedInUserId)
+                                        @if (User.IsInRole("Admin") && user.User_Id.ToString() != loggedInUserId)
                                         {
                                             <a asp-action="Delete" asp-route-id="@user.User_Id"
                                                class="btn btn-sm btn-outline-danger" title="Delete">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         }
-                                        else
+                                        else if (User.IsInRole("Admin"))
                                         {
                                             <button class="btn btn-sm btn-outline-secondary" disabled
                                                     title="You cannot delete yourself">
@@ -89,7 +89,8 @@
         $(document).ready(function () {
             $('#userTable').DataTable({
                 "pageLength": 10,
-                "responsive": true
+                "responsive": true,
+                "stateSave": true
             });
         });
     </script>

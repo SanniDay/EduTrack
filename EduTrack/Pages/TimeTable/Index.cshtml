@@ -6,7 +6,7 @@
 
 <div class="container-fluid mt-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient bg-primary text-white d-flex justify-content-between align-items-center">
+        <div class="card-header bg-gradient bg-info text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0"><i class="bi bi-calendar3 me-2"></i>Time Table</h5>
             @if (User.IsInRole("Admin") || User.IsInRole("Teacher"))
             {
@@ -36,8 +36,10 @@
                         <option>Saturday</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-primary w-100">Filter</button>
+                <div class="col-md-1">
+                    <button class="btn btn-info btn-sm w-100">
+                        <i class="bi bi-search"></i>
+                    </button>
                 </div>
             </form>
 
@@ -45,9 +47,11 @@
             {
                 var groupedByClass = Model.Items.GroupBy(x => x.ClassName).OrderBy(g => g.Key);
                 var daysOfWeek = new[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                
+
                 <div class="accordion" id="timetableAccordion">
-                    @{ int accIndex = 0; }
+                    @{
+                        int accIndex = 0;
+                    }
                     @foreach (var classGroup in groupedByClass)
                     {
                         var collapseId = "collapseClass" + accIndex;
@@ -56,11 +60,11 @@
                             <h2 class="accordion-header" id="@headingId">
                                 <button class="accordion-button @(accIndex != 0 ? "collapsed" : "") bg-light text-dark fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="@(accIndex == 0 ? "true" : "false")" aria-controls="@collapseId">
                                     <i class="bi bi-door-open-fill me-2 text-primary fs-5"></i> <span class="fs-5">Class: @classGroup.Key</span>
-                                    <span class="badge bg-primary ms-3 rounded-pill">@classGroup.Count() sessions</span>
+                                    <span class="badge bg-info ms-3 rounded-pill">@classGroup.Count() sessions</span>
                                 </button>
                             </h2>
                             <div id="@collapseId" class="accordion-collapse collapse @(accIndex == 0 ? "show" : "")" aria-labelledby="@headingId" data-bs-parent="#timetableAccordion">
-                                <div class="accordion-body bg-white p-4">
+                                <div class="accordion-body p-4">
                                     <div class="row g-4">
                                         @foreach (var day in daysOfWeek)
                                         {
@@ -74,16 +78,16 @@
                                                         </div>
                                                         <div class="card-body p-3">
                                                             <div class="d-flex flex-column gap-3">
-                                                                @foreach(var item in dayItems)
+                                                                @foreach (var item in dayItems)
                                                                 {
-                                                                    <div class="p-3 bg-white rounded-3 shadow-sm border border-light position-relative hover-lift" style="transition: transform 0.2s;">
+                                                                    <div class="p-3 bg-body rounded-3 shadow-sm border border-light position-relative hover-lift" style="transition: transform 0.2s;">
                                                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                                                             <span class="badge bg-info bg-opacity-10 text-info border border-info rounded-pill">Period @item.Period_No</span>
                                                                             <span class="small fw-bold text-muted"><i class="bi bi-clock me-1"></i>@item.Start_Time.ToString("hh\\:mm") - @item.End_Time.ToString("hh\\:mm")</span>
                                                                         </div>
-                                                                        
+
                                                                         <div class="fw-bold mb-1 fs-6">Room: @item.Room_No</div>
-                                                                        
+
                                                                         <div class="d-flex justify-content-between align-items-end mt-3">
                                                                             <div>
                                                                                 @if (item.IsActive)

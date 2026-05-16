@@ -7,10 +7,10 @@
 
 <div class="container-fluid mt-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient bg-primary text-white">
+        <div class="card-header bg-gradient bg-info text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">
-                    <i class="bi bi-book-fill me-2"></i>Class Subjects Management
+                    <i class="bi bi-book-half me-2"></i>Class Subjects Management
                 </h4>
                 @if (User.IsInRole("Admin"))
                 {
@@ -55,7 +55,7 @@
                                 <tr>
                                     <td class="fw-bold">@cs.ClassSubject_Id</td>
                                     <td>
-                                        <i class="bi bi-door-open text-primary me-2"></i>@cs.ClassName
+                                        <i class="bi bi-door-open text-info me-2"></i>@cs.ClassName
                                     </td>
                                     <td>
                                         <i class="bi bi-book text-info me-2"></i>@cs.SubjectName
@@ -99,7 +99,7 @@
                                         <td>
                                             <div class="d-flex gap-2 justify-content-center flex-wrap">
                                                 <a asp-page="Edit" asp-route-id="@cs.ClassSubject_Id" 
-                                                   class="btn btn-sm btn-outline-primary" title="Edit">
+                                                   class="btn btn-sm btn-outline-info" title="Edit">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
                                                 <a asp-page="Delete" asp-route-id="@cs.ClassSubject_Id" 
@@ -131,3 +131,19 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#classSubjectTable').DataTable({
+                pageLength: 10,
+                responsive: true,
+                stateSave: true,
+                language: {
+                    search: "Search class subjects:",
+                    lengthMenu: "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}

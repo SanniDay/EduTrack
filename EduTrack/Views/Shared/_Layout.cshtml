@@ -1,6 +1,19 @@
 @using System.Security.Claims
 @using System.Linq
 @using EduTrack.Constants
+@{
+    var isAuthenticated = User?.Identity?.IsAuthenticated == true;
+    var isAdmin = isAuthenticated && User?.IsInRole(AppRoles.Admin) == true;
+    var isTeacher = isAuthenticated && User?.IsInRole(AppRoles.Teacher) == true;
+    var isStudent = isAuthenticated && User?.IsInRole(AppRoles.Student) == true;
+
+    var displayName = User?.Identity?.Name ?? "Guest";
+
+    var roles = isAuthenticated
+        ? (User?.Claims ?? Enumerable.Empty<Claim>()).Where(c => c.Type == ClaimTypes.Role).Select(c => c.Value).ToList()
+        : new List<string>();
+    var roleText = roles.Any() ? string.Join(", ", roles) : "No role assigned";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,32 +34,29 @@
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-
-                <!-- Logo -->
-                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
-                    EduTrack
+<body class="d-flex flex-column min-vh-100">
+    <header class="app-header sticky-top">
+        <nav class="navbar navbar-expand-xl navbar-light  border-bottom shadow-sm">
+            <div class="container-fluid px-3 px-lg-4">
+                <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark"><i class="bi bi-mortarboard-fill"></i></span>
+                    <span>EduTrack</span>
                 </a>
 
-                <!-- Mobile Toggle -->
                 <button class="navbar-toggler" type="button"
                         data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse">
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-
-                    <!-- LEFT MENU: organized by role for easier maintenance -->
-                    <ul class="navbar-nav me-auto">
-
-                        <!-- Common links -->
+                <div id="mainNavbar" class="navbar-collapse collapse">
+                    <ul class="navbar-nav me-auto align-items-xl-center">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door me-1"></i> Home
+                                <i class="bi bi-speedometer2 me-1"></i> Dashboard
                             </a>
                         </li>
                         <li class="nav-item">
@@ -55,268 +65,136 @@
                             </a>
                         </li>
 
-                        @* Student quick links (visible only to Students) *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Student))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/StudentFees/Index">
-                                    <i class="bi bi-receipt-cutoff me-1"></i> My Fees
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/TimeTable/Index">
-                                    <i class="bi bi-calendar3 me-1"></i> TimeTable
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-page="/Attendance/Index">
-                                    <i class="bi bi-calendar-check me-1"></i> Attendance
-                                </a>
-                            </li>
-                        }
-
-                        @* Admin menu: management + academic *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && User.IsInRole(AppRoles.Admin))
+                        @if (isAdmin)
                         {
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                     <i class="bi bi-gear me-1"></i> Management
                                 </a>
-                                <ul class="dropdown-menu shadow">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Role" asp-action="Index">
-                                            <i class="bi bi-shield-lock me-2"></i> Roles
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/Fees/Index">
-                                            <i class="bi bi-cash-stack me-2"></i> Fees
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/StudentFees/Index">
-                                            <i class="bi bi-receipt-cutoff me-2"></i> Student Fees
-                                        </a>
-                                    </li>
+                                <ul class="dropdown-menu shadow-sm">
+                                    <li><a class="dropdown-item" asp-controller="User" asp-action="Index"><i class="bi bi-people me-2"></i>Users</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Role" asp-action="Index"><i class="bi bi-shield-lock me-2"></i>Roles</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Teacher" asp-action="Index"><i class="bi bi-person-badge me-2"></i>Teachers</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Student" asp-action="Index"><i class="bi bi-person-lines-fill me-2"></i>Students</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-page="/Fees/Index"><i class="bi bi-cash-stack me-2"></i>Fees</a></li>
+                                    <li><a class="dropdown-item" asp-page="/StudentFees/Index"><i class="bi bi-receipt-cutoff me-2"></i>Student Fees</a></li>
                                 </ul>
                             </li>
 
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                    <i class="bi bi-mortarboard me-1"></i> Academic
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-book me-1"></i> Academic
                                 </a>
-                                <ul class="dropdown-menu shadow">
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/Classes/Index">
-                                            <i class="bi bi-door-open me-2"></i> Classes
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/Subjects/Index">
-                                            <i class="bi bi-book me-2"></i> Subjects
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/TimeTable/Index">
-                                            <i class="bi bi-calendar3 me-2"></i> TimeTable
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/ClassSubjects/Index">
-                                            <i class="bi bi-book-half me-2"></i> Class Subjects
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/StudentClasses/Index">
-                                            <i class="bi bi-people-fill me-2"></i> Student Classes
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/TeacherClasses/Index">
-                                            <i class="bi bi-mortarboard-fill me-2"></i> Teacher Classes
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li>
-                                        <a class="dropdown-item" asp-page="/Attendance/Index">
-                                            <i class="bi bi-check-circle me-2"></i> Attendance
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li class="d-none">
-                                        <a class="dropdown-item" asp-controller="DeletedRecords" asp-action="Index">
-                                            <i class="bi bi-trash2-fill me-2 text-danger"></i> Deleted Records Manager
-                                        </a>
-                                    </li>
-                                    <li class="d-none">
-                                        <a class="dropdown-item" asp-controller="SystemIntegrity" asp-action="Index">
-                                            <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i> System Integrity
-                                        </a>
-                                    </li>
+                                <ul class="dropdown-menu shadow-sm">
+                                    <li><a class="dropdown-item" asp-page="/Classes/Index"><i class="bi bi-door-open me-2"></i>Classes</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Subjects/Index"><i class="bi bi-journal-bookmark me-2"></i>Subjects</a></li>
+                                    <li><a class="dropdown-item" asp-page="/ClassSubjects/Index"><i class="bi bi-book-half me-2"></i>Class Subjects</a></li>
+                                    <li><a class="dropdown-item" asp-page="/StudentClasses/Index"><i class="bi bi-people-fill me-2"></i>Student Classes</a></li>
+                                    <li><a class="dropdown-item" asp-page="/TeacherClasses/Index"><i class="bi bi-mortarboard-fill me-2"></i>Teacher Classes</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" asp-page="/TimeTable/Index"><i class="bi bi-calendar3 me-2"></i>Timetable</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Attendance/Index"><i class="bi bi-calendar-check me-2"></i>Attendance</a></li>
+                                </ul>
+                            </li>
+
+                            <li class="nav-item dropdown d-none">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-tools me-1"></i> Admin Tools
+                                </a>
+                                <ul class="dropdown-menu shadow-sm">
+                                    <li><a class="dropdown-item" asp-controller="DeletedRecords" asp-action="Index"><i class="bi bi-trash2 me-2"></i>Deleted Records</a></li>
+                                    <li><a class="dropdown-item" asp-controller="SystemIntegrity" asp-action="Index"><i class="bi bi-exclamation-triangle me-2"></i>System Integrity</a></li>
                                 </ul>
                             </li>
                         }
-
-                        @* Admin or Teacher: important management links (visible to both) *@
-                        @if (User?.Identity != null && User.Identity.IsAuthenticated && (User.IsInRole(AppRoles.Admin) || User.IsInRole(AppRoles.Teacher)))
+                        else if (isTeacher)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="User" asp-action="Index">
-                                    <i class="bi bi-people me-1"></i> Users
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Teacher" asp-action="Index">
-                                    <i class="bi bi-keyboard me-1"></i> Teachers
-                                </a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Student" asp-action="Index">
-                                    <i class="bi bi-person-lines-fill me-1"></i> Students
-                                </a>
-                            </li>
-
-                            @* Teachers also need quick access to fees/student-fees for their classes; keep link visible to Teacher *@
-                            @if (User.IsInRole(AppRoles.Teacher))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Fees/Index">
-                                        <i class="bi bi-cash-stack me-1"></i> Fees
-                                    </a>
-                                </li>
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/StudentFees/Index">
-                                        <i class="bi bi-receipt-cutoff me-1"></i> Student Fees
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/Attendance/Index">
-                                        <i class="bi bi-calendar-check me-1"></i> Attendance
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-page="/TimeTable/Index">
-                                        <i class="bi bi-calendar3 me-1"></i> TimeTable
-                                    </a>
-                                </li>
-                            }
+                            <li class="nav-item"><a class="nav-link" asp-controller="Student" asp-action="Index"><i class="bi bi-person-lines-fill me-1"></i>Students</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/Attendance/Index"><i class="bi bi-calendar-check me-1"></i>Attendance</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/TimeTable/Index"><i class="bi bi-calendar3 me-1"></i>Timetable</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/StudentFees/Index"><i class="bi bi-receipt-cutoff me-1"></i>Student Fees</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/Fees/Index"><i class="bi bi-cash-stack me-1"></i>Fees</a></li>
                         }
-
+                        else if (isStudent)
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-page="/StudentFees/Index"><i class="bi bi-receipt-cutoff me-1"></i>My Fees</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/Attendance/Index"><i class="bi bi-calendar-check me-1"></i>Attendance</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-page="/TimeTable/Index"><i class="bi bi-calendar3 me-1"></i>Timetable</a></li>
+                        }
                     </ul>
 
-                    <!-- RIGHT PROFILE -->
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-xl-center">
                         <li class="nav-item dropdown">
-
-                            <a class="nav-link dropdown-toggle d-flex align-items-center"
-                               href="#"
-                               id="profileDropdown"
-                               role="button"
-                               data-bs-toggle="dropdown">
-
-                                <i class="bi bi-person-circle fs-4"></i>
+                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="profile-dot"><i class="bi bi-person-circle"></i></span>
+                                <span class="d-xl-none">Account</span>
                             </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow"
-                                aria-labelledby="profileDropdown">
-
-                                <!-- Theme Toggle -->
-                                <li class="px-4 py-2">
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <i class="bi bi-sun-fill text-warning"></i>
-
-                                        <div class="form-check form-switch mx-2">
-                                            <input class="form-check-input"
-                                                   type="checkbox"
-                                                   id="themeToggle">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
+                                <li class="px-3 py-2">
+                                    <div class="d-flex align-items-center justify-content-between gap-3">
+                                        <span class="small fw-semibold text-secondary">Theme</span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="bi bi-sun-fill text-warning"></i>
+                                            <div class="form-check form-switch m-0">
+                                                <input class="form-check-input" type="checkbox" id="themeToggle" aria-label="Toggle dark mode">
+                                            </div>
+                                            <i class="bi bi-moon-fill text-secondary"></i>
                                         </div>
-
-                                        <i class="bi bi-moon-fill text-secondary"></i>
                                     </div>
                                 </li>
+                                <li><hr class="dropdown-divider" /></li>
 
-                                <li><hr class="dropdown-divider"></li>
-
-                                @if (User?.Identity != null && User.Identity.IsAuthenticated)
+                                @if (isAuthenticated)
                                 {
-                                    var displayName = User.Identity.Name ?? "";
-                                    var roles = User.Claims
-                                    .Where(c => c.Type == ClaimTypes.Role)
-                                    .Select(c => c.Value)
-                                    .ToList();
-                                    var roleText = roles.Any() ? string.Join(", ", roles) : "No role assigned";
-
-                                    <li class="px-3">
-                                        <div class="small text-muted">Signed in as</div>
-                                        <div class="fw-bold">@displayName</div>
+                                    <li class="px-3 py-2">
+                                        <div class="small text-secondary">Signed in as</div>
+                                        <div class="fw-bold text-truncate" style="max-width: 16rem;">@displayName</div>
                                         <div class="small text-secondary">Role: @roleText</div>
                                     </li>
-
-                                    <li><hr class="dropdown-divider"></li>
-
-                                    <li>
-                                        <a class="dropdown-item"
-                                           asp-controller="Account"
-                                           asp-action="Profile">
-                                            <i class="bi bi-person me-2"></i> Profile
-                                        </a>
-                                    </li>
-
-                                    @if (User.IsInRole("Admin"))
+                                    @if (isAdmin)
                                     {
-                                        <li>
-                                            <a class="dropdown-item" asp-controller="Role" asp-action="Index">
-                                                <i class="bi bi-shield-lock me-2"></i> Manage Roles
-                                            </a>
-                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        <li><a class="dropdown-item" asp-controller="Role" asp-action="Index"><i class="bi bi-shield-lock me-2"></i>Manage Roles</a></li>
                                     }
-
-                                    <li>
-                                        <a class="dropdown-item text-danger"
-                                           asp-controller="Account"
-                                           asp-action="Logout">
-                                            <i class="bi bi-box-arrow-right me-2"></i> Logout
-                                        </a>
-                                    </li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
                                 }
                                 else
                                 {
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Login">
-                                            <i class="bi bi-box-arrow-in-right me-2"></i> Login
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Register">
-                                            <i class="bi bi-person-plus me-2"></i> Register
-                                        </a>
-                                    </li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Login"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a></li>
+                                    <li><a class="dropdown-item" asp-controller="Account" asp-action="Register"><i class="bi bi-person-plus me-2"></i>Register</a></li>
                                 }
-
                             </ul>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
+    <div class="container-fluid app-shell px-3 px-lg-4 flex-grow-1 d-flex flex-column">
+        <main role="main" class="pb-4 flex-grow-1">
             <partial name="_NotificationPartial" />
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer">
-        <div class="container">
-            &copy; 2026 - EduTrack -
-            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- FOOTER -->
+    <footer class="app-footer border-top  mt-auto py-3">
+
+        <div class="container-fluid px-3 px-lg-4 d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+
+            <span>
+                &copy; 2026 - EduTrack
+            </span>
+
+            <a asp-controller="Home"
+               asp-action="Privacy"
+               class="text-decoration-none">
+                Privacy
+            </a>
+
         </div>
     </footer>
 
@@ -330,18 +208,27 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         $(document).ready(function () {
-            // Initialize Select2 on all select elements that don't explicitly opt-out
+            if ($.fn.DataTable) {
+                $.extend(true, $.fn.dataTable.defaults, {
+                    stateSave: true,
+                    pageLength: 10,
+                    responsive: true,
+                    language: {
+                        search: "Search:",
+                        lengthMenu: "Show _MENU_ entries"
+                    }
+                });
+            }
+
             $('select').not('.no-select2').select2({
                 width: '100%'
             });
 
-            // Initialize Flatpickr on date inputs
             $('input[type="date"]').flatpickr({
                 dateFormat: "Y-m-d",
                 allowInput: true
             });
 
-            // Initialize Flatpickr on time inputs
             $('input[type="time"]').flatpickr({
                 enableTime: true,
                 noCalendar: true,

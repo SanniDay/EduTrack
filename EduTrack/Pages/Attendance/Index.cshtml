@@ -125,3 +125,20 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#attendanceTable').DataTable({
+                pageLength: 10,
+                responsive: true,
+                stateSave: true,
+                order: [[4, 'desc']],
+                language: {
+                    search: "Search attendance:",
+                    lengthMenu: "Show _MENU_ entries"
+                }
+            });
+        });
+    </script>
+}

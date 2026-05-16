@@ -31,8 +31,8 @@ function applyDarkMode() {
     document.documentElement.setAttribute('data-bs-theme', 'dark');
     const navbar = document.querySelector(".navbar");
     if (navbar) {
-        navbar.classList.add("navbar-dark", "bg-dark");
-        navbar.classList.remove("navbar-light", "bg-white", "border-bottom");
+        navbar.classList.add("navbar-dark", "bg-dark", "border-secondary");
+        navbar.classList.remove("navbar-light", "bg-white");
     }
 }
 
@@ -40,7 +40,7 @@ function applyLightMode() {
     document.documentElement.setAttribute('data-bs-theme', 'light');
     const navbar = document.querySelector(".navbar");
     if (navbar) {
-        navbar.classList.remove("navbar-dark", "bg-dark");
+        navbar.classList.remove("navbar-dark", "bg-dark", "border-secondary");
         navbar.classList.add("navbar-light", "bg-white", "border-bottom");
     }
 }

@@ -7,14 +7,14 @@
 
 <div class="container-fluid mt-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient bg-warning text-dark">
+        <div class="card-header bg-gradient bg-info text-dark">
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">
                         <i class="bi bi-receipt-cutoff me-2"></i>Student Fees Management
                     </h4>
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-page="Create" class="btn btn-dark btn-sm">
+                        <a asp-page="Create" class="btn btn-light btn-sm">
                             <i class="bi bi-plus-circle me-1"></i>Add Fee Record
                         </a>
                     }
@@ -128,6 +128,7 @@
             $('#studentFeesTable').DataTable({
                 "pageLength": 10,
                 "responsive": true,
+                "stateSave": true,
                 "language": {
                     "search": "Search records:",
                     "lengthMenu": "Show _MENU_ entries"

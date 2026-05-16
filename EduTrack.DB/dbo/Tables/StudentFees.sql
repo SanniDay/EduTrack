@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[StudentFees] (
+CREATE TABLE [dbo].[StudentFees] (
     [StudentFees_Id] INT             IDENTITY (1, 1) NOT NULL,
     [Student_Id]     INT             NOT NULL,
     [Fees_Id]        INT             NOT NULL,
@@ -21,6 +21,8 @@
     CONSTRAINT [FK_StudentFees_Fees] FOREIGN KEY ([Fees_Id]) REFERENCES [dbo].[Fees] ([Fees_Id]),
     CONSTRAINT [FK_StudentFees_Student] FOREIGN KEY ([Student_Id]) REFERENCES [dbo].[Students] ([Student_Id])
 );
+
+
 
 
 
@@ -51,6 +53,6 @@ CREATE NONCLUSTERED INDEX [IX_StudentFees_StudentId]
 
 
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [UX_StudentFees_Unique]
+CREATE UNIQUE NONCLUSTERED INDEX [UX_StudentFees_Unique_Active]
     ON [dbo].[StudentFees]([Student_Id] ASC, [Fees_Id] ASC) WHERE ([IsDeleted]=(0));
 

@@ -3,42 +3,91 @@
 
 @{
     ViewData["Title"] = "Delete Student Class";
+    Layout = "_Layout";
 }
 
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <div class="card border-danger">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">Delete Student Class</h5>
-                </div>
 
+            <div class="alert alert-warning">
+                <h4 class="alert-heading">
+                    ⚠️ Confirm Deletion
+                </h4>
+
+                <p>
+                    Are you sure you want to delete this student class assignment?
+                    This action cannot be undone.
+                </p>
+            </div>
+
+            <div class="card shadow-sm">
                 <div class="card-body">
-                    <div class="alert alert-warning" role="alert">
-                        <i class="bi bi-exclamation-triangle"></i>
-                        <strong>Warning!</strong> Are you sure you want to delete this student class assignment?
+
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <strong>Student:</strong>
+                        </div>
+
+                        <div class="col-8">
+                            @Model.StudentClassViewModel.StudentName
+                        </div>
                     </div>
 
-                    <div class="info-box">
-                        <p><strong>Student:</strong> @Model.StudentClassViewModel.StudentName</p>
-                        <p><strong>Class:</strong> @Model.StudentClassViewModel.ClassName - @Model.StudentClassViewModel.Section</p>
-                        <p><strong>Created By:</strong> @Model.StudentClassViewModel.Created_By</p>
-                        <p><strong>Created Date:</strong> @Model.StudentClassViewModel.Created_Date.ToString("dd/MM/yyyy HH:mm")</p>
-                    </div>
-                </div>
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <strong>Class:</strong>
+                        </div>
 
-                <div class="card-footer">
-                    <form method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@Model.StudentClassViewModel.Student_Class_Id">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="bi bi-trash"></i> Delete
-                        </button>
-                    </form>
-                    <a href="/StudentClasses/Index" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Cancel
-                    </a>
+                        <div class="col-8">
+                            @Model.StudentClassViewModel.ClassName - @Model.StudentClassViewModel.Section
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <strong>Created By:</strong>
+                        </div>
+
+                        <div class="col-8">
+                            @Model.StudentClassViewModel.Created_By
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <strong>Created Date:</strong>
+                        </div>
+
+                        <div class="col-8">
+                            @Model.StudentClassViewModel.Created_Date.ToString("dd MMM yyyy HH:mm")
+                        </div>
+                    </div>
+
                 </div>
             </div>
+
+            <form method="post" class="mt-4">
+                <input type="hidden"
+                       name="id"
+                       value="@Model.StudentClassViewModel.Student_Class_Id" />
+
+                <div class="row">
+                    <div class="col-6">
+                        <button type="submit" class="btn btn-danger w-100">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+
+                    <div class="col-6">
+                        <a href="/StudentClasses/Index"
+                           class="btn btn-secondary w-100">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </div>
 </div>

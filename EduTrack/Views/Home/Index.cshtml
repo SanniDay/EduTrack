@@ -482,14 +482,10 @@
 
 @section Styles {
     <style>
-        .dashboard-page {
-            color: #172033;
-        }
-
         .dashboard-hero,
         .dashboard-panel,
         .metric-card {
-            background: #fff;
+           
             border: 1px solid rgba(15, 23, 42, .08);
             box-shadow: 0 .75rem 2rem rgba(15, 23, 42, .07);
         }
@@ -512,7 +508,7 @@
         }
 
         .dashboard-now {
-            background: #f8fafc;
+            background: var(--bs-tertiary-bg);
             border: 1px solid rgba(15, 23, 42, .08);
             border-radius: .75rem;
         }
@@ -559,7 +555,7 @@
         }
 
         .mini-stat {
-            background: #f8fafc;
+            background: var(--bs-tertiary-bg);
             border: 1px solid rgba(15, 23, 42, .08);
             border-radius: .6rem;
             padding: .85rem;
@@ -585,8 +581,8 @@
             align-items: center;
             justify-content: center;
             background:
-                radial-gradient(circle at center, #fff 56%, transparent 57%),
-                conic-gradient(#0dcaf0 0 72%, #e9ecef 72% 100%);
+                radial-gradient(circle at center, var(--bs-body-bg) 56%, transparent 57%),
+                conic-gradient(#0dcaf0 0 72%, var(--bs-secondary-bg) 72% 100%);
         }
 
         .timeline-list {
@@ -604,7 +600,7 @@
             width: .75rem;
             height: .75rem;
             border-radius: 50%;
-            background: #adb5bd;
+            background: var(--bs-secondary-color);
             margin-top: .45rem;
         }
 
@@ -621,7 +617,7 @@
             border: 1px solid rgba(15, 23, 42, .08);
             border-radius: .6rem;
             padding: .85rem;
-            background: #f8fafc;
+            background: var(--bs-tertiary-bg);
         }
 
         .timeline-item.is-current .timeline-content {
@@ -655,8 +651,8 @@
         .empty-state,
         .empty-day {
             text-align: center;
-            color: #6c757d;
-            background: #f8fafc;
+            color: var(--bs-secondary-color);
+            background: var(--bs-tertiary-bg);
             border: 1px dashed rgba(15, 23, 42, .16);
             border-radius: .6rem;
             padding: 1.25rem;

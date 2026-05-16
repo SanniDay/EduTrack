@@ -7,7 +7,7 @@
 
 <div class="container-fluid mt-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient bg-danger text-white">
+        <div class="card-header bg-gradient bg-info text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">
                     <i class="bi bi-cash-stack me-2"></i>Fees Management
@@ -91,7 +91,7 @@
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center flex-wrap">
                                             <a asp-page="Edit" asp-route-id="@fee.Fees_Id" 
-                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                               class="btn btn-sm btn-outline-warning" title="Edit">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
                                             <a asp-page="Delete" asp-route-id="@fee.Fees_Id" 
@@ -124,6 +124,7 @@
             $('#feesTable').DataTable({
                 "pageLength": 10,
                 "responsive": true,
+                "stateSave": true,
                 "language": {
                     "search": "Search fees:",
                     "lengthMenu": "Show _MENU_ entries"

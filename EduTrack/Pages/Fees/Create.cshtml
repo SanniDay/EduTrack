@@ -8,24 +8,24 @@
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <div class="card shadow-lg border-0">
-                <div class="card-header bg-gradient bg-danger text-white">
+                <div class="card-header bg-gradient bg-primary text-white">
                     <h5 class="mb-0"><i class="bi bi-cash-stack me-2"></i>Create Fee</h5>
                 </div>
 
                 <div class="card-body p-4">
                     <form method="post" class="needs-validation">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationAlert"></div>
+                        <div asp-validation-summary="ModelOnly" class="alert alert-primary d-none" id="validationAlert"></div>
 
                         <div class="mb-3">
-                            <label asp-for="Fee.Class_Id" class="form-label fw-bold">Class <span class="text-danger">*</span></label>
+                            <label asp-for="Fee.Class_Id" class="form-label fw-bold">Class <span class="text-primary">*</span></label>
                             <select asp-for="Fee.Class_Id" asp-items="Model.Classes" class="form-select" required>
                                 <option value="">-- Select Class --</option>
                             </select>
-                            <span asp-validation-for="Fee.Class_Id" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.Class_Id" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Fee.FeeType" class="form-label fw-bold">Fee Type <span class="text-danger">*</span></label>
+                            <label asp-for="Fee.FeeType" class="form-label fw-bold">Fee Type <span class="text-primary">*</span></label>
                             <select asp-for="Fee.FeeType" class="form-select" required>
                                 <option value="">-- Select --</option>
                                 <option value="1">Tuition</option>
@@ -34,31 +34,31 @@
                                 <option value="4">Library</option>
                                 <option value="5">Other</option>
                             </select>
-                            <span asp-validation-for="Fee.FeeType" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.FeeType" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Fee.Amount" class="form-label fw-bold">Amount</label>
                             <input asp-for="Fee.Amount" class="form-control" type="number" step="0.01" required />
-                            <span asp-validation-for="Fee.Amount" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.Amount" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Fee.Currency" class="form-label fw-bold">Currency</label>
                             <input asp-for="Fee.Currency" class="form-control" />
-                            <span asp-validation-for="Fee.Currency" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.Currency" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Fee.Description" class="form-label fw-bold">Description</label>
                             <textarea asp-for="Fee.Description" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="Fee.Description" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.Description" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Fee.DueDate" class="form-label fw-bold">Due Date</label>
                             <input asp-for="Fee.DueDate" class="form-control" type="date" />
-                            <span asp-validation-for="Fee.DueDate" class="text-danger small"></span>
+                            <span asp-validation-for="Fee.DueDate" class="text-primary small"></span>
                         </div>
 
                         <div class="mb-3">
@@ -69,7 +69,7 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-danger btn-lg"><i class="bi bi-check-circle me-2"></i>Create Fee</button>
+                            <button type="submit" class="btn btn-primary btn-lg"><i class="bi bi-check-circle me-2"></i>Create Fee</button>
                             <a asp-page="Index" class="btn btn-outline-secondary"> <i class="bi bi-arrow-left me-2"></i>Back to List</a>
                         </div>
                     </form>
@@ -82,6 +82,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
-        if (document.querySelectorAll('.text-danger').length > 0) { var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none'); }
+        if (document.querySelectorAll('.text-primary').length > 0) { var el = document.getElementById('validationAlert'); if (el) el.classList.remove('d-none'); }
     </script>
 }

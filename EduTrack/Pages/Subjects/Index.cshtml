@@ -8,10 +8,10 @@
 
 <div class="container-fluid mt-4">
     <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient bg-primary text-white">
+        <div class="card-header bg-gradient bg-info text-white">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 class="mb-0">
-                    <i class="bi bi-book-fill me-2"></i>Subjects Management
+                    <i class="bi bi-journal-bookmark me-2"></i>Subjects Management
                 </h4>
                 <a asp-page="Create" class="btn btn-light btn-sm">
                     <i class="bi bi-plus-circle me-1"></i>Add Subject
@@ -53,7 +53,7 @@
                                         <span class="badge bg-secondary">@subject.Subject_Code</span>
                                     </td>
                                     <td>
-                                        <i class="bi bi-book-fill text-primary me-2"></i><strong>@subject.Subject_Name</strong>
+                                        <i class="bi bi-book-fill text-info me-2"></i><strong>@subject.Subject_Name</strong>
                                     </td>
                                     <td>
                                         @if (!string.IsNullOrEmpty(subject.Description))
@@ -86,7 +86,7 @@
                                     <td>
                                         <div class="d-flex gap-2 justify-content-center flex-wrap">
                                             <a asp-page="Edit" asp-route-id="@subject.Subject_Id" 
-                                               class="btn btn-sm btn-outline-primary" title="Edit">
+                                               class="btn btn-sm btn-outline-info" title="Edit">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
                                             <a asp-page="Delete" asp-route-id="@subject.Subject_Id" 
@@ -119,6 +119,7 @@
             $('#subjectsTable').DataTable({
                 "pageLength": 10,
                 "responsive": true,
+                "stateSave": true,
                 "language": {
                     "search": "Search subjects:",
                     "lengthMenu": "Show _MENU_ entries"
