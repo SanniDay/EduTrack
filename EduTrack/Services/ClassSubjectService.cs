@@ -108,6 +108,7 @@ namespace EduTrack.Services
                 ClassSubject_Id = (int)row["ClassSubject_Id"],
                 Class_Id = (int)row["Class_Id"],
                 Subject_Id = (int)row["Subject_Id"],
+                SubjectName = row["Subject_Name"] != DBNull.Value ? (string)row["Subject_Name"] : string.Empty,
                 IsCore = row["IsCore"] != DBNull.Value && (bool)row["IsCore"],
                 IsActive = row["IsActive"] != DBNull.Value && (bool)row["IsActive"],
                 IsDeleted = row["IsDeleted"] != DBNull.Value && (bool)row["IsDeleted"],

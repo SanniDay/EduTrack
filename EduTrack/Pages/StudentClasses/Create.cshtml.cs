@@ -37,16 +37,27 @@ namespace EduTrack.Pages.StudentClasses
 
         public IActionResult OnPost()
         {
+            Students = _studentService.GetAll();
+            Classes = _classService.GetAllClasses();
+
             if (!ModelState.IsValid)
             {
-                
-                Students = _studentService.GetAll();
-                Classes = _classService.GetAllClasses();
                 return Page();
             }
 
             try
             {
+                // Check if student already exists in another class
+                var existingStudentClass = _studentClassService
+                    .GetAllStudentClasses()
+                    .FirstOrDefault(x => x.Student_Id == StudentClassViewModel.Student_Id && !x.isDeleted);
+
+                if (existingStudentClass != null)
+                {
+                    ErrorMessage = "This student is already assigned to another class.";
+                    return Page();
+                }
+
                 var studentClass = new StudentClass
                 {
                     Student_Id = StudentClassViewModel.Student_Id,
@@ -67,8 +78,6 @@ namespace EduTrack.Pages.StudentClasses
             catch (Exception ex)
             {
                 ErrorMessage = $"Error: {ex.Message}";
-                Students = _studentService.GetAll();
-                Classes = _classService.GetAllClasses();
                 return Page();
             }
         }

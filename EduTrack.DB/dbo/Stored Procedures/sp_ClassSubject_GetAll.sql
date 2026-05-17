@@ -1,7 +1,7 @@
 ﻿
-CREATE   PROCEDURE sp_ClassSubject_GetAll
+CREATE   PROCEDURE [dbo].[sp_ClassSubject_GetAll]
 AS
-SELECT cs.*,c.ClassName,s.Subject_Name
+SELECT cs.*,c.ClassName + ' - ' + c.Section AS ClassName,s.Subject_Name
 FROM ClassSubject cs
 JOIN Classes c ON c.Class_Id=cs.Class_Id
 JOIN Subjects s ON s.Subject_Id=cs.Subject_Id

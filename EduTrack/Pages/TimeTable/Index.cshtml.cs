@@ -16,7 +16,16 @@ namespace EduTrack.Pages.TimeTable
         private readonly IStudentClassService _studentClassService;
         private readonly ITeacherService _teacherService;
         private readonly IStudentService _studentService;
+        public List<Class> Classes { get; set; } = new();
 
+        [BindProperty(SupportsGet = true)]
+        public string Search { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int ClassId { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Day { get; set; }
         public IndexModel(ITimeTableService timeTableService, IClassService classService, IStudentClassService studentClassService, ITeacherService teacherService, IStudentService studentService)
         {
             _timeTableService = timeTableService;
@@ -31,7 +40,7 @@ namespace EduTrack.Pages.TimeTable
         [TempData]
         public string Message { get; set; }
 
-        public void OnGet(string search = "", int classId = 0, string day = "")
+        public void OnGet()
         {
             var tt = _timeTableService.GetAll().Where(t => !t.IsDeleted).ToList();
 
@@ -64,16 +73,23 @@ namespace EduTrack.Pages.TimeTable
                 }
             }
 
-            if (classId > 0)
-                tt = tt.Where(t => t.Class_Id == classId).ToList();
+            if (ClassId > 0)
+                tt = tt.Where(t => t.Class_Id == ClassId).ToList();
 
-            if (!string.IsNullOrWhiteSpace(day))
-                tt = tt.Where(t => string.Equals(t.Day_Name, day, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!string.IsNullOrWhiteSpace(Day))
+                tt = tt.Where(t => string.Equals(t.Day_Name, Day, System.StringComparison.OrdinalIgnoreCase)).ToList();
 
-            if (!string.IsNullOrWhiteSpace(search))
-                tt = tt.Where(t => (t.Room_No ?? string.Empty).Contains(search, System.StringComparison.OrdinalIgnoreCase)).ToList();
+            if (!string.IsNullOrWhiteSpace(Search))
+                tt = tt.Where(t => (t.Room_No ?? string.Empty)
+                .Contains(Search, System.StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-            var classes = _classService.GetAllClasses().ToDictionary(c => c.Class_Id, c => c.ClassName);
+            Classes = _classService.GetAllClasses();
+
+            var classes = Classes.ToDictionary(
+                c => c.Class_Id,
+                c => $"{c.ClassName} - {c.Section}"
+            );
             var studentClasses = _studentClassService.GetAllStudentClasses().ToDictionary(sc => sc.Student_Class_Id, sc => sc);
 
             Items = tt.Select(t => new TimeTableViewModel

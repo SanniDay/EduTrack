@@ -54,11 +54,13 @@ namespace EduTrack.Pages.TimeTable
             ClassSubjects = _classSubjectService.GetAllClassSubjects();
             Teachers = _teacherService.GetAll();
             var classes = Classes.ToDictionary(c => c.Class_Id, c => c.ClassName);
+
             ClassSubjectOptions = new Dictionary<int, string>();
+
             foreach (var cs in ClassSubjects)
             {
-                var className = classes.ContainsKey(cs.Class_Id) ? classes[cs.Class_Id] : "Class";
-                ClassSubjectOptions[cs.ClassSubject_Id] = $"{className} - {cs.Subject_Id}";
+                // Show only Subject Name
+                ClassSubjectOptions[cs.ClassSubject_Id] = cs.SubjectName;
             }
 
             return Page();

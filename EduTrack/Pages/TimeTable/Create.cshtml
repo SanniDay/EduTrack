@@ -34,7 +34,9 @@
                                     <option value="">-- Select Class --</option>
                                     @foreach (var c in Model.Classes)
                                     {
-                                        <option value="@c.Class_Id">@c.ClassName</option>
+                                        <option value="@c.Class_Id">
+                                            @c.ClassName - @c.Section
+                                        </option>
                                     }
                                 </select>
                                 <span asp-validation-for="TimeTable.Class_Id" class="text-danger small"></span>

@@ -18,22 +18,35 @@
         <div class="card-body">
             <form method="get" class="row g-2 mb-3">
                 <div class="col-md-4">
-                    <input type="text" name="search" class="form-control" placeholder="Search by room" />
+                    <input type="text"
+                           name="Search"
+                           value="@Model.Search"
+                           class="form-control"
+                           placeholder="Search by room" />
                 </div>
                 <div class="col-md-3">
-                    <select name="classId" class="form-select">
+                    <select name="ClassId" class="form-select">
                         <option value="">All Classes</option>
+
+                        @foreach (var c in Model.Classes)
+                        {
+                            <option value="@c.Class_Id"
+                                    selected="@(c.Class_Id == Model.ClassId)">
+                                @c.ClassName - @c.Section
+                            </option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <select name="day" class="form-select">
+                    <select name="Day" class="form-select">
                         <option value="">All Days</option>
-                        <option>Monday</option>
-                        <option>Tuesday</option>
-                        <option>Wednesday</option>
-                        <option>Thursday</option>
-                        <option>Friday</option>
-                        <option>Saturday</option>
+
+                        <option value="Monday" selected="@(Model.Day == "Monday")">Monday</option>
+                        <option value="Tuesday" selected="@(Model.Day == "Tuesday")">Tuesday</option>
+                        <option value="Wednesday" selected="@(Model.Day == "Wednesday")">Wednesday</option>
+                        <option value="Thursday" selected="@(Model.Day == "Thursday")">Thursday</option>
+                        <option value="Friday" selected="@(Model.Day == "Friday")">Friday</option>
+                        <option value="Saturday" selected="@(Model.Day == "Saturday")">Saturday</option>
                     </select>
                 </div>
                 <div class="col-md-1">

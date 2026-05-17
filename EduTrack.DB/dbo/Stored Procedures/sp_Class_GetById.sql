@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE sp_Class_GetById
+﻿CREATE PROCEDURE [dbo].[sp_Class_GetById]
 (
     @Class_Id INT
 )

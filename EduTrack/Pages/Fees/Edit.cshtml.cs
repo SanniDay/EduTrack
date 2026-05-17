@@ -31,7 +31,7 @@ namespace EduTrack.Pages.Fees
             Classes = classes.Select(c => new SelectListItem
             {
                 Value = c.Class_Id.ToString(),
-                Text = c.ClassName
+                Text = c.ClassName + '-' + c.Section
             }).ToList();
         }
 

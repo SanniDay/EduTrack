@@ -8,6 +8,8 @@ namespace EduTrack.Models
 
         public int Subject_Id { get; set; }
 
+        public string SubjectName { get; set; }
+
         public bool IsCore { get; set; }
 
         public bool IsActive { get; set; }
